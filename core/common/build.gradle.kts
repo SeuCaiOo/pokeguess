@@ -18,6 +18,8 @@ android {
 
 dependencies {
     api(libs.androidx.core.ktx)
+    api(libs.koin.android)
+
     detektPlugins(libs.detekt.formatting)
 }
 
