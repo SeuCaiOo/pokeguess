@@ -8,4 +8,4 @@ fun Long.isZero() = this == Long.ZERO
 
 fun Long?.orZero() = this ?: Long.ZERO
 
-fun Long?.toStringSafe() : String = defaultValue().toString()
+fun Long?.toStringSafe(): String = defaultValue().toString()
