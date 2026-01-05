@@ -8,4 +8,4 @@ fun Int.isZero() = this == Int.ZERO
 
 fun Int?.orZero() = this ?: Int.ZERO
 
-fun Int?.toStringSafe() : String = defaultValue().toString()
+fun Int?.toStringSafe(): String = defaultValue().toString()

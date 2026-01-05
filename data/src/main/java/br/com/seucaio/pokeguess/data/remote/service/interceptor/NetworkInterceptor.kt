@@ -1,6 +1,6 @@
-package br.com.seucaio.gamedex.remote.service.interceptor
+package br.com.seucaio.pokeguess.data.remote.service.interceptor
 
-import br.com.seucaio.gamedex.data.BuildConfig
+import br.com.seucaio.pokeguess.data.BuildConfig
 import okhttp3.logging.HttpLoggingInterceptor
 
 object NetworkInterceptor {

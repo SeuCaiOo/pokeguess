@@ -15,10 +15,8 @@ class PokemonRemoteDataSourceImpl(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : PokemonRemoteDataSource {
     override suspend fun getPokemons(offset: Int, limit: Int): PokemonListResponse {
-        return try {
+        return runCatching {
             withContext(ioDispatcher) { apiService.getPokemons(offset = offset, limit = limit) }
-        } catch (e: Exception) {
-            PokemonListResponse(emptyList())
-        }
+        }.getOrElse { PokemonListResponse(emptyList()) }
     }
 }
