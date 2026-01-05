@@ -4,7 +4,7 @@ import br.com.seucaio.pokeguess.data.remote.dto.PokemonListResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface PokemonApiService {
+internal interface PokemonApiService {
     @GET("pokemon")
     suspend fun getPokemons(
         @Query("offset") offset: Int,
