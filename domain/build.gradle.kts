@@ -8,7 +8,7 @@ kotlin {
 }
 
 android {
-    namespace = "br.com.seucaio.pokeguess.core.common"
+    namespace = "br.com.seucaio.pokeguess.domain"
     compileSdk = 36
 
     defaultConfig {
@@ -16,6 +16,4 @@ android {
     }
 }
 
-dependencies {
-    api(libs.androidx.core.ktx)
-}
+dependencies {}
