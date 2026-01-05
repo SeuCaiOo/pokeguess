@@ -1,4 +1,4 @@
-package br.com.seucaio.pokeguess.ui.theme
+package br.com.seucaio.pokeguess.core.designsystem.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
