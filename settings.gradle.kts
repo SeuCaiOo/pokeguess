@@ -23,3 +23,4 @@ rootProject.name = "PokeGuess"
 include(":app")
 include(":core:common")
 include(":core:design-system")
+include(":domain")
