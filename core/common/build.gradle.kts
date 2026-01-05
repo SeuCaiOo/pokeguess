@@ -16,4 +16,6 @@ android {
     }
 }
 
-dependencies {}
+dependencies {
+    api(libs.androidx.core.ktx)
+}
