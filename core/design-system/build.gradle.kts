@@ -33,4 +33,18 @@ dependencies {
 
     androidTestApi(platform(libs.androidx.compose.bom))
     androidTestApi(libs.androidx.compose.ui.test.junit4)
+
+    detektPlugins(libs.bundles.detekt)
+}
+
+detekt {
+    config.setFrom(
+        files(
+            "$rootDir/config/detekt/detekt.yml",
+            "$rootDir/config/detekt/detekt-compose.yml"
+        )
+    )
+    toolVersion = libs.versions.detekt.get()
+    buildUponDefaultConfig = true
+    ignoreFailures = false
 }

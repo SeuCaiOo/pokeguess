@@ -15,6 +15,9 @@ android {
     defaultConfig {
         minSdk = 24
     }
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {
@@ -23,4 +26,13 @@ dependencies {
 
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.bundles.retrofit)
+
+    detektPlugins(libs.detekt.formatting)
+}
+
+detekt {
+    config.setFrom(files("$rootDir/config/detekt/detekt.yml"))
+    toolVersion = libs.versions.detekt.get()
+    buildUponDefaultConfig = true
+    ignoreFailures = false
 }
