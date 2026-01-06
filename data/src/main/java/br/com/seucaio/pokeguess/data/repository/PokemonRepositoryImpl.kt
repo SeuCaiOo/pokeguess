@@ -6,7 +6,7 @@ import br.com.seucaio.pokeguess.domain.model.Generation
 import br.com.seucaio.pokeguess.domain.model.Pokemon
 import br.com.seucaio.pokeguess.domain.repository.PokemonRepository
 
-class PokemonRepositoryImpl(
+internal class PokemonRepositoryImpl(
     private val remoteDataSource: PokemonRemoteDataSource
 ) : PokemonRepository {
     override suspend fun getPokemons(generation: Generation): List<Pokemon> {

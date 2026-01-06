@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit
 
 private const val TIMEOUT_SECONDS: Long = 30L
 
-object RetrofitConfig {
+internal object RetrofitConfig {
     private const val JSON_MEDIA_TYPE = "application/json"
 
     @OptIn(ExperimentalSerializationApi::class)

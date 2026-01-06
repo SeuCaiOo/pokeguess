@@ -17,6 +17,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:common"))
+
     detektPlugins(libs.detekt.formatting)
 }
 

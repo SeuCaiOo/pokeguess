@@ -5,7 +5,7 @@ import br.com.seucaio.pokeguess.data.remote.dto.PokemonResponse
 import br.com.seucaio.pokeguess.data.remote.service.PokemonApiService
 import br.com.seucaio.pokeguess.domain.model.Pokemon
 
-object PokemonMapper {
+internal object PokemonMapper {
     fun PokemonListResponse.toPokemonDomainList(): List<Pokemon> {
         return results.map { it.toPokemonDomain() }
     }

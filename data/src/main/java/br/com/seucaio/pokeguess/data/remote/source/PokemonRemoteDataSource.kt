@@ -6,11 +6,11 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-interface PokemonRemoteDataSource {
+internal interface PokemonRemoteDataSource {
     suspend fun getPokemons(offset: Int, limit: Int): PokemonListResponse
 }
 
-class PokemonRemoteDataSourceImpl(
+internal class PokemonRemoteDataSourceImpl(
     private val apiService: PokemonApiService,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : PokemonRemoteDataSource {
