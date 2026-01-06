@@ -76,7 +76,6 @@ jobs:
     name: Build App
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    needs: [ code-quality ]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
