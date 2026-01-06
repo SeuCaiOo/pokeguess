@@ -40,3 +40,8 @@ google-services.json
 
 # Kotlin
 .kotlin/
+
+# Android Studio Agents
+AGENTS.md
+GEMINI.md
+.agent/
