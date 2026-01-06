@@ -48,10 +48,10 @@ class GameViewModel(private val getRandomPokemonUseCase: GetRandomPokemonUseCase
     }
 
     private fun startTimer() {
-        _gameState.update { it.copy(remainingTime = 10) }
+        _gameState.update { it.copy(remainingTime = TIMER_START_VALUE) }
         timerJob = viewModelScope.launch {
             while (_gameState.value.remainingTime > 0) {
-                delay(1000)
+                delay(TIMER_DELAY_MS)
                 _gameState.update { it.copy(remainingTime = it.remainingTime - 1) }
             }
             onTimeUp()
@@ -92,6 +92,11 @@ class GameViewModel(private val getRandomPokemonUseCase: GetRandomPokemonUseCase
     override fun onCleared() {
         super.onCleared()
         stopTimer()
+    }
+
+    companion object {
+        private const val TIMER_START_VALUE = 10
+        private const val TIMER_DELAY_MS = 1000L
     }
 }
 
