@@ -11,22 +11,30 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = RedPokeQuiz,
+    secondary = YellowPokeQuiz,
+    background = BlackPokeQuiz,
+    surface = SurfaceDarkPokeQuiz,
+    onSurface = OnSurfaceDarkPokeQuiz,
+    onPrimary = WhitePokeQuiz,
+    onSecondary = BlackTextPokeQuiz
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    primary = RedPokeQuiz,
+    secondary = YellowPokeQuiz,
+    background = BackgroundLightPokeQuiz,
+    surface = SurfaceLightPokeQuiz,
+    onSurface = OnSurfaceLightPokeQuiz,
+    onPrimary = WhitePokeQuiz,
+    onSecondary = BlackTextPokeQuiz
 )
 
 @Composable
 fun PokeGuessTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -42,6 +50,7 @@ fun PokeGuessTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
+        shapes = PokeGuessShapes,
         content = content
     )
 }
