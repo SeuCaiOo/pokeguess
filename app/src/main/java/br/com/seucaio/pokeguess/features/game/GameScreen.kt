@@ -25,6 +25,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,14 +43,16 @@ import org.koin.androidx.compose.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GameScreen(
+    onGameOver: (Int, Int) -> Unit,
+    modifier: Modifier = Modifier,
     generation: Generation = Generation.I,
     timerEnabled: Boolean = false,
-    viewModel: GameViewModel = koinViewModel(),
-    onGameOver: (Int, Int) -> Unit
+    viewModel: GameViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val gameState by viewModel.gameState.collectAsState()
     var guess by remember { mutableStateOf("") }
+    val currentOnGameOver by rememberUpdatedState(onGameOver)
 
     LaunchedEffect(Unit) {
         viewModel.startGame(generation, timerEnabled)
@@ -57,7 +60,7 @@ fun GameScreen(
 
     LaunchedEffect(gameState.isGameOver) {
         if (gameState.isGameOver) {
-            onGameOver(gameState.score, gameState.totalRounds)
+            currentOnGameOver(gameState.score, gameState.totalRounds)
         }
     }
 
@@ -72,8 +75,9 @@ fun GameScreen(
         uiState = uiState,
         gameState = gameState,
         guess = guess,
-        onGuessChanged = { guess = it },
-        onCheckGuess = { viewModel.checkGuess(it) }
+        onGuessChange = { guess = it },
+        onCheckGuess = { viewModel.checkGuess(it) },
+        modifier = modifier
     )
 }
 
@@ -83,16 +87,33 @@ fun GameScreenContent(
     uiState: GameUiState,
     gameState: GameState,
     guess: String,
-    onGuessChanged: (String) -> Unit,
-    onCheckGuess: (String) -> Unit
+    onGuessChange: (String) -> Unit,
+    onCheckGuess: (String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        GameHeader(gameState)
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        GameBody(
+            uiState = uiState,
+            guess = guess,
+            onGuessChange = onGuessChange,
+            onCheckGuess = onCheckGuess
+        )
+    }
+}
+
+@Composable
+private fun GameHeader(gameState: GameState) {
+    Column(modifier = Modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
@@ -115,17 +136,28 @@ fun GameScreenContent(
                 )
             }
         }
+    }
+}
 
-        Spacer(modifier = Modifier.height(32.dp))
+@Composable
+private fun GameBody(
+    uiState: GameUiState,
+    guess: String,
+    onGuessChange: (String) -> Unit,
+    onCheckGuess: (String) -> Unit
+) {
+    when (uiState) {
+        is GameUiState.Loading -> {
+            CircularProgressIndicator()
+        }
 
-        when (val state = uiState) {
-            is GameUiState.Loading -> {
-                CircularProgressIndicator()
-            }
-
-            is GameUiState.Success -> {
+        is GameUiState.Success -> {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 AsyncImage(
-                    model = state.pokemon.imageUrl,
+                    model = uiState.pokemon.imageUrl,
                     contentDescription = "Pokémon Silhouette",
                     modifier = Modifier
                         .fillMaxWidth()
@@ -136,7 +168,7 @@ fun GameScreenContent(
 
                 OutlinedTextField(
                     value = guess,
-                    onValueChange = onGuessChanged,
+                    onValueChange = onGuessChange,
                     label = { Text("Who's that Pokémon?") },
                     singleLine = true,
                     maxLines = 1,
@@ -153,10 +185,10 @@ fun GameScreenContent(
                     Text("Submit")
                 }
             }
+        }
 
-            is GameUiState.Error -> {
-                Text(text = state.message)
-            }
+        is GameUiState.Error -> {
+            Text(text = uiState.message)
         }
     }
 }
@@ -171,7 +203,8 @@ private fun GameScreenPreviewSuccess() {
                     Pokemon(
                         id = 1,
                         name = "Pikachu",
-                        imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png"
+                        imageUrl = "https://raw.githubusercontent.com/PokeAPI/" +
+                            "sprites/master/sprites/pokemon/other/official-artwork/25.png"
                     )
                 ),
                 gameState = GameState(
@@ -183,7 +216,7 @@ private fun GameScreenPreviewSuccess() {
                     isGameOver = false
                 ),
                 guess = "Pikachu",
-                onGuessChanged = {},
+                onGuessChange = {},
                 onCheckGuess = {}
             )
         }
@@ -206,7 +239,7 @@ private fun GameScreenPreviewLoading() {
                     isGameOver = false
                 ),
                 guess = "",
-                onGuessChanged = {},
+                onGuessChange = {},
                 onCheckGuess = {}
             )
         }
@@ -229,7 +262,7 @@ private fun GameScreenPreviewError() {
                     isGameOver = false
                 ),
                 guess = "",
-                onGuessChanged = {},
+                onGuessChange = {},
                 onCheckGuess = {}
             )
         }

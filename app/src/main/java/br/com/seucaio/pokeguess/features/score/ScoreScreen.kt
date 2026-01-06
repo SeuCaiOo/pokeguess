@@ -22,21 +22,33 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import br.com.seucaio.pokeguess.core.designsystem.ui.theme.HighAccuracyColor
+import br.com.seucaio.pokeguess.core.designsystem.ui.theme.LowAccuracyColor
+import br.com.seucaio.pokeguess.core.designsystem.ui.theme.MediumAccuracyColor
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.PokeGuessTheme
 import kotlin.math.roundToInt
+
+private const val ACCURACY_PERCENTAGE = 100
+private const val HIGH_ACCURACY_THRESHOLD = 80
+private const val MEDIUM_ACCURACY_THRESHOLD = 50
 
 @Composable
 fun ScoreScreen(
     score: Int,
     total: Int,
     onPlayAgain: () -> Unit,
-    onBackToMenu: () -> Unit
+    onBackToMenu: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    val accuracy = if (total > 0) (score.toFloat() / total * 100).roundToInt() else 0
+    val accuracy = if (total > 0) {
+        (score.toFloat() / total * ACCURACY_PERCENTAGE).roundToInt()
+    } else {
+        0
+    }
     val incorrect = total - score
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -49,46 +61,70 @@ fun ScoreScreen(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant
-            )
-        ) {
-            Column(
-                modifier = Modifier.padding(24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "$accuracy%",
-                    style = MaterialTheme.typography.displayLarge,
-                    color = when {
-                        accuracy >= 80 -> Color(0xFF4CAF50)
-                        accuracy >= 50 -> Color(0xFFFFC107)
-                        else -> Color(0xFFF44336)
-                    }
-                )
-                Text(text = "Accuracy", style = MaterialTheme.typography.labelLarge)
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    StatItem(label = "Correct", value = score.toString(), color = Color(0xFF4CAF50))
-                    StatItem(label = "Incorrect", value = incorrect.toString(), color = Color(0xFFF44336))
-                    StatItem(
-                        label = "Total",
-                        value = total.toString(),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-            }
-        }
+        ScoreResultCard(accuracy, score, incorrect, total)
 
         Spacer(modifier = Modifier.height(48.dp))
 
+        ScoreActionButtons(onPlayAgain, onBackToMenu)
+    }
+}
+
+@Composable
+private fun ScoreResultCard(
+    accuracy: Int,
+    score: Int,
+    incorrect: Int,
+    total: Int
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
+        )
+    ) {
+        Column(
+            modifier = Modifier.padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "$accuracy%",
+                style = MaterialTheme.typography.displayLarge,
+                color = when {
+                    accuracy >= HIGH_ACCURACY_THRESHOLD -> HighAccuracyColor
+                    accuracy >= MEDIUM_ACCURACY_THRESHOLD -> MediumAccuracyColor
+                    else -> LowAccuracyColor
+                }
+            )
+            Text(text = "Accuracy", style = MaterialTheme.typography.labelLarge)
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                StatItem(label = "Correct", value = score.toString(), color = HighAccuracyColor)
+                StatItem(
+                    label = "Incorrect",
+                    value = incorrect.toString(),
+                    color = LowAccuracyColor
+                )
+                StatItem(
+                    label = "Total",
+                    value = total.toString(),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun ScoreActionButtons(
+    onPlayAgain: () -> Unit,
+    onBackToMenu: () -> Unit
+) {
+    Column(modifier = Modifier.fillMaxWidth()) {
         Button(
             onClick = onPlayAgain,
             modifier = Modifier
@@ -112,8 +148,11 @@ fun ScoreScreen(
 }
 
 @Composable
-fun StatItem(label: String, value: String, color: Color) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+fun StatItem(label: String, value: String, color: Color, modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Text(text = value, style = MaterialTheme.typography.headlineMedium, color = color)
         Text(text = label, style = MaterialTheme.typography.labelSmall)
     }

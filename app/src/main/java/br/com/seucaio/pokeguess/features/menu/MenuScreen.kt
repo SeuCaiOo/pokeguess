@@ -35,14 +35,15 @@ import br.com.seucaio.pokeguess.domain.model.Generation
 
 @Composable
 fun MenuScreen(
-    onNavigateToGame: (Generation, Boolean) -> Unit
+    onNavigateToGame: (Generation, Boolean) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     var selectedGeneration by remember { mutableStateOf(Generation.I) }
     var timerEnabled by remember { mutableStateOf(false) }
     var expanded by remember { mutableStateOf(false) }
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -55,76 +56,12 @@ fun MenuScreen(
 
         Spacer(modifier = Modifier.height(48.dp))
 
-        Text(
-            text = "Settings",
-            style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.align(Alignment.Start)
+        SettingsSection(
+            selectedGeneration = selectedGeneration,
+            onGenerationSelect = { selectedGeneration = it },
+            timerEnabled = timerEnabled,
+            onTimerToggle = { timerEnabled = it }
         )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Generation Selection
-        OutlinedCard(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { expanded = true }
-        ) {
-            Row(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column {
-                    Text(text = "Generation", style = MaterialTheme.typography.labelLarge)
-                    Text(text = selectedGeneration.displayName, style = MaterialTheme.typography.bodyLarge)
-                }
-                Icon(Icons.Default.ArrowDropDown, contentDescription = null)
-            }
-
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
-            ) {
-                Generation.entries.forEach { generation ->
-                    DropdownMenuItem(
-                        text = { Text(generation.displayName) },
-                        onClick = {
-                            selectedGeneration = generation
-                            expanded = false
-                        }
-                    )
-                }
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Timer Toggle
-        OutlinedCard(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Row(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column {
-                    Text(text = "Game Timer", style = MaterialTheme.typography.labelLarge)
-                    Text(
-                        text = if (timerEnabled) "10 seconds per round" else "No time limit",
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                }
-                Switch(
-                    checked = timerEnabled,
-                    onCheckedChange = { timerEnabled = it }
-                )
-            }
-        }
 
         Spacer(modifier = Modifier.height(48.dp))
 
@@ -135,6 +72,108 @@ fun MenuScreen(
                 .height(56.dp)
         ) {
             Text(text = "Start Game")
+        }
+    }
+}
+
+@Composable
+private fun SettingsSection(
+    selectedGeneration: Generation,
+    onGenerationSelect: (Generation) -> Unit,
+    timerEnabled: Boolean,
+    onTimerToggle: (Boolean) -> Unit
+) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text(
+            text = "Settings",
+            style = MaterialTheme.typography.headlineSmall,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        GenerationSelector(
+            selectedGeneration = selectedGeneration,
+            onGenerationSelect = onGenerationSelect
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        TimerToggle(
+            timerEnabled = timerEnabled,
+            onTimerToggle = onTimerToggle
+        )
+    }
+}
+
+@Composable
+private fun GenerationSelector(
+    selectedGeneration: Generation,
+    onGenerationSelect: (Generation) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+    OutlinedCard(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { expanded = true }
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column {
+                Text(text = "Generation", style = MaterialTheme.typography.labelLarge)
+                Text(text = selectedGeneration.displayName, style = MaterialTheme.typography.bodyLarge)
+            }
+            Icon(Icons.Default.ArrowDropDown, contentDescription = null)
+        }
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            Generation.entries.forEach { generation ->
+                DropdownMenuItem(
+                    text = { Text(generation.displayName) },
+                    onClick = {
+                        onGenerationSelect(generation)
+                        expanded = false
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun TimerToggle(
+    timerEnabled: Boolean,
+    onTimerToggle: (Boolean) -> Unit
+) {
+    OutlinedCard(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column {
+                Text(text = "Game Timer", style = MaterialTheme.typography.labelLarge)
+                Text(
+                    text = if (timerEnabled) "10 seconds per round" else "No time limit",
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
+            Switch(
+                checked = timerEnabled,
+                onCheckedChange = onTimerToggle
+            )
         }
     }
 }

@@ -35,9 +35,9 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun PokeGuessApp() {
+fun PokeGuessApp(modifier: Modifier = Modifier) {
     Surface(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
         val navController = rememberNavController()
@@ -87,14 +87,10 @@ fun PokeGuessApp() {
                     score = score,
                     total = total,
                     onPlayAgain = {
-                        navController.navigate("game") {
-                            popUpTo("menu") { inclusive = false }
-                        }
+                        navController.navigate("game") { popUpTo("menu") { inclusive = false } }
                     },
                     onBackToMenu = {
-                        navController.navigate("menu") {
-                            popUpTo("menu") { inclusive = true }
-                        }
+                        navController.navigate("menu") { popUpTo("menu") { inclusive = true } }
                     }
                 )
             }
