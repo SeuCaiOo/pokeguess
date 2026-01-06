@@ -1,6 +1,5 @@
 package br.com.seucaio.pokeguess.features.score
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,8 +19,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import br.com.seucaio.pokeguess.R
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.HighAccuracyColor
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.LowAccuracyColor
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.MediumAccuracyColor
@@ -37,7 +38,7 @@ fun ScoreScreen(
     score: Int,
     total: Int,
     onPlayAgain: () -> Unit,
-    onBackToMenu: () -> Unit,
+    onBackToHome: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val accuracy = if (total > 0) {
@@ -55,7 +56,7 @@ fun ScoreScreen(
         verticalArrangement = Arrangement.Center,
     ) {
         Text(
-            text = "Game Over!",
+            text = stringResource(R.string.game_over),
             style = MaterialTheme.typography.displayMedium
         )
 
@@ -65,7 +66,10 @@ fun ScoreScreen(
 
         Spacer(modifier = Modifier.height(48.dp))
 
-        ScoreActionButtons(onPlayAgain, onBackToMenu)
+        ScoreActionButtons(
+            onPlayAgain = onPlayAgain,
+            onBackToMenu = onBackToHome
+        )
     }
 }
 
@@ -95,7 +99,7 @@ private fun ScoreResultCard(
                     else -> LowAccuracyColor
                 }
             )
-            Text(text = "Accuracy", style = MaterialTheme.typography.labelLarge)
+            Text(text = stringResource(R.string.accuracy), style = MaterialTheme.typography.labelLarge)
 
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -105,12 +109,12 @@ private fun ScoreResultCard(
             ) {
                 StatItem(label = "Correct", value = score.toString(), color = HighAccuracyColor)
                 StatItem(
-                    label = "Incorrect",
+                    label = stringResource(R.string.incorrect),
                     value = incorrect.toString(),
                     color = LowAccuracyColor
                 )
                 StatItem(
-                    label = "Total",
+                    label = stringResource(R.string.total),
                     value = total.toString(),
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -131,7 +135,7 @@ private fun ScoreActionButtons(
                 .fillMaxWidth()
                 .height(56.dp)
         ) {
-            Text(text = "Play Again")
+            Text(text = stringResource(R.string.play_again))
         }
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -142,7 +146,7 @@ private fun ScoreActionButtons(
                 .fillMaxWidth()
                 .height(56.dp)
         ) {
-            Text(text = "Back to Menu")
+            Text(text = stringResource(R.string.back_to_home))
         }
     }
 }
@@ -158,7 +162,7 @@ fun StatItem(label: String, value: String, color: Color, modifier: Modifier = Mo
     }
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@PreviewLightDark
 @Composable
 private fun ScoreScreenPreview() {
     PokeGuessTheme {
@@ -167,7 +171,7 @@ private fun ScoreScreenPreview() {
                 score = 8,
                 total = 10,
                 onPlayAgain = {},
-                onBackToMenu = {}
+                onBackToHome = {}
             )
         }
     }
