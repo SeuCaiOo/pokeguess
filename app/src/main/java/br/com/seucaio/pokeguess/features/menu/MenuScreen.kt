@@ -1,110 +1,152 @@
 package br.com.seucaio.pokeguess.features.menu
 
-import android.content.res.Configuration
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import br.com.seucaio.pokeguess.R
+import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessButton
+import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessScaffold
+import br.com.seucaio.pokeguess.core.designsystem.ui.component.SettingsItem
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.PokeGuessTheme
 import br.com.seucaio.pokeguess.domain.model.Generation
+import br.com.seucaio.pokeguess.features.menu.viewmodel.MenuUiAction
+import br.com.seucaio.pokeguess.features.menu.viewmodel.MenuUiEvent
+import br.com.seucaio.pokeguess.features.menu.viewmodel.MenuUiState
+import br.com.seucaio.pokeguess.features.menu.viewmodel.MenuViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MenuScreen(
-    onNavigateToGame: (Generation, Boolean) -> Unit,
-    modifier: Modifier = Modifier
+    onNavigateToGame: (Generation, Boolean, Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: MenuViewModel = koinViewModel()
 ) {
-    var selectedGeneration by remember { mutableStateOf(Generation.I) }
-    var timerEnabled by remember { mutableStateOf(false) }
-    var expanded by remember { mutableStateOf(false) }
+    val latestOnNavigateToGame by rememberUpdatedState(onNavigateToGame)
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = "PokéGuess",
-            style = MaterialTheme.typography.displayLarge
-        )
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-        Spacer(modifier = Modifier.height(48.dp))
-
-        SettingsSection(
-            selectedGeneration = selectedGeneration,
-            onGenerationSelect = { selectedGeneration = it },
-            timerEnabled = timerEnabled,
-            onTimerToggle = { timerEnabled = it }
-        )
-
-        Spacer(modifier = Modifier.height(48.dp))
-
-        Button(
-            onClick = { onNavigateToGame(selectedGeneration, timerEnabled) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp)
-        ) {
-            Text(text = "Start Game")
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collect { event ->
+            when (event) {
+                is MenuUiEvent.NavigateToGame -> {
+                    latestOnNavigateToGame(state.selectedGeneration, state.timerEnabled, state.withFriends)
+                }
+            }
         }
     }
+
+    MenuContent(
+        onAction = viewModel::handleAction,
+        onState = state,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun MenuContent(
+    onAction: (MenuUiAction) -> Unit,
+    onState: MenuUiState,
+    modifier: Modifier = Modifier,
+) {
+    PokeGuessScaffold(
+        modifier = modifier,
+        centerContent = {
+            Text(
+                text = "PokéGuess",
+                style = MaterialTheme.typography.displayLarge
+            )
+            Spacer(modifier = Modifier.height(48.dp))
+            SettingsSection(
+                menuState = onState,
+                onGenerationSelect = { onAction(MenuUiAction.GenerationSelected(it)) },
+                onTimerToggle = { onAction(MenuUiAction.TimerToggled(it)) },
+                onRoundsChange = { onAction(MenuUiAction.NumberOfRoundsChanged(it)) }
+            )
+        },
+        bottomContent = {
+            Spacer(modifier = Modifier.height(48.dp))
+            PokeGuessButton(
+                text = stringResource(R.string.start_game),
+                color = MaterialTheme.colorScheme.secondary,
+                onClick = { onAction(MenuUiAction.StartGameClicked) },
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+    )
 }
 
 @Composable
 private fun SettingsSection(
-    selectedGeneration: Generation,
-    onGenerationSelect: (Generation) -> Unit,
-    timerEnabled: Boolean,
-    onTimerToggle: (Boolean) -> Unit
+    menuState: MenuUiState,
+    modifier: Modifier = Modifier,
+    onGenerationSelect: (Generation) -> Unit = {},
+    onTimerToggle: (Boolean) -> Unit = {},
+    onRoundsChange: (Int) -> Unit = {},
 ) {
-    Column(modifier = Modifier.fillMaxWidth()) {
+    val latestOnRoundsChange by rememberUpdatedState(onRoundsChange)
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .border(
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface),
+                shape = MaterialTheme.shapes.medium
+            )
+            .padding(16.dp)
+    ) {
         Text(
-            text = "Settings",
+            text = stringResource(R.string.settings),
             style = MaterialTheme.typography.headlineSmall,
             modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(16.dp))
-
         GenerationSelector(
-            selectedGeneration = selectedGeneration,
+            selectedGeneration = menuState.selectedGeneration,
             onGenerationSelect = onGenerationSelect
         )
 
         Spacer(modifier = Modifier.height(16.dp))
-
         TimerToggle(
-            timerEnabled = timerEnabled,
+            timerEnabled = menuState.timerEnabled,
             onTimerToggle = onTimerToggle
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+        NumberRounds(
+            rounds = menuState.rounds,
+            onRoundsChange = latestOnRoundsChange
         )
     }
 }
@@ -115,22 +157,12 @@ private fun GenerationSelector(
     onGenerationSelect: (Generation) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
-    OutlinedCard(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { expanded = true }
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+    Box {
+        SettingsItem(
+            title = stringResource(R.string.generation),
+            description = selectedGeneration.displayName,
+            onClick = { expanded = true }
         ) {
-            Column {
-                Text(text = "Generation", style = MaterialTheme.typography.labelLarge)
-                Text(text = selectedGeneration.displayName, style = MaterialTheme.typography.bodyLarge)
-            }
             Icon(Icons.Default.ArrowDropDown, contentDescription = null)
         }
 
@@ -156,31 +188,58 @@ private fun TimerToggle(
     timerEnabled: Boolean,
     onTimerToggle: (Boolean) -> Unit
 ) {
-    OutlinedCard(
-        modifier = Modifier.fillMaxWidth()
+    val description = if (timerEnabled) {
+        stringResource(R.string.seconds_per_round)
+    } else {
+        stringResource(R.string.no_time_limit)
+    }
+    SettingsItem(
+        onClick = { onTimerToggle(!timerEnabled) },
+        title = stringResource(R.string.game_timer),
+        description = description
+    ) {
+        Switch(checked = timerEnabled, onCheckedChange = onTimerToggle)
+    }
+}
+
+@Composable
+private fun NumberRounds(
+    rounds: Int,
+    onRoundsChange: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val latestOnRoundsChange by rememberUpdatedState(onRoundsChange)
+    SettingsItem(
+        modifier = modifier,
+        title = stringResource(R.string.number_of_rounds),
+        description = stringResource(R.string.total_guesses),
     ) {
         Row(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column {
-                Text(text = "Game Timer", style = MaterialTheme.typography.labelLarge)
-                Text(
-                    text = if (timerEnabled) {
-                        stringResource(R.string.seconds_per_round)
-                    } else {
-                        stringResource(R.string.no_time_limit)
-                    },
-                    style = MaterialTheme.typography.bodyLarge
-                )
+            IconButton(
+                colors = IconButtonDefaults.iconButtonColors(
+                    containerColor = MaterialTheme.colorScheme.outlineVariant,
+                ),
+                enabled = rounds > 1,
+                onClick = { latestOnRoundsChange(rounds - 1) }
+            ) {
+                Icon(imageVector = Icons.Default.Remove, contentDescription = null)
             }
-            Switch(
-                checked = timerEnabled,
-                onCheckedChange = onTimerToggle
+            Text(
+                text = rounds.toString(),
+                style = MaterialTheme.typography.titleLarge
             )
+            IconButton(
+                colors = IconButtonDefaults.iconButtonColors(
+                    containerColor = MaterialTheme.colorScheme.outlineVariant,
+                ),
+                enabled = rounds < 10,
+                onClick = { latestOnRoundsChange(rounds + 1) }
+            ) {
+                Icon(imageVector = Icons.Default.Add, contentDescription = null)
+            }
         }
     }
 }
@@ -189,10 +248,9 @@ private fun TimerToggle(
 @Composable
 private fun MenuScreenPreview() {
     PokeGuessTheme {
-        Surface {
-            MenuScreen(
-                onNavigateToGame = { _, _ -> }
-            )
-        }
+        MenuContent(
+            onAction = {},
+            onState = MenuUiState()
+        )
     }
 }
