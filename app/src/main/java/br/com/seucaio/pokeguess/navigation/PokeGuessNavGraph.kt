@@ -31,8 +31,14 @@ fun PokeGuessNavGraph(
 
         composable<PokeGuessRoute.Menu> {
             MenuScreen(
-                onNavigateToGame = { generation, timerEnabled ->
-                    navController.navigate(PokeGuessRoute.Game(generation.name, timerEnabled)) {
+                onNavigateToGame = { generation, timerEnabled, withFriends ->
+                    navController.navigate(
+                        PokeGuessRoute.Game(
+                            generation = generation.name,
+                            timerEnabled = timerEnabled,
+                            withFriends = withFriends
+                        )
+                    ) {
                         popUpTo<PokeGuessRoute.Menu> { inclusive = false }
                     }
                 }
@@ -47,11 +53,7 @@ fun PokeGuessNavGraph(
                 timerEnabled = gameRoute.timerEnabled,
                 onGameOver = { score, total ->
                     navController.navigate(
-                        PokeGuessRoute.Score(
-                            score = score,
-                            total = total,
-                            withFriends = gameRoute.withFriends
-                        )
+                        PokeGuessRoute.Score(score, total, gameRoute.withFriends)
                     ) { popUpTo<PokeGuessRoute.Game> { inclusive = true } }
                 }
             )
@@ -60,8 +62,6 @@ fun PokeGuessNavGraph(
         composable<PokeGuessRoute.Score> { backStackEntry ->
             val scoreRoute = backStackEntry.toRoute<PokeGuessRoute.Score>()
             ScoreScreen(
-                score = scoreRoute.score,
-                total = scoreRoute.total,
                 onPlayAgain = {
                     navController.navigate(
                         PokeGuessRoute.Menu(withFriends = scoreRoute.withFriends)
