@@ -32,7 +32,9 @@ fun PokeGuessNavGraph(
         composable<PokeGuessRoute.Menu> {
             MenuScreen(
                 onNavigateToGame = { generation, timerEnabled ->
-                    navController.navigate(PokeGuessRoute.Game(generation.name, timerEnabled))
+                    navController.navigate(PokeGuessRoute.Game(generation.name, timerEnabled)) {
+                        popUpTo<PokeGuessRoute.Menu> { inclusive = false }
+                    }
                 }
             )
         }
