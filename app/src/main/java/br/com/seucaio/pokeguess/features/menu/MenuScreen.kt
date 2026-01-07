@@ -28,8 +28,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import br.com.seucaio.pokeguess.R
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.PokeGuessTheme
 import br.com.seucaio.pokeguess.domain.model.Generation
 
@@ -166,7 +169,11 @@ private fun TimerToggle(
             Column {
                 Text(text = "Game Timer", style = MaterialTheme.typography.labelLarge)
                 Text(
-                    text = if (timerEnabled) "10 seconds per round" else "No time limit",
+                    text = if (timerEnabled) {
+                        stringResource(R.string.seconds_per_round)
+                    } else {
+                        stringResource(R.string.no_time_limit)
+                    },
                     style = MaterialTheme.typography.bodyLarge
                 )
             }
@@ -178,7 +185,7 @@ private fun TimerToggle(
     }
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@PreviewLightDark
 @Composable
 private fun MenuScreenPreview() {
     PokeGuessTheme {

@@ -31,11 +31,20 @@ import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessScaffold
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.PokeGuessTheme
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(
+    onNavigateToMenuSolo: () -> Unit,
+    onNavigateToMenuFriends: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     PokeGuessScaffold(
         modifier = modifier,
         centerContent = { HomeBranding() },
-        bottomContent = { HomeActions() }
+        bottomContent = {
+            HomeActions(
+                onPlaySolo = onNavigateToMenuSolo,
+                onPlayWithFriends = onNavigateToMenuFriends
+            )
+        }
     )
 }
 
@@ -85,7 +94,11 @@ private fun HomeBranding(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun HomeActions(modifier: Modifier = Modifier) {
+private fun HomeActions(
+    onPlaySolo: () -> Unit,
+    onPlayWithFriends: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Column(
         modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -94,13 +107,13 @@ private fun HomeActions(modifier: Modifier = Modifier) {
         PokeGuessButton(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(R.string.play_solo),
-            onClick = {},
+            onClick = onPlaySolo,
         )
         Spacer(modifier = Modifier.height(16.dp))
         PokeGuessOutlinedButton(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(R.string.play_with_friends),
-            onClick = {},
+            onClick = onPlayWithFriends,
         )
         Spacer(modifier = Modifier.height(32.dp))
     }
@@ -110,6 +123,9 @@ private fun HomeActions(modifier: Modifier = Modifier) {
 @Composable
 private fun HomeScreenPreview() {
     PokeGuessTheme {
-        HomeScreen()
+        HomeScreen(
+            onNavigateToMenuSolo = {},
+            onNavigateToMenuFriends = {}
+        )
     }
 }

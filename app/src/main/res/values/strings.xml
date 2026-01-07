@@ -10,4 +10,13 @@
     <string name="type_pokemon_name">Type Pokémon name …</string>
     <string name="submit">Submit</string>
     <string name="skip">Skip</string>
+    <string name="game_over">Game Over!</string>
+    <string name="incorrect">Incorrect</string>
+    <string name="total">Total</string>
+    <string name="accuracy">Accuracy</string>
+    <string name="play_again">Play Again</string>
+    <string name="back_to_menu">Back to Menu</string>
+    <string name="back_to_home">Back to Home</string>
+    <string name="no_time_limit">No time limit</string>
+    <string name="seconds_per_round">10 seconds per round</string>
 </resources>
