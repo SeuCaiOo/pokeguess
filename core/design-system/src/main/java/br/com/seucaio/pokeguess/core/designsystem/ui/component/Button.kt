@@ -31,7 +31,6 @@ fun PokeGuessButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     color: Color = MaterialTheme.colorScheme.primary,
-    textColor: Color = MaterialTheme.colorScheme.onPrimary,
     icon: ImageVector? = null,
 ) {
     Button(
@@ -54,7 +53,7 @@ fun PokeGuessButton(
                 Spacer(modifier = Modifier.size(8.dp))
             }
             Text(
-                color = textColor,
+                color = MaterialTheme.colorScheme.surface,
                 text = text,
                 fontSize = 18.sp
             )
