@@ -4,7 +4,7 @@ import br.com.seucaio.pokeguess.data.di.dataModule
 import br.com.seucaio.pokeguess.domain.di.domainModule
 import br.com.seucaio.pokeguess.domain.usecase.CalculateGameStatsUseCase
 import br.com.seucaio.pokeguess.domain.usecase.GetRandomPokemonUseCase
-import br.com.seucaio.pokeguess.features.game.viewmodel.GameViewModel
+import br.com.seucaio.pokeguess.features.game.GameViewModel
 import br.com.seucaio.pokeguess.features.home.viewmodel.HomeViewModel
 import br.com.seucaio.pokeguess.features.menu.viewmodel.MenuViewModel
 import br.com.seucaio.pokeguess.features.score.viewmodel.ScoreViewModel
