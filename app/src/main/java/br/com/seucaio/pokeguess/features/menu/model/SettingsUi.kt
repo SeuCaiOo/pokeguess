@@ -24,5 +24,4 @@ data class SettingsUi(
     fun setName(name: String): SettingsUi = copy(playerName = name)
 
     fun setWithFriends(withFriends: Boolean): SettingsUi = copy(withFriends = withFriends)
-
 }

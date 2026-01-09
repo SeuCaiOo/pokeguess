@@ -86,9 +86,6 @@ fun MenuContent(
 ) {
     PokeGuessScaffold(
         modifier = modifier,
-        topContent = {
-
-        },
         centerContent = {
             SettingsSection(
                 menuState = onState,
