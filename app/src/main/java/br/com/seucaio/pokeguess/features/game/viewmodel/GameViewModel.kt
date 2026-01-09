@@ -43,7 +43,8 @@ class GameViewModel(
                 withFriends = route.withFriends,
                 gameUi = GameUi(
                     remainingTime = remainingTime,
-                    isTimerEnabled = route.timerEnabled
+                    isTimerEnabled = route.timerEnabled,
+                    totalRounds = route.rounds
                 )
             )
         )

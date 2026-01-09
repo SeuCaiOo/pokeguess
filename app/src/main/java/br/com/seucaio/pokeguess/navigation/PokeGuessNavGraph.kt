@@ -30,11 +30,12 @@ fun PokeGuessNavGraph(
 
         composable<PokeGuessRoute.Menu> {
             MenuScreen(
-                onNavigateToGame = { generation, timerEnabled, withFriends ->
+                onNavigateToGame = { generation, timerEnabled, rounds, withFriends ->
                     navController.navigate(
                         PokeGuessRoute.Game(
                             generation = generation.name,
                             timerEnabled = timerEnabled,
+                            rounds = rounds,
                             withFriends = withFriends
                         )
                     ) {
