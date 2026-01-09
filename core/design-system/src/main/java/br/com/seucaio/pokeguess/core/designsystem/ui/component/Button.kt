@@ -31,12 +31,13 @@ fun PokeGuessButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     color: Color = MaterialTheme.colorScheme.primary,
+    enabled: Boolean = true,
     icon: ImageVector? = null,
 ) {
     Button(
         onClick = onClick,
-        modifier = modifier
-            .height(56.dp),
+        modifier = modifier.height(56.dp),
+        enabled = enabled,
         shape = RoundedCornerShape(24.dp),
         colors = ButtonDefaults.buttonColors(containerColor = color)
     ) {
