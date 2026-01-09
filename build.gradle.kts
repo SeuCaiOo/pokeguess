@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.detekt) apply false
     alias(libs.plugins.google.gms.google.services) apply false
     alias(libs.plugins.google.firebase.crashlytics) apply false
+    alias(libs.plugins.kotlin.parcelize) apply false
 }
 
 subprojects {

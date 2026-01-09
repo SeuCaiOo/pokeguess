@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.google.firebase.crashlytics)
 }
@@ -53,9 +54,6 @@ dependencies {
 
     // Koin
     implementation(libs.koin.androidx.compose)
-
-    // Coil
-    implementation(libs.coil.compose)
 
     // Firebase
     implementation(platform(libs.google.firebase.bom))
