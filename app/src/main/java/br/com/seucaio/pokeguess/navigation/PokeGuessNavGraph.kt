@@ -6,7 +6,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import br.com.seucaio.pokeguess.domain.model.Generation
 import br.com.seucaio.pokeguess.features.game.GameScreen
 import br.com.seucaio.pokeguess.features.home.HomeScreen
 import br.com.seucaio.pokeguess.features.menu.MenuScreen
@@ -45,15 +44,15 @@ fun PokeGuessNavGraph(
             )
         }
 
-        composable<PokeGuessRoute.Game> { backStackEntry ->
-            val gameRoute = backStackEntry.toRoute<PokeGuessRoute.Game>()
-            val generation = Generation.valueOf(gameRoute.generation)
+        composable<PokeGuessRoute.Game> {
             GameScreen(
-                generation = generation,
-                timerEnabled = gameRoute.timerEnabled,
-                onGameOver = { score, total ->
+                onGameOver = { score, total, withFriends ->
                     navController.navigate(
-                        PokeGuessRoute.Score(score, total, gameRoute.withFriends)
+                        PokeGuessRoute.Score(
+                            score = score,
+                            total = total,
+                            withFriends = withFriends
+                        )
                     ) { popUpTo<PokeGuessRoute.Game> { inclusive = true } }
                 }
             )
