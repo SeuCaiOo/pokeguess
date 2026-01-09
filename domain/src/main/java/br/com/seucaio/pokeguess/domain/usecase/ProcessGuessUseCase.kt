@@ -9,4 +9,3 @@ class ProcessGuessUseCase(private val validateGuessUseCase: ValidateGuessUseCase
         return GuessResult(isCorrect, newScore)
     }
 }
-

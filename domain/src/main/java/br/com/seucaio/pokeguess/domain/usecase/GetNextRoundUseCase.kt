@@ -10,4 +10,3 @@ class GetNextRoundUseCase {
         return NextRoundResult(nextRound = nextRound, isGameOver = isGameOver)
     }
 }
-
