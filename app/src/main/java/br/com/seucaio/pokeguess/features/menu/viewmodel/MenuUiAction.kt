@@ -7,4 +7,5 @@ sealed interface MenuUiAction {
     data class GenerationSelected(val generation: Generation) : MenuUiAction
     data class TimerToggled(val enabled: Boolean) : MenuUiAction
     data class NumberOfRoundsChanged(val rounds: Int) : MenuUiAction
+    data class PlayerNameChanged(val name: String) : MenuUiAction
 }

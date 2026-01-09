@@ -1,16 +1,19 @@
 package br.com.seucaio.pokeguess.features.menu.viewmodel
 
-import br.com.seucaio.pokeguess.domain.model.Generation
+import android.os.Parcelable
+import br.com.seucaio.pokeguess.features.menu.model.SettingsUi
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class MenuUiState(
-    val selectedGeneration: Generation = Generation.I,
-    val timerEnabled: Boolean = false,
-    val rounds: Int = 10,
-    val withFriends: Boolean = false,
-) {
-    fun setGeneration(generation: Generation): MenuUiState = copy(selectedGeneration = generation)
+    val settingsUi: SettingsUi = SettingsUi(),
+) : Parcelable {
+    val selectedGeneration get() = settingsUi.generation
+    val timerEnabled get() = settingsUi.timerEnabled
+    val rounds get() = settingsUi.rounds
+    val withFriends get() = settingsUi.withFriends
+    val playerName get() = settingsUi.playerName
+    val startGameIsAvailable get() = settingsUi.nameFilled && settingsUi.roundsFilled
 
-    fun setTimer(enabled: Boolean): MenuUiState = copy(timerEnabled = enabled)
-
-    fun setNumberRounds(rounds: Int): MenuUiState = copy(rounds = rounds)
+    fun updateSettings(settingsUi: SettingsUi): MenuUiState = copy(settingsUi = settingsUi)
 }
