@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import br.com.seucaio.pokeguess.R
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessButton
-import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessScaffold
+import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessContainer
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.SettingsItem
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.PokeGuessTheme
 import br.com.seucaio.pokeguess.domain.model.Generation
@@ -84,7 +84,7 @@ fun MenuContent(
     onState: MenuUiState,
     modifier: Modifier = Modifier,
 ) {
-    PokeGuessScaffold(
+    PokeGuessContainer(
         modifier = modifier,
         centerContent = {
             SettingsSection(

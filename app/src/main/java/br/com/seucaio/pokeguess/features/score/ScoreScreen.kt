@@ -26,7 +26,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import br.com.seucaio.pokeguess.R
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessButton
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessOutlinedButton
-import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessScaffold
+import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessContainer
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.HighAccuracyColor
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.LowAccuracyColor
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.PokeGuessTheme
@@ -71,7 +71,7 @@ fun ScoreContent(
     onAction: (ScoreUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    PokeGuessScaffold(
+    PokeGuessContainer(
         modifier = modifier,
         topContent = {
             Column(
