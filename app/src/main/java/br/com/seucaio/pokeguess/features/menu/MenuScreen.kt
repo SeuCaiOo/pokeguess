@@ -1,7 +1,5 @@
 package br.com.seucaio.pokeguess.features.menu
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +18,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -49,7 +48,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MenuScreen(
-    onNavigateToGame: (Generation, Boolean, Boolean) -> Unit,
+    onNavigateToGame: (Generation, Boolean, Int, Boolean) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: MenuViewModel = koinViewModel()
 ) {
@@ -61,7 +60,12 @@ fun MenuScreen(
         viewModel.uiEvent.collect { event ->
             when (event) {
                 is MenuUiEvent.NavigateToGame -> {
-                    latestOnNavigateToGame(state.selectedGeneration, state.timerEnabled, state.withFriends)
+                    latestOnNavigateToGame(
+                        state.selectedGeneration,
+                        state.timerEnabled,
+                        state.rounds,
+                        state.withFriends
+                    )
                 }
             }
         }
@@ -83,16 +87,16 @@ fun MenuContent(
     PokeGuessScaffold(
         modifier = modifier,
         centerContent = {
-            Text(
-                text = "PokéGuess",
-                style = MaterialTheme.typography.displayLarge
-            )
-            Spacer(modifier = Modifier.height(48.dp))
             SettingsSection(
                 menuState = onState,
                 onGenerationSelect = { onAction(MenuUiAction.GenerationSelected(it)) },
                 onTimerToggle = { onAction(MenuUiAction.TimerToggled(it)) },
                 onRoundsChange = { onAction(MenuUiAction.NumberOfRoundsChanged(it)) }
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            PlayerNameSection(
+                name = onState.playerName,
+                onNameChange = { onAction(MenuUiAction.PlayerNameChanged(it)) },
             )
         },
         bottomContent = {
@@ -100,11 +104,41 @@ fun MenuContent(
             PokeGuessButton(
                 text = stringResource(R.string.start_game),
                 color = MaterialTheme.colorScheme.secondary,
+                enabled = onState.startGameIsAvailable,
                 onClick = { onAction(MenuUiAction.StartGameClicked) },
                 modifier = Modifier.fillMaxWidth()
             )
         }
     )
+}
+
+@Composable
+fun PlayerNameSection(
+    name: String,
+    onNameChange: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 16.dp),
+    ) {
+        Text(
+            text = "Player Name",
+            style = MaterialTheme.typography.headlineSmall,
+            modifier = Modifier.fillMaxWidth()
+        )
+        OutlinedTextField(
+            value = name,
+            onValueChange = { onNameChange(it) },
+            label = { Text("What's your name?") },
+            singleLine = true,
+            maxLines = 1,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 16.dp)
+        )
+    }
 }
 
 @Composable
@@ -119,11 +153,7 @@ private fun SettingsSection(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .border(
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface),
-                shape = MaterialTheme.shapes.medium
-            )
-            .padding(16.dp)
+            .padding(vertical = 16.dp)
     ) {
         Text(
             text = stringResource(R.string.settings),

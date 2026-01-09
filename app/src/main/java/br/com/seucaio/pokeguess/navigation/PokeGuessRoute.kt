@@ -14,6 +14,7 @@ sealed interface PokeGuessRoute {
     data class Game(
         val generation: String,
         val timerEnabled: Boolean,
+        val rounds: Int,
         val withFriends: Boolean = false
     ) : PokeGuessRoute
 
