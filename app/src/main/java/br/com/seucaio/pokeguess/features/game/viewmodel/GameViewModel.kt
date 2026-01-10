@@ -61,10 +61,11 @@ class GameViewModel(
 
     fun handleAction(action: GameUiAction) {
         when (action) {
+            is GameUiAction.StartGame -> loadPokemon()
             is GameUiAction.SubmitGuess -> checkGuess(action.guess)
             is GameUiAction.NextPokemon -> onNextPokemon()
             is GameUiAction.OnBackPressed -> navigateBack()
-            is GameUiAction.OnGuessChange -> {}
+            is GameUiAction.GuessChanged -> saveUiStateHandle { setGuess(action.guess) }
         }
     }
 
@@ -156,9 +157,9 @@ class GameViewModel(
         }
     }
 
-    private fun saveUiStateHandle(update: GameUiState.() -> GameUiState) {
-        // TODO fix bug lost state guess + time
-        savedStateHandle[KEY_UI_STATE] = uiState.value.update()
+    private fun saveUiStateHandle(block: GameUiState.() -> GameUiState) {
+        // TODO fix bug lost state time
+        savedStateHandle[KEY_UI_STATE] = uiState.value.block()
     }
 
     override fun onCleared() {

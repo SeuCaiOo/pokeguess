@@ -38,7 +38,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import br.com.seucaio.pokeguess.R
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessButton
-import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessScaffold
+import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessContainer
+import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessErrorContent
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokemonFrame
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.GreenPokeQuiz
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.PokeGuessTheme
@@ -90,10 +91,7 @@ fun GameScreen(
 
     GameScreenContent(
         uiState = uiState,
-        guess = guess,
-        onGuessChange = { guess = it },
-        onCheckGuess = { viewModel.handleAction(GameUiAction.SubmitGuess(it)) },
-        onNextPokemon = { viewModel.handleAction(GameUiAction.NextPokemon) },
+        uiAction = viewModel::handleAction,
         modifier = modifier
     )
 }
@@ -102,11 +100,8 @@ fun GameScreen(
 @Composable
 fun GameScreenContent(
     uiState: GameUiState,
-    guess: String,
-    onGuessChange: (String) -> Unit,
-    onCheckGuess: (String) -> Unit,
-    onNextPokemon: () -> Unit,
-    modifier: Modifier = Modifier
+    uiAction: (GameUiAction) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     when {
         uiState.isLoading -> {
@@ -118,21 +113,18 @@ fun GameScreenContent(
         }
 
         uiState.errorMessage != null -> {
-            // TODO implement retry button
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) { Text(text = uiState.errorMessage) }
+            PokeGuessErrorContent(
+                message = uiState.errorMessage,
+                onRetry = { uiAction(GameUiAction.StartGame) },
+            )
         }
 
         uiState.pokemon != null -> {
             GameSuccessContent(
                 uiState = uiState,
-                guess = guess,
-                onGuessChange = onGuessChange,
-                onCheckGuess = onCheckGuess,
-                onNextPokemon = onNextPokemon,
+                onGuessChange = { uiAction(GameUiAction.GuessChanged(it)) },
+                onCheckGuess = { uiAction(GameUiAction.SubmitGuess(it)) },
+                onNextPokemon = { uiAction(GameUiAction.NextPokemon) },
                 modifier = modifier
             )
         }
@@ -142,19 +134,18 @@ fun GameScreenContent(
 @Composable
 private fun GameSuccessContent(
     uiState: GameUiState,
-    guess: String,
     onGuessChange: (String) -> Unit,
     onCheckGuess: (String) -> Unit,
     onNextPokemon: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    PokeGuessScaffold(
+    PokeGuessContainer(
         modifier = modifier,
         topContent = { GameHeader(uiState.gameUi) },
         centerContent = {
             GameBody(
                 uiState = uiState,
-                guess = guess,
+                guess = uiState.guessTyped,
                 onGuessChange = onGuessChange,
                 onCheckGuess = onCheckGuess
             )
@@ -171,7 +162,7 @@ private fun GameSuccessContent(
                 PokeGuessButton(
                     text = stringResource(R.string.submit),
                     color = MaterialTheme.colorScheme.secondary,
-                    onClick = { onCheckGuess(guess) },
+                    onClick = { onCheckGuess(uiState.guessTyped) },
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -251,10 +242,7 @@ private fun GameScreenPreview(
         Surface {
             GameScreenContent(
                 uiState = uiState,
-                guess = "Pikachu",
-                onGuessChange = {},
-                onCheckGuess = {},
-                onNextPokemon = {}
+                uiAction = {}
             )
         }
     }

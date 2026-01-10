@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="oops_something_went_wrong">Oops! Something went wrong</string>
+    <string name="please_try_again">Please try again</string>
+    <string name="try_again">Try Again</string>
+    <string name="unknown_error">Unknown Error</string>
+</resources>
