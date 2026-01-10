@@ -11,6 +11,7 @@ data class GameUiState(
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
     val pokemon: Pokemon? = null,
+    val pokemonMatchs: List<Pokemon> = emptyList(),
     val gameUi: GameUi = GameUi(),
     val withFriends: Boolean = false,
     val guessTyped: String = "",
@@ -36,8 +37,12 @@ data class GameUiState(
         return copy(isLoading = false, errorMessage = error.message ?: "Unknown error")
     }
 
-    fun setSuccessPokemon(pokemon: Pokemon): GameUiState {
-        return copy(isLoading = false, pokemon = pokemon)
+    fun setMatchsPokemon(pokemonMatchs: List<Pokemon>): GameUiState {
+        return copy(
+            isLoading = false,
+            pokemonMatchs = pokemonMatchs,
+            pokemon = pokemonMatchs.first()
+        )
     }
 
     fun setGuess(guess: String): GameUiState = copy(guessTyped = guess)
@@ -46,15 +51,11 @@ data class GameUiState(
         return copy(guessTyped = guess, gameUi = gameUi)
     }
 
-    fun nextRound(gameUi: GameUi): GameUiState {
-        return copy(guessTyped = "", gameUi = gameUi)
+    fun nextRound(gameUi: GameUi, nextPokemon: Pokemon?): GameUiState {
+        return copy(guessTyped = "", gameUi = gameUi, pokemon = nextPokemon)
     }
 
     fun updateGameUi(gameUi: GameUi): GameUiState = copy(gameUi = gameUi)
-
-    fun updateTimeGameUi(remainingTime: Int): GameUiState {
-        return copy(gameUi = gameUi.updateTime(remainingTime))
-    }
 
     fun updateGameUiState(update: GameUi.() -> GameUi): GameUiState {
         return copy(gameUi = gameUi.update())

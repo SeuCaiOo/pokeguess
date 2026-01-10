@@ -174,7 +174,7 @@ private fun GameSuccessContent(
 private fun GameHeader(gameUi: GameUi) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text("Round: ${gameUi.currentRound}/${gameUi.totalRounds}")
+            Text("Round: ${gameUi.progressText}")
             Text("Score: ${gameUi.score}")
         }
 
