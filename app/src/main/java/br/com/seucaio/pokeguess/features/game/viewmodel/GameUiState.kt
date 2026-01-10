@@ -40,6 +40,8 @@ data class GameUiState(
         return copy(isLoading = false, pokemon = pokemon)
     }
 
+    fun setGuess(guess: String): GameUiState = copy(guessTyped = guess)
+
     fun checkGuess(guess: String, gameUi: GameUi): GameUiState {
         return copy(guessTyped = guess, gameUi = gameUi)
     }
