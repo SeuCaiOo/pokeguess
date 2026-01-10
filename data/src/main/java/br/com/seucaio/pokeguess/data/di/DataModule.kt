@@ -54,7 +54,6 @@ val dataModule = module {
         PokemonRepositoryImpl(
             remoteDataSource = get<PokemonRemoteDataSource>(),
             localDataSource = get<PokemonLocalDataSource>(),
-            gameMatchLocalDataSource = get<GameMatchLocalDataSource>()
         )
     }
     single<GameMatchRepository> {
