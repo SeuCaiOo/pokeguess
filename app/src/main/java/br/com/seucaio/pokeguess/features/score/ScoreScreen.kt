@@ -25,8 +25,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import br.com.seucaio.pokeguess.R
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessButton
-import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessOutlinedButton
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessContainer
+import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessOutlinedButton
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.HighAccuracyColor
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.LowAccuracyColor
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.PokeGuessTheme
