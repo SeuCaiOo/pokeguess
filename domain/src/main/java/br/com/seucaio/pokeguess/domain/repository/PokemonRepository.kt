@@ -5,4 +5,5 @@ import br.com.seucaio.pokeguess.domain.model.Pokemon
 
 interface PokemonRepository {
     suspend fun getPokemons(generation: Generation): List<Pokemon>
+    suspend fun getPokemonById(pokemonId: Int): Pokemon?
 }

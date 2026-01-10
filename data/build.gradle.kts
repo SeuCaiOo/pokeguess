@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.kotlin.ksp)
 }
 
 kotlin {
@@ -26,6 +27,8 @@ dependencies {
 
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.bundles.retrofit)
+    implementation(libs.bundles.room)
+    ksp(libs.androidx.room.compiler)
 
     detektPlugins(libs.detekt.formatting)
 }
