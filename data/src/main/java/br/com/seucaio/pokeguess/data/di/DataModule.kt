@@ -1,5 +1,9 @@
 package br.com.seucaio.pokeguess.data.di
 
+import br.com.seucaio.pokeguess.data.local.database.PokeGuessDatabase
+import br.com.seucaio.pokeguess.data.local.database.dao.PokemonDao
+import br.com.seucaio.pokeguess.data.local.source.PokemonLocalDataSource
+import br.com.seucaio.pokeguess.data.local.source.PokemonLocalDataSourceImpl
 import br.com.seucaio.pokeguess.data.remote.service.PokemonApiService
 import br.com.seucaio.pokeguess.data.remote.service.RetrofitConfig
 import br.com.seucaio.pokeguess.data.remote.service.interceptor.NetworkInterceptor
@@ -23,13 +27,24 @@ val dataModule = module {
     single<PokemonApiService> { get<Retrofit>().create(PokemonApiService::class.java) }
     // endregion
 
+    // region Database
+    single<PokeGuessDatabase> { PokeGuessDatabase.getDatabase(context = get()) }
+    single<PokemonDao> { get<PokeGuessDatabase>().pokemonDao() }
+    // endregion
+
     // region Data Source
     single<PokemonRemoteDataSource> {
         PokemonRemoteDataSourceImpl(apiService = get<PokemonApiService>())
     }
+    single<PokemonLocalDataSource> {
+        PokemonLocalDataSourceImpl(pokemonDao = get<PokemonDao>())
+    }
     // endregion
 
     single<PokemonRepository> {
-        PokemonRepositoryImpl(remoteDataSource = get<PokemonRemoteDataSource>())
+        PokemonRepositoryImpl(
+            remoteDataSource = get<PokemonRemoteDataSource>(),
+            localDataSource = get<PokemonLocalDataSource>()
+        )
     }
 }
