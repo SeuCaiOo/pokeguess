@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import br.com.seucaio.pokeguess.domain.model.GameStats
 import br.com.seucaio.pokeguess.domain.usecase.CalculateGameStatsUseCase
+import br.com.seucaio.pokeguess.domain.usecase.GetLastMatchUseCase
 import br.com.seucaio.pokeguess.features.score.model.GameStatsUi
 import br.com.seucaio.pokeguess.navigation.PokeGuessRoute
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -18,7 +19,8 @@ import kotlinx.coroutines.launch
 
 class ScoreViewModel(
     savedStateHandle: SavedStateHandle,
-    calculateGameStatsUseCase: CalculateGameStatsUseCase
+    calculateGameStatsUseCase: CalculateGameStatsUseCase,
+    private val getLastMatchUseCase: GetLastMatchUseCase
 ) : ViewModel() {
 
     private val route = savedStateHandle.toRoute<PokeGuessRoute.Score>()
@@ -33,6 +35,19 @@ class ScoreViewModel(
         )
     )
     val uiState: StateFlow<ScoreUiState> = _uiState.asStateFlow()
+
+    init {
+        loadLastMatch()
+    }
+
+    private fun loadLastMatch() {
+        viewModelScope.launch {
+            getLastMatchUseCase()?.let { match ->
+                // Aqui poderíamos atualizar a UI com a lista de palpites
+                // Por enquanto apenas logamos ou preparamos o estado se necessário
+            }
+        }
+    }
 
     private val _uiEvent = MutableSharedFlow<ScoreUiEvent>()
     val uiEvent: SharedFlow<ScoreUiEvent> = _uiEvent.asSharedFlow()

@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import br.com.seucaio.pokeguess.domain.model.Generation
-import br.com.seucaio.pokeguess.domain.usecase.GetNextRoundUseCase
-import br.com.seucaio.pokeguess.domain.usecase.GetRandomPokemonUseCase
+import br.com.seucaio.pokeguess.domain.usecase.AdvanceRoundUseCase
 import br.com.seucaio.pokeguess.domain.usecase.ProcessGuessUseCase
+import br.com.seucaio.pokeguess.domain.usecase.StartGameMatchUseCase
 import br.com.seucaio.pokeguess.domain.usecase.StartTimerUseCase
 import br.com.seucaio.pokeguess.features.game.model.GameUi
 import br.com.seucaio.pokeguess.navigation.PokeGuessRoute
@@ -23,10 +23,10 @@ import kotlinx.coroutines.launch
 
 class GameViewModel(
     private val savedStateHandle: SavedStateHandle,
-    private val getRandomPokemonUseCase: GetRandomPokemonUseCase,
+    private val startGameMatchUseCase: StartGameMatchUseCase,
     private val startTimerUseCase: StartTimerUseCase,
     private val processGuessUseCase: ProcessGuessUseCase,
-    private val getNextRoundUseCase: GetNextRoundUseCase
+    private val advanceRoundUseCase: AdvanceRoundUseCase,
 ) : ViewModel() {
 
     private val route = savedStateHandle.toRoute<PokeGuessRoute.Game>()
@@ -56,26 +56,29 @@ class GameViewModel(
 
     init {
         // Load pokemon if not already loaded or if returning to active game
-        if (currentState.pokemon == null && !currentGameState.isGameOver) loadPokemon()
+        if (currentState.pokemon == null && !currentGameState.isGameOver) starGameMatch()
     }
 
     fun handleAction(action: GameUiAction) {
         when (action) {
-            is GameUiAction.StartGame -> loadPokemon()
+            is GameUiAction.StartGame -> starGameMatch()
             is GameUiAction.SubmitGuess -> checkGuess(action.guess)
-            is GameUiAction.NextPokemon -> onNextPokemon()
+            is GameUiAction.NextPokemon -> nextRound()
             is GameUiAction.OnBackPressed -> navigateBack()
             is GameUiAction.GuessChanged -> saveUiStateHandle { setGuess(action.guess) }
         }
     }
 
-    private fun loadPokemon() {
+    private fun starGameMatch() {
         stopTimer()
         viewModelScope.launch {
             saveUiStateHandle { setLoading() }
-            getRandomPokemonUseCase(currentGeneration)
-                .onSuccess { pokemon ->
-                    saveUiStateHandle { setSuccessPokemon(pokemon) }
+            startGameMatchUseCase(
+                generation = currentGeneration,
+                totalRounds = currentState.gameUi.totalRounds,
+            )
+                .onSuccess { pokemons ->
+                    saveUiStateHandle { setMatchsPokemon(pokemons) }
                     if (currentState.gameTimerEnabled) startTimer()
                 }
                 .onFailure { error -> saveUiStateHandle { setError(error) } }
@@ -119,25 +122,35 @@ class GameViewModel(
         }
     }
 
-    private fun onNextPokemon() {
-        getNextRoundUseCase(
-            currentRound = currentGameState.currentRound,
-            totalRounds = currentGameState.totalRounds
-        ).let { result ->
-            val remainingTime = if (currentGameState.isTimerEnabled) TIMER_START_VALUE else 0
-            saveUiStateHandle {
-                nextRound(
-                    gameUi = currentGameState.nextRound(
-                        currentRound = result.nextRound,
-                        isGameOver = result.isGameOver,
-                        guessSubmitted = false,
-                        correctGuess = false,
-                        remainingTime = remainingTime
+    private fun nextRound() {
+        stopTimer()
+        viewModelScope.launch {
+            advanceRoundUseCase(
+                roundIndex = currentGameState.currentRound,
+                totalRounds = currentGameState.totalRounds,
+                score = currentGameState.score,
+                pokemons = currentState.pokemonMatchs,
+                pokemon = currentState.pokemon,
+                guess = currentState.guessTyped
+            ).onSuccess { result ->
+                val remainingTime = if (currentGameState.isTimerEnabled) TIMER_START_VALUE else 0
+                saveUiStateHandle {
+                    nextRound(
+                        gameUi =
+                        currentGameState.nextRound(
+                            currentRound = result.nextRound,
+                            isGameOver = result.isGameOver,
+                            guessSubmitted = false,
+                            correctGuess = false,
+                            remainingTime = remainingTime
+                        ),
+                        nextPokemon = result.nextPokemon
                     )
-                )
+                }
+                if (result.isGameOver) return@onSuccess navigateToScore()
+                if (currentState.gameTimerEnabled) startTimer()
             }
-
-            if (result.isGameOver) navigateToScore() else loadPokemon()
+                .onFailure { saveUiStateHandle { setError(it) } }
         }
     }
 
