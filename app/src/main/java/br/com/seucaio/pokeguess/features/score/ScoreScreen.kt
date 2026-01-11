@@ -84,8 +84,8 @@ fun ScoreContent(
         modifier = modifier,
         topContent = {
             Text(
-                text = stringResource(R.string.game_over),
-                style = MaterialTheme.typography.displayMedium
+                text = stringResource(R.string.score),
+                style = MaterialTheme.typography.displaySmall
             )
             Spacer(modifier = Modifier.height(16.dp))
             ScoreResultCard(gameStatsUi = uiState.gameStatsUi)
@@ -112,13 +112,12 @@ private fun ScoreResultCard(
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = modifier.fillMaxWidth().padding(16.dp),
+        modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
         )
     ) {
         Column(
-            modifier = Modifier.padding(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             with(gameStatsUi) {
@@ -154,6 +153,7 @@ private fun ScoreResultCard(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
+                Spacer(modifier = Modifier.height(8.dp))
             }
         }
     }
@@ -161,8 +161,8 @@ private fun ScoreResultCard(
 
 @Composable
 private fun PokemonListOld(
-    modifier: Modifier = Modifier,
     pokemonsWithGuesses: Map<Pokemon, String>,
+    modifier: Modifier = Modifier,
 ) {
     LazyRow(
         modifier = modifier.fillMaxSize(fraction = 0.8f),
@@ -204,8 +204,8 @@ private fun PokemonListOld(
 
 @Composable
 private fun PokemonList(
-    modifier: Modifier = Modifier,
     pokemonsWithGuesses: Map<Pokemon, String>,
+    modifier: Modifier = Modifier,
 ) {
     LazyColumn(
         modifier = modifier.fillMaxWidth(),
