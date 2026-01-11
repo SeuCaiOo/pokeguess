@@ -39,9 +39,7 @@ fun PokeGuessNavGraph(
                             playerName = playerName,
                             withFriends = withFriends
                         )
-                    ) {
-                        popUpTo<PokeGuessRoute.Menu> { inclusive = false }
-                    }
+                    ) { popUpTo<PokeGuessRoute.Menu> { inclusive = false } }
                 }
             )
         }
