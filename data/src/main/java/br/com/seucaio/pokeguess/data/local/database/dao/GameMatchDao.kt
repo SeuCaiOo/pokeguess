@@ -34,7 +34,7 @@ interface GameMatchDao {
     suspend fun getAll(): List<GameMatchEntity>
 
     @Query("SELECT * FROM game_matchs WHERE game_id = :gameId")
-    suspend fun getMatchByGameId(gameId: Int): GameMatchEntity
+    suspend fun getMatchByGameId(gameId: Int): GameMatchEntity?
 
     @Query("SELECT * FROM game_matchs WHERE player_name = :playerName")
     suspend fun getMatchListByPlayerName(playerName: String): List<GameMatchEntity>
