@@ -14,7 +14,7 @@ object GameMatchMapper {
             playerName = playerName,
             totalRounds = totalRounds,
             score = score,
-            rounds = rounds.mapKeys { it.key.toPokemonDomain() },
+            rounds = rounds,
         )
     }
 
@@ -24,7 +24,7 @@ object GameMatchMapper {
             playerName = playerName,
             totalRounds = totalRounds,
             score = score,
-            rounds = rounds.mapKeys { it.key.toPokemonEntity() },
+            rounds = rounds,
         )
     }
 }

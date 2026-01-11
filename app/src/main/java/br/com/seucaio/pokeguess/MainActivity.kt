@@ -10,9 +10,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessTopAppBar
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.PokeGuessTheme
 import br.com.seucaio.pokeguess.navigation.PokeGuessNavGraph
 
@@ -30,12 +33,24 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun PokeGuessApp(modifier: Modifier = Modifier) {
+    val navController = rememberNavController()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val showBackButton =
+        navBackStackEntry != null && navController.previousBackStackEntry != null
+
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            PokeGuessTopAppBar(
+                onBackButtonClick = if (!showBackButton) {
+                    null
+                } else {
+                    { navController.popBackStack() }
+                }
+            )
+        },
     ) { innerPadding ->
-        val navController = rememberNavController()
-
         PokeGuessNavGraph(
             navController = navController,
             modifier = Modifier.padding(innerPadding)

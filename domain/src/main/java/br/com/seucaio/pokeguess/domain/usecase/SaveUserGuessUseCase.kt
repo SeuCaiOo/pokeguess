@@ -13,8 +13,7 @@ class SaveUserGuessUseCase(private val gameMatchRepository: GameMatchRepository)
         return runCatching {
             gameMatchRepository.getLastMatch()?.let { gameMatch ->
                 val updatedRounds = gameMatch.rounds.toMutableMap()
-                gameMatch.rounds.keys
-                    .firstOrNull { p -> p.name == pokemon?.name }
+                gameMatch.rounds.keys.firstOrNull { pId -> pId == pokemon?.id }
                     ?.let { pokemon -> updatedRounds.put(key = pokemon, value = guess) }
 
                 val updatedMatch = gameMatch.copy(score = score, rounds = updatedRounds)

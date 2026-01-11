@@ -76,6 +76,7 @@ class GameViewModel(
             startGameMatchUseCase(
                 generation = currentGeneration,
                 totalRounds = currentState.gameUi.totalRounds,
+                playerName = route.playerName,
             )
                 .onSuccess { pokemons ->
                     saveUiStateHandle { setMatchsPokemon(pokemons) }
@@ -126,18 +127,19 @@ class GameViewModel(
         stopTimer()
         viewModelScope.launch {
             advanceRoundUseCase(
-                roundIndex = currentGameState.currentRound,
-                totalRounds = currentGameState.totalRounds,
-                score = currentGameState.score,
-                pokemons = currentState.pokemonMatchs,
-                pokemon = currentState.pokemon,
-                guess = currentState.guessTyped
+                AdvanceRoundUseCase.Params(
+                    roundIndex = currentGameState.currentRound,
+                    totalRounds = currentGameState.totalRounds,
+                    score = currentGameState.score,
+                    pokemonMatchs = currentState.pokemonMatchs,
+                    currentPokemon = currentState.pokemon,
+                    guessTyped = currentState.guessTyped
+                )
             ).onSuccess { result ->
                 val remainingTime = if (currentGameState.isTimerEnabled) TIMER_START_VALUE else 0
                 saveUiStateHandle {
                     nextRound(
-                        gameUi =
-                        currentGameState.nextRound(
+                        gameUi = currentGameState.nextRound(
                             currentRound = result.nextRound,
                             isGameOver = result.isGameOver,
                             guessSubmitted = false,

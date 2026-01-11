@@ -6,29 +6,35 @@ import br.com.seucaio.pokeguess.domain.model.Pokemon
 class AdvanceRoundUseCase(
     private val saveUserGuessUseCase: SaveUserGuessUseCase
 ) {
-    suspend operator fun invoke(
-        roundIndex: Int,
-        totalRounds: Int,
-        score: Int,
-        pokemons: List<Pokemon>,
-        pokemon: Pokemon?,
-        guess: String
-    ): Result<AdvanceRoundResult> {
+    data class Params(
+        val roundIndex: Int,
+        val totalRounds: Int,
+        val score: Int,
+        val pokemonMatchs: List<Pokemon>,
+        val currentPokemon: Pokemon?,
+        val guessTyped: String
+    )
+
+    suspend operator fun invoke(params: Params): Result<AdvanceRoundResult> {
         return runCatching {
-            val isGameOver = pokemons.lastIndex == roundIndex
+            val isGameOver = params.pokemonMatchs.lastIndex == params.roundIndex
 
             saveUserGuessUseCase(
-                score = score,
-                guess = guess,
-                pokemon = pokemon,
+                score = params.score,
+                guess = params.guessTyped,
+                pokemon = params.currentPokemon,
                 isGameOver = isGameOver
             )
 
             if (isGameOver) {
-                AdvanceRoundResult(nextRound = roundIndex, isGameOver = true, nextPokemon = null)
+                AdvanceRoundResult(
+                    nextRound = params.roundIndex,
+                    isGameOver = true,
+                    nextPokemon = null
+                )
             } else {
-                val nextRound = roundIndex + 1
-                val nextPokemon = pokemons.getOrNull(nextRound)
+                val nextRound = params.roundIndex + 1
+                val nextPokemon = params.pokemonMatchs.getOrNull(nextRound)
                     ?: throw NoSuchElementException("No next Pokémon found")
                 AdvanceRoundResult(
                     nextRound = nextRound,

@@ -14,7 +14,7 @@ interface GameMatchLocalDataSource {
     suspend fun updateRound(
         gameId: Int?,
         score: Int?,
-        rounds: Map<PokemonEntity, String>,
+        rounds: Map<Int, String>,
         finishedAt: Long?
     )
 
@@ -45,7 +45,7 @@ class GameMatchLocalDataSourceImpl(
     override suspend fun updateRound(
         gameId: Int?,
         score: Int?,
-        rounds: Map<PokemonEntity, String>,
+        rounds: Map<Int, String>,
         finishedAt: Long?
     ) {
         return withContext(ioDispatcher) {
