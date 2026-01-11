@@ -16,6 +16,7 @@ class HomeViewModel : ViewModel() {
         when (action) {
             is HomeUiAction.SoloModeSelected -> navigateToSoloMode()
             is HomeUiAction.FriendsModeSelected -> navigateToMenuFriends()
+            is HomeUiAction.HistorySelected -> navigateToHistory()
         }
     }
 
@@ -25,5 +26,9 @@ class HomeViewModel : ViewModel() {
 
     private fun navigateToMenuFriends() {
         viewModelScope.launch { _uiEvent.emit(HomeUiEvent.NavigateToFriendsMode) }
+    }
+
+    private fun navigateToHistory() {
+        viewModelScope.launch { _uiEvent.emit(HomeUiEvent.NavigateToHistory) }
     }
 }

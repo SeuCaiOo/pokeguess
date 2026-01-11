@@ -27,4 +27,8 @@ class GameMatchRepositoryImpl(private val localDataSource: GameMatchLocalDataSou
             )
         }
     }
+
+    override suspend fun getAllMatches(): List<GameMatch> {
+        return localDataSource.getAll().map { it.toDomain() }
+    }
 }

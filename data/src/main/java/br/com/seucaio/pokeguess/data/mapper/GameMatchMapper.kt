@@ -1,10 +1,7 @@
 package br.com.seucaio.pokeguess.data.mapper
 
 import br.com.seucaio.pokeguess.data.local.database.entity.GameMatchEntity
-import br.com.seucaio.pokeguess.data.mapper.PokemonMapper.toPokemonDomain
-import br.com.seucaio.pokeguess.data.mapper.PokemonMapper.toPokemonEntity
 import br.com.seucaio.pokeguess.domain.model.GameMatch
-import kotlin.collections.mapKeys
 
 object GameMatchMapper {
     fun GameMatchEntity?.toDomain(): GameMatch {
@@ -15,6 +12,8 @@ object GameMatchMapper {
             totalRounds = totalRounds,
             score = score,
             rounds = rounds,
+            createdAt = createdAt,
+            finishedAt = finishedAt
         )
     }
 
@@ -25,6 +24,8 @@ object GameMatchMapper {
             totalRounds = totalRounds,
             score = score,
             rounds = rounds,
+            createdAt = createdAt,
+            finishedAt = finishedAt
         )
     }
 }

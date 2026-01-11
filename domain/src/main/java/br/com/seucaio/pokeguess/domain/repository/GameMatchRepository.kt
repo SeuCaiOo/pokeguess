@@ -6,4 +6,5 @@ interface GameMatchRepository {
     suspend fun getLastMatch(): GameMatch?
     suspend fun saveMatch(match: GameMatch)
     suspend fun updateMatch(match: GameMatch, isGameOver: Boolean)
+    suspend fun getAllMatches(): List<GameMatch>
 }

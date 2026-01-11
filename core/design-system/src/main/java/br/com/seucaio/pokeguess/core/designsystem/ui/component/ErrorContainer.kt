@@ -26,10 +26,12 @@ fun PokeGuessErrorContent(
     modifier: Modifier = Modifier,
     title: String = stringResource(R.string.oops_something_went_wrong),
     message: String = stringResource(R.string.please_try_again),
-    onRetry: () -> Unit = {}
+    onRetry: (() -> Unit)? = null
 ) {
     Column(
-        modifier = modifier.padding(16.dp).fillMaxSize(),
+        modifier = modifier
+            .padding(16.dp)
+            .fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -45,12 +47,16 @@ fun PokeGuessErrorContent(
             textAlign = TextAlign.Center
         )
         Spacer(modifier = Modifier.height(32.dp))
-        Button(
-            onClick = onRetry,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(text = stringResource(R.string.try_again))
+
+        onRetry?.let {
+            Button(
+                onClick = onRetry,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = stringResource(R.string.try_again))
+            }
         }
+
     }
 }
 
@@ -59,7 +65,7 @@ fun PokeGuessErrorContent(
 private fun PokeGuessErrorContentPreview() {
     PokeGuessTheme {
         Surface {
-            PokeGuessErrorContent()
+            PokeGuessErrorContent() {}
         }
     }
 }

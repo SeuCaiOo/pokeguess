@@ -41,17 +41,20 @@ import org.koin.androidx.compose.koinViewModel
 fun HomeScreen(
     onNavigateToMenuSolo: () -> Unit,
     onNavigateToMenuFriends: () -> Unit,
+    onNavigateToHistory: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = koinViewModel()
 ) {
     val latestOnNavigateToMenuSolo by rememberUpdatedState(onNavigateToMenuSolo)
     val latestOnNavigateToMenuFriends by rememberUpdatedState(onNavigateToMenuFriends)
+    val latestOnNavigateToHistory by rememberUpdatedState(onNavigateToHistory)
 
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { event ->
             when (event) {
                 is HomeUiEvent.NavigateToSoloMode -> latestOnNavigateToMenuSolo()
                 is HomeUiEvent.NavigateToFriendsMode -> latestOnNavigateToMenuFriends()
+                is HomeUiEvent.NavigateToHistory -> latestOnNavigateToHistory()
             }
         }
     }
@@ -73,7 +76,8 @@ fun HomeContent(
         bottomContent = {
             HomeActions(
                 onPlaySolo = { onAction(HomeUiAction.SoloModeSelected) },
-                onPlayWithFriends = { onAction(HomeUiAction.FriendsModeSelected) }
+                onPlayWithFriends = { onAction(HomeUiAction.FriendsModeSelected) },
+                onHistory = { onAction(HomeUiAction.HistorySelected) }
             )
         }
     )
@@ -128,6 +132,7 @@ private fun HomeBranding(modifier: Modifier = Modifier) {
 private fun HomeActions(
     onPlaySolo: () -> Unit,
     onPlayWithFriends: () -> Unit,
+    onHistory: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -140,11 +145,19 @@ private fun HomeActions(
             text = stringResource(R.string.play_solo),
             onClick = onPlaySolo,
         )
+
+        // TODO implement local multiplayer
+//        Spacer(modifier = Modifier.height(16.dp))
+//        PokeGuessOutlinedButton(
+//            modifier = Modifier.fillMaxWidth(),
+//            text = stringResource(R.string.play_with_friends),
+//            onClick = onPlayWithFriends,
+//        )
         Spacer(modifier = Modifier.height(16.dp))
         PokeGuessOutlinedButton(
             modifier = Modifier.fillMaxWidth(),
-            text = stringResource(R.string.play_with_friends),
-            onClick = onPlayWithFriends,
+            text = stringResource(R.string.history),
+            onClick = onHistory,
         )
         Spacer(modifier = Modifier.height(32.dp))
     }
