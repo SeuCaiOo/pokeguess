@@ -24,8 +24,13 @@ fun PokeGuessNavGraph(
         composable<PokeGuessRoute.Home> {
             HomeScreen(
                 onNavigateToMenuSolo = { navController.navigate(PokeGuessRoute.Menu(false)) },
-                onNavigateToMenuFriends = { navController.navigate(PokeGuessRoute.Menu(true)) }
+                onNavigateToMenuFriends = { navController.navigate(PokeGuessRoute.Menu(true)) },
+                onNavigateToHistory = { navController.navigate(PokeGuessRoute.History) }
             )
+        }
+
+        composable<PokeGuessRoute.History> {
+
         }
 
         composable<PokeGuessRoute.Menu> {
