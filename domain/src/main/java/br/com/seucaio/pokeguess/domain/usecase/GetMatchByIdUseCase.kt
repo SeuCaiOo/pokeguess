@@ -5,13 +5,13 @@ import br.com.seucaio.pokeguess.domain.model.Pokemon
 import br.com.seucaio.pokeguess.domain.repository.GameMatchRepository
 import br.com.seucaio.pokeguess.domain.repository.PokemonRepository
 
-class GetLastMatchUseCase(
+class GetMatchByIdUseCase(
     private val gameMatchRepository: GameMatchRepository,
     private val pokemonRepository: PokemonRepository
 ) {
-    suspend operator fun invoke(): Result<GameMatch> {
+    suspend operator fun invoke(matchId: Int): Result<GameMatch> {
         return runCatching {
-            gameMatchRepository.getLastMatch()?.let { gameMatch ->
+            gameMatchRepository.getMatchById(matchId)?.let { gameMatch ->
                 val pokemons = mutableListOf<Pokemon>()
                 gameMatch.rounds.keys.forEach { pokemonId ->
                     pokemonRepository.getPokemonById(pokemonId)?.let {
@@ -19,7 +19,7 @@ class GetLastMatchUseCase(
                     }
                 }
                 gameMatch.setPokemons(pokemons)
-            } ?: throw NoSuchElementException("No last match found")
+            } ?: throw NoSuchElementException("No match by id found")
         }
     }
 }

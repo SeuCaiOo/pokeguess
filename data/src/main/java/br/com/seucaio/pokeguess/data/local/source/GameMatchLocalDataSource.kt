@@ -2,7 +2,6 @@ package br.com.seucaio.pokeguess.data.local.source
 
 import br.com.seucaio.pokeguess.data.local.database.dao.GameMatchDao
 import br.com.seucaio.pokeguess.data.local.database.entity.GameMatchEntity
-import br.com.seucaio.pokeguess.data.local.database.entity.PokemonEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -19,7 +18,7 @@ interface GameMatchLocalDataSource {
     )
 
     suspend fun getAll(): List<GameMatchEntity>
-    suspend fun getMatchByGameId(gameId: Int): GameMatchEntity
+    suspend fun getMatchByGameId(gameId: Int): GameMatchEntity?
     suspend fun getMatchListByPlayerName(playerName: String): List<GameMatchEntity>
     suspend fun getLastFinishedGameMatch(): GameMatchEntity?
     suspend fun getCurrentMatchActive(): GameMatchEntity?
@@ -62,7 +61,7 @@ class GameMatchLocalDataSourceImpl(
         return withContext(ioDispatcher) { gameMatchDao.getAll() }
     }
 
-    override suspend fun getMatchByGameId(gameId: Int): GameMatchEntity {
+    override suspend fun getMatchByGameId(gameId: Int): GameMatchEntity? {
         return withContext(ioDispatcher) { gameMatchDao.getMatchByGameId(gameId) }
     }
 

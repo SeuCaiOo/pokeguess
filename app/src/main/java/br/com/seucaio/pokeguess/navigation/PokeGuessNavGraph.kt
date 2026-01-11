@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import br.com.seucaio.pokeguess.features.game.GameScreen
+import br.com.seucaio.pokeguess.features.history.HistoryScreen
 import br.com.seucaio.pokeguess.features.home.HomeScreen
 import br.com.seucaio.pokeguess.features.menu.MenuScreen
 import br.com.seucaio.pokeguess.features.score.ScoreScreen
@@ -30,7 +31,18 @@ fun PokeGuessNavGraph(
         }
 
         composable<PokeGuessRoute.History> {
-
+            HistoryScreen(
+                onNavigateToScore = { matchId, score, total, withFriends ->
+                    navController.navigate(
+                        PokeGuessRoute.Score(
+                            score = score,
+                            total = total,
+                            withFriends = withFriends,
+                            matchId = matchId
+                        )
+                    )
+                }
+            )
         }
 
         composable<PokeGuessRoute.Menu> {

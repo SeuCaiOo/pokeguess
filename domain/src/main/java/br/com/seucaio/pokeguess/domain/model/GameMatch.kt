@@ -10,6 +10,19 @@ data class GameMatch(
     val totalRounds: Int,
     val score: Int? = null,
     val rounds: Map<Int, String> = emptyMap(),
+    val pokemons: List<Pokemon> = emptyList(),
     val createdAt: Long = System.currentTimeMillis(),
     val finishedAt: Long? = null
-) : Parcelable
+) : Parcelable {
+    val pokemonsWithGuesses: Map<Pokemon, String> get() {
+        val pokemonsWithGuesses = mutableMapOf<Pokemon, String>()
+        rounds.forEach { (pokemonId, guess) ->
+            pokemons.find { it.id == pokemonId }?.let { pokemon ->
+                pokemonsWithGuesses[pokemon] = guess
+            }
+        }
+        return pokemonsWithGuesses
+    }
+
+    fun setPokemons(pokemons: List<Pokemon>) = copy(pokemons = pokemons)
+}

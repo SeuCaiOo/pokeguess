@@ -26,6 +26,7 @@ sealed interface PokeGuessRoute {
     data class Score(
         val score: Int,
         val total: Int,
-        val withFriends: Boolean
+        val withFriends: Boolean,
+        val matchId: Int? = null
     ) : PokeGuessRoute
 }
