@@ -4,6 +4,7 @@ import br.com.seucaio.pokeguess.domain.repository.GameMatchRepository
 import br.com.seucaio.pokeguess.domain.repository.PokemonRepository
 import br.com.seucaio.pokeguess.domain.usecase.AdvanceRoundUseCase
 import br.com.seucaio.pokeguess.domain.usecase.CalculateGameStatsUseCase
+import br.com.seucaio.pokeguess.domain.usecase.GetAllMatchesUseCase
 import br.com.seucaio.pokeguess.domain.usecase.GetLastMatchUseCase
 import br.com.seucaio.pokeguess.domain.usecase.GetNextPokemonUseCase
 import br.com.seucaio.pokeguess.domain.usecase.GetNextRoundUseCase
@@ -29,4 +30,5 @@ val domainModule = module {
     factory { GetLastMatchUseCase(get<GameMatchRepository>()) }
     factory { SaveUserGuessUseCase(get<GameMatchRepository>()) }
     factory { AdvanceRoundUseCase(get<SaveUserGuessUseCase>()) }
+    factory { GetAllMatchesUseCase(get()) }
 }

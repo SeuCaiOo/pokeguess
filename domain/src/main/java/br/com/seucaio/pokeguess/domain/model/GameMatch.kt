@@ -10,4 +10,6 @@ data class GameMatch(
     val totalRounds: Int,
     val score: Int? = null,
     val rounds: Map<Int, String> = emptyMap(),
+    val createdAt: Long = System.currentTimeMillis(),
+    val finishedAt: Long? = null
 ) : Parcelable
