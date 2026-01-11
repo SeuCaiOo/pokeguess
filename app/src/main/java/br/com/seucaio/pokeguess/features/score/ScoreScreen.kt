@@ -1,12 +1,18 @@
 package br.com.seucaio.pokeguess.features.score
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -27,9 +33,12 @@ import br.com.seucaio.pokeguess.R
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessButton
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessContainer
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessOutlinedButton
+import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokemonFrame
+import br.com.seucaio.pokeguess.core.designsystem.ui.component.model.PokemonFrameData
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.HighAccuracyColor
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.LowAccuracyColor
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.PokeGuessTheme
+import br.com.seucaio.pokeguess.domain.model.Pokemon
 import br.com.seucaio.pokeguess.features.score.model.GameStatsUi
 import br.com.seucaio.pokeguess.features.score.preview.ScoreUiStatePreviewProvider
 import br.com.seucaio.pokeguess.features.score.viewmodel.ScoreUiAction
@@ -74,23 +83,21 @@ fun ScoreContent(
     PokeGuessContainer(
         modifier = modifier,
         topContent = {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-            ) {
-                Text(
-                    text = stringResource(R.string.game_over),
-                    style = MaterialTheme.typography.displayMedium
-                )
-            }
-        },
-        centerContent = {
+            Text(
+                text = stringResource(R.string.game_over),
+                style = MaterialTheme.typography.displayMedium
+            )
+            Spacer(modifier = Modifier.height(16.dp))
             ScoreResultCard(gameStatsUi = uiState.gameStatsUi)
         },
+        centerContent = {
+            PokemonList(
+                modifier = Modifier.fillMaxWidth(),
+                pokemonsWithGuesses = uiState.pokemons
+            )
+        },
         bottomContent = {
+            Spacer(modifier = Modifier.height(16.dp))
             ScoreActionButtons(
                 onPlayAgain = { onAction(ScoreUiAction.PlayAgainClicked) },
                 onBackToHome = { onAction(ScoreUiAction.BackToHomeClicked) }
@@ -105,13 +112,13 @@ private fun ScoreResultCard(
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth().padding(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
         )
     ) {
         Column(
-            modifier = Modifier.padding(24.dp),
+            modifier = Modifier.padding(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             with(gameStatsUi) {
@@ -125,7 +132,7 @@ private fun ScoreResultCard(
                     style = MaterialTheme.typography.labelLarge
                 )
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -147,6 +154,87 @@ private fun ScoreResultCard(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun PokemonListOld(
+    modifier: Modifier = Modifier,
+    pokemonsWithGuesses: Map<Pokemon, String>,
+) {
+    LazyRow(
+        modifier = modifier.fillMaxSize(fraction = 0.8f),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        items(pokemonsWithGuesses.keys.toList()) { pokemon ->
+            val isCorrect = pokemon.name == pokemonsWithGuesses[pokemon]
+
+            Card(
+                modifier = Modifier,
+            ) {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    Text(
+                        text = "Player guess: ${pokemonsWithGuesses[pokemon].orEmpty()}",
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                    PokemonFrame(
+                        modifier = Modifier.padding(vertical = 64.dp),
+                        frameData = PokemonFrameData(
+                            pokemonName = pokemon.name,
+                            pokemonImageUrl = pokemon.imageUrl,
+                            unknownPokemon = false,
+                            guessCorrectly = isCorrect
+                        )
+                    )
+                }
+            }
+
+            Column(
+                modifier = Modifier,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+        }
+    }
+}
+
+@Composable
+private fun PokemonList(
+    modifier: Modifier = Modifier,
+    pokemonsWithGuesses: Map<Pokemon, String>,
+) {
+    LazyColumn(
+        modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = PaddingValues(16.dp)
+    ) {
+        items(pokemonsWithGuesses.keys.toList()) { pokemon ->
+            val isCorrect = pokemon.name == pokemonsWithGuesses[pokemon]
+            Column(
+                modifier = Modifier.fillMaxWidth(
+                    fraction = 0.8f
+                ),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                PokemonFrame(
+                    frameData = PokemonFrameData(
+                        pokemonName = pokemon.name,
+                        pokemonImageUrl = pokemon.imageUrl,
+                        unknownPokemon = false,
+                        guessCorrectly = isCorrect
+                    )
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "Player guess: ${pokemonsWithGuesses[pokemon].orEmpty()}",
+                    style = MaterialTheme.typography.titleMedium,
+                )
             }
         }
     }

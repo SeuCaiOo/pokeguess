@@ -7,6 +7,7 @@ import androidx.navigation.toRoute
 import br.com.seucaio.pokeguess.domain.model.GameStats
 import br.com.seucaio.pokeguess.domain.usecase.CalculateGameStatsUseCase
 import br.com.seucaio.pokeguess.domain.usecase.GetLastMatchUseCase
+import br.com.seucaio.pokeguess.domain.usecase.GetMatchByIdUseCase
 import br.com.seucaio.pokeguess.features.score.model.GameStatsUi
 import br.com.seucaio.pokeguess.navigation.PokeGuessRoute
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -15,12 +16,14 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ScoreViewModel(
     savedStateHandle: SavedStateHandle,
     calculateGameStatsUseCase: CalculateGameStatsUseCase,
-    private val getLastMatchUseCase: GetLastMatchUseCase
+    private val getLastMatchUseCase: GetLastMatchUseCase,
+    private val getMatchByIdUseCase: GetMatchByIdUseCase
 ) : ViewModel() {
 
     private val route = savedStateHandle.toRoute<PokeGuessRoute.Score>()
@@ -36,26 +39,37 @@ class ScoreViewModel(
     )
     val uiState: StateFlow<ScoreUiState> = _uiState.asStateFlow()
 
-    init {
-        loadLastMatch()
-    }
-
-    private fun loadLastMatch() {
-        viewModelScope.launch {
-            getLastMatchUseCase()?.let { match ->
-                // Aqui poderíamos atualizar a UI com a lista de palpites
-                // Por enquanto apenas logamos ou preparamos o estado se necessário
-            }
-        }
-    }
-
     private val _uiEvent = MutableSharedFlow<ScoreUiEvent>()
     val uiEvent: SharedFlow<ScoreUiEvent> = _uiEvent.asSharedFlow()
+
+    init {
+        route.matchId?.let { getMatchById(it) } ?: run { loadLastMatch() }
+    }
 
     fun handleAction(action: ScoreUiAction) {
         when (action) {
             is ScoreUiAction.PlayAgainClicked -> navigateToPlayAgain()
             is ScoreUiAction.BackToHomeClicked -> navigateToHome()
+        }
+    }
+
+    private fun loadLastMatch() {
+        viewModelScope.launch {
+            _uiState.update { it.setLoading() }
+            getLastMatchUseCase().let { result ->
+                result.onSuccess { gameMatch -> _uiState.update { it.setGameMatch(gameMatch) } }
+                result.onFailure { error -> _uiState.update { it.setError(error) } }
+            }
+        }
+    }
+
+    private fun getMatchById(matchId: Int) {
+        viewModelScope.launch {
+            _uiState.update { it.setLoading() }
+            getMatchByIdUseCase(matchId).let { result ->
+                result.onSuccess { gameMatch -> _uiState.update { it.setGameMatch(gameMatch) } }
+                result.onFailure { error -> _uiState.update { it.setError(error) } }
+            }
         }
     }
 

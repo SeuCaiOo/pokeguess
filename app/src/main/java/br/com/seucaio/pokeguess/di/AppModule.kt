@@ -6,6 +6,7 @@ import br.com.seucaio.pokeguess.domain.usecase.AdvanceRoundUseCase
 import br.com.seucaio.pokeguess.domain.usecase.CalculateGameStatsUseCase
 import br.com.seucaio.pokeguess.domain.usecase.GetAllMatchesUseCase
 import br.com.seucaio.pokeguess.domain.usecase.GetLastMatchUseCase
+import br.com.seucaio.pokeguess.domain.usecase.GetMatchByIdUseCase
 import br.com.seucaio.pokeguess.domain.usecase.ProcessGuessUseCase
 import br.com.seucaio.pokeguess.domain.usecase.StartGameMatchUseCase
 import br.com.seucaio.pokeguess.domain.usecase.StartTimerUseCase
@@ -40,6 +41,7 @@ val appModule = module {
             savedStateHandle = params.get(),
             calculateGameStatsUseCase = get<CalculateGameStatsUseCase>(),
             getLastMatchUseCase = get<GetLastMatchUseCase>(),
+            getMatchByIdUseCase = get<GetMatchByIdUseCase>()
         )
     }
 
