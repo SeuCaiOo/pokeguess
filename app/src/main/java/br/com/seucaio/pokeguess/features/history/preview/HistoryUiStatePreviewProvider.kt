@@ -1,11 +1,8 @@
 package br.com.seucaio.pokeguess.features.history.preview
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import br.com.seucaio.pokeguess.domain.model.AccuracyLevel
 import br.com.seucaio.pokeguess.domain.model.GameMatch
 import br.com.seucaio.pokeguess.features.history.viewmodel.HistoryUiState
-import br.com.seucaio.pokeguess.features.score.model.GameStatsUi
-import br.com.seucaio.pokeguess.features.score.viewmodel.ScoreUiState
 
 class HistoryUiStatePreviewProvider : PreviewParameterProvider<HistoryUiState> {
     override val values: Sequence<HistoryUiState> = sequenceOf(

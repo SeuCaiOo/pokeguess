@@ -56,7 +56,6 @@ fun PokeGuessErrorContent(
                 Text(text = stringResource(R.string.try_again))
             }
         }
-
     }
 }
 
@@ -65,7 +64,7 @@ fun PokeGuessErrorContent(
 private fun PokeGuessErrorContentPreview() {
     PokeGuessTheme {
         Surface {
-            PokeGuessErrorContent() {}
+            PokeGuessErrorContent {}
         }
     }
 }

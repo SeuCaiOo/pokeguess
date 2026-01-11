@@ -5,7 +5,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import br.com.seucaio.pokeguess.data.local.database.entity.GameMatchEntity
-import br.com.seucaio.pokeguess.data.local.database.entity.PokemonEntity
 
 @Dao
 interface GameMatchDao {

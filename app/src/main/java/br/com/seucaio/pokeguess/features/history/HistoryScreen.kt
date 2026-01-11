@@ -163,7 +163,7 @@ private fun EmptyHistoryMessage() {
 @PreviewLightDark
 @Composable
 private fun ScoreScreenPreview(
-    @PreviewParameter(HistoryUiStatePreviewProvider ::class) uiState: HistoryUiState,
+    @PreviewParameter(HistoryUiStatePreviewProvider::class) uiState: HistoryUiState,
 ) {
     PokeGuessTheme {
         HistoryContent(
@@ -172,4 +172,3 @@ private fun ScoreScreenPreview(
         )
     }
 }
-

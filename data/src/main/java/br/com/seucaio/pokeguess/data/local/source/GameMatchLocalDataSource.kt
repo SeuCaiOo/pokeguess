@@ -2,7 +2,6 @@ package br.com.seucaio.pokeguess.data.local.source
 
 import br.com.seucaio.pokeguess.data.local.database.dao.GameMatchDao
 import br.com.seucaio.pokeguess.data.local.database.entity.GameMatchEntity
-import br.com.seucaio.pokeguess.data.local.database.entity.PokemonEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
