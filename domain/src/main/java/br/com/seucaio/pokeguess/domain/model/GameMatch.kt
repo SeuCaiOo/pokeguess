@@ -9,5 +9,5 @@ data class GameMatch(
     val playerName: String? = "Player #1",
     val totalRounds: Int,
     val score: Int? = null,
-    val rounds: Map<Pokemon, String> = emptyMap(),
+    val rounds: Map<Int, String> = emptyMap(),
 ) : Parcelable

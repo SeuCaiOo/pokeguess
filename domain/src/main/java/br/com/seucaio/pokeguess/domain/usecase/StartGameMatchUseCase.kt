@@ -20,7 +20,7 @@ class StartGameMatchUseCase(
                     gameMatchRepository.saveMatch(
                         GameMatch(
                             totalRounds = totalRounds,
-                            rounds = matchPokemons.associateWith { "" }
+                            rounds = matchPokemons.associate { it.id to "" },
                         )
                     )
                 }

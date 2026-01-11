@@ -27,7 +27,7 @@ interface GameMatchDao {
     suspend fun updateRound(
         gameId: Int?,
         score: Int?,
-        rounds: Map<PokemonEntity, String>,
+        rounds: Map<Int, String>,
         finishedAt: Long?,
     )
 

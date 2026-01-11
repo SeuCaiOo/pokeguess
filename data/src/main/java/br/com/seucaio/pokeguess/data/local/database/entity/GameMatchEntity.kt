@@ -18,7 +18,7 @@ data class GameMatchEntity(
     @ColumnInfo(name = "total_rounds")
     val totalRounds: Int,
     val score: Int? = null,
-    val rounds: Map<PokemonEntity, String> = emptyMap(),
+    val rounds: Map<Int, String> = emptyMap(),
     @ColumnInfo(name = "created_at")
     val createdAt: Long = System.currentTimeMillis(),
     @ColumnInfo(name = "finished_at")
@@ -28,7 +28,7 @@ data class GameMatchEntity(
 
     fun finishGameMatch(): GameMatchEntity = copy(finishedAt = System.currentTimeMillis())
 
-    fun updateRound(updatedRounds: Map<PokemonEntity, String>): GameMatchEntity {
+    fun updateRound(updatedRounds: Map<Int, String>): GameMatchEntity {
         return copy(rounds = updatedRounds)
     }
 }
