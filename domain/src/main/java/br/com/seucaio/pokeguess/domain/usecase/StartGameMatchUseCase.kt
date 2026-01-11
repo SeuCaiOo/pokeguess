@@ -19,6 +19,7 @@ class StartGameMatchUseCase(
                 pokemons.shuffled().take(totalRounds).also { matchPokemons ->
                     gameMatchRepository.saveMatch(
                         GameMatch(
+                            playerName = playerName,
                             totalRounds = totalRounds,
                             rounds = matchPokemons.associate { it.id to "" },
                         )
