@@ -42,7 +42,7 @@ import java.util.Locale
 
 @Composable
 fun HistoryScreen(
-    onNavigateToScore: (Int) -> Unit,
+    onNavigateToScore: (Int, Int, Int, Boolean) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HistoryViewModel = koinViewModel()
 ) {
@@ -51,7 +51,12 @@ fun HistoryScreen(
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { event ->
             when (event) {
-                is HistoryUiEvent.NavigateToScoreByMatchId -> latestOnNavigateToScore(event.matchId)
+                is HistoryUiEvent.NavigateToScoreByMatchId -> latestOnNavigateToScore(
+                    event.matchId,
+                    event.score,
+                    event.total,
+                    event.withFriends
+                )
             }
         }
     }
@@ -77,14 +82,20 @@ fun HistoryContent(
                 uiState.isLoading -> {
                     PokeGuessLoadingContent()
                 }
+
                 uiState.errorMessage != null -> {
                     PokeGuessErrorContent(message = uiState.errorMessage)
                 }
+
                 uiState.matches.isEmpty() -> {
                     PokeGuessErrorContent(message = stringResource(R.string.no_history_found))
                 }
+
                 else -> {
-                    HistoryList(matches = uiState.matches)
+                    HistoryList(
+                        matches = uiState.matches,
+                        onMatchClick = { matchId -> onAction(HistoryUiAction.MatchClicked(matchId)) }
+                    )
                 }
             }
         }
@@ -92,27 +103,40 @@ fun HistoryContent(
 }
 
 @Composable
-private fun HistoryList(matches: List<GameMatch>) {
+private fun HistoryList(
+    matches: List<GameMatch>,
+    onMatchClick: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(matches) { match ->
-            HistoryItem(match = match)
+            HistoryItem(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                match = match,
+                onMatchClick = onMatchClick
+            )
         }
     }
 }
 
 @Composable
-private fun HistoryItem(match: GameMatch) {
+private fun HistoryItem(
+    match: GameMatch,
+    onMatchClick: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
     val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
     val date = match.finishedAt?.let { dateFormat.format(Date(it)) } ?: ""
 
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
-        )
+        ),
+        onClick = { onMatchClick(match.id ?: 0) }
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
@@ -143,20 +167,6 @@ private fun HistoryItem(match: GameMatch) {
                 modifier = Modifier.padding(top = 4.dp)
             )
         }
-    }
-}
-
-@Composable
-private fun EmptyHistoryMessage() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = stringResource(R.string.no_history_found),
-            style = MaterialTheme.typography.bodyLarge
-        )
     }
 }
 

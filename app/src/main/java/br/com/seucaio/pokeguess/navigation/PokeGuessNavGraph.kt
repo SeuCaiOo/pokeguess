@@ -32,7 +32,15 @@ fun PokeGuessNavGraph(
 
         composable<PokeGuessRoute.History> {
             HistoryScreen(
-                onNavigateToScore = { matchId ->
+                onNavigateToScore = { matchId, score, total, withFriends ->
+                    navController.navigate(
+                        PokeGuessRoute.Score(
+                            score = score,
+                            total = total,
+                            withFriends = withFriends,
+                            matchId = matchId
+                        )
+                    )
                 }
             )
         }

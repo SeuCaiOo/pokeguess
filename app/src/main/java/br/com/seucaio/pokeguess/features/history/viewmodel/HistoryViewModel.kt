@@ -49,7 +49,16 @@ class HistoryViewModel(
 
     private fun navigateToScoreByMatchId(matchId: Int) {
         viewModelScope.launch {
-            _uiEvent.emit(HistoryUiEvent.NavigateToScoreByMatchId(matchId))
+            _uiState.value.matches.firstOrNull { it.id == matchId }?.let {
+                _uiEvent.emit(
+                    HistoryUiEvent.NavigateToScoreByMatchId(
+                        matchId = it.id ?: 0,
+                        score = it.score ?: 0,
+                        total = it.totalRounds,
+                        withFriends = false
+                    )
+                )
+            }
         }
     }
 }
