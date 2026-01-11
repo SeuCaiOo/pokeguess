@@ -15,6 +15,7 @@ sealed interface PokeGuessRoute {
         val generation: String,
         val timerEnabled: Boolean,
         val rounds: Int,
+        val playerName: String? = null,
         val withFriends: Boolean = false
     ) : PokeGuessRoute
 
