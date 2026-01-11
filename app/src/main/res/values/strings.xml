@@ -28,4 +28,7 @@
     <string name="accuracy_value">%1$d%%</string>
     <string name="correct">Correct</string>
     <string name="next">Next</string>
+    <string name="history">History</string>
+    <string name="no_history_found">No match history found</string>
+    <string name="match_result_format">Score: %1$d/%2$d</string>
 </resources>
