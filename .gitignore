@@ -18,6 +18,12 @@ captures/
 *.apk
 output-metadata.json
 
+# Generated files
+bin/
+gen/
+out/
+release/
+
 # IntelliJ
 *.iml
 .idea/

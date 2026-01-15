@@ -76,7 +76,6 @@ fun HomeContent(
         bottomContent = {
             HomeActions(
                 onPlaySolo = { onAction(HomeUiAction.SoloModeSelected) },
-                onPlayWithFriends = { onAction(HomeUiAction.FriendsModeSelected) },
                 onHistory = { onAction(HomeUiAction.HistorySelected) }
             )
         }
@@ -131,7 +130,6 @@ private fun HomeBranding(modifier: Modifier = Modifier) {
 @Composable
 private fun HomeActions(
     onPlaySolo: () -> Unit,
-    onPlayWithFriends: () -> Unit,
     onHistory: () -> Unit,
     modifier: Modifier = Modifier,
 ) {

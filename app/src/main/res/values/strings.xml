@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">PokeGuess</string>
     <string name="app_logo">Pokémon Guess Logo</string>
     <string name="who_that_pokemon">Who\'s that Pokémon?</string>
     <string name="pokemon">Pokémon</string>
