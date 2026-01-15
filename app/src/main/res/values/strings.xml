@@ -1,3 +1,34 @@
 <resources>
-    <string name="app_name">PokeGuess</string>
+    <string name="app_logo">Pokémon Guess Logo</string>
+    <string name="who_that_pokemon">Who\'s that Pokémon?</string>
+    <string name="pokemon">Pokémon</string>
+    <string name="guess">Guess</string>
+    <string name="pokemon_logo">Pokémon Logo</string>
+    <string name="play_solo">Play Solo</string>
+    <string name="play_with_friends">Play with Friends</string>
+    <string name="type_pokemon_name">Type Pokémon name …</string>
+    <string name="submit">Submit</string>
+    <string name="skip">Skip</string>
+    <string name="game_over">Game Over!</string>
+    <string name="score">Score</string>
+    <string name="incorrect">Incorrect</string>
+    <string name="total">Total</string>
+    <string name="accuracy">Accuracy</string>
+    <string name="play_again">Play Again</string>
+    <string name="back_to_menu">Back to Menu</string>
+    <string name="back_to_home">Back to Home</string>
+    <string name="no_time_limit">No time limit</string>
+    <string name="seconds_per_round">10 seconds per round</string>
+    <string name="start_game">Start Game</string>
+    <string name="game_timer">Game Timer</string>
+    <string name="number_of_rounds">Number of Rounds</string>
+    <string name="total_guesses">Total guesses</string>
+    <string name="generation">Generation</string>
+    <string name="settings">Settings</string>
+    <string name="accuracy_value">%1$d%%</string>
+    <string name="correct">Correct</string>
+    <string name="next">Next</string>
+    <string name="history">History</string>
+    <string name="no_history_found">No match history found</string>
+    <string name="match_result_format">Score: %1$d/%2$d</string>
 </resources>

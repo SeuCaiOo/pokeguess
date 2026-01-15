@@ -18,6 +18,12 @@ captures/
 *.apk
 output-metadata.json
 
+# Generated files
+bin/
+gen/
+out/
+release/
+
 # IntelliJ
 *.iml
 .idea/
@@ -40,3 +46,8 @@ google-services.json
 
 # Kotlin
 .kotlin/
+
+# Android Studio Agents
+AGENTS.md
+GEMINI.md
+.agent/
