@@ -14,7 +14,11 @@ plugins {
 
 val keystorePropertiesFile: File? = rootProject.file("signing.properties")
 val keystoreProperties = Properties()
-keystorePropertiesFile?.let { keystoreProperties.load(FileInputStream(keystorePropertiesFile)) }
+keystorePropertiesFile?.let {
+    if (keystorePropertiesFile.exists()) {
+        keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+    }
+}
 
 fun getVersionName(): String {
     return System.getenv("VERSION_NAME") ?: "1.0.0-SNAPSHOT"
