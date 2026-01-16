@@ -8,8 +8,11 @@ import kotlinx.coroutines.withContext
 
 internal interface PokemonLocalDataSource {
     suspend fun getAllPokemons(): List<PokemonEntity>
+    suspend fun getAllByGeneration(offset: Int, limit: Int): List<PokemonEntity>
     suspend fun getByPokemonId(pokemonId: Int): PokemonEntity?
     suspend fun clearAndCachePokemons(pokemons: List<PokemonEntity>)
+    suspend fun hasNoPokemons(): Boolean
+    suspend fun hasPokemons(): Boolean
 }
 
 internal class PokemonLocalDataSourceImpl(
@@ -18,6 +21,10 @@ internal class PokemonLocalDataSourceImpl(
 ) : PokemonLocalDataSource {
     override suspend fun getAllPokemons(): List<PokemonEntity> {
         return withContext(ioDispatcher) { pokemonDao.getAll() }
+    }
+
+    override suspend fun getAllByGeneration(offset: Int, limit: Int): List<PokemonEntity> {
+        return withContext(ioDispatcher) { pokemonDao.getByGeneration(offset, limit) }
     }
 
     override suspend fun getByPokemonId(pokemonId: Int): PokemonEntity? {
@@ -29,5 +36,13 @@ internal class PokemonLocalDataSourceImpl(
             pokemonDao.deleteAll()
             pokemonDao.insertAll(pokemons)
         }
+    }
+
+    override suspend fun hasNoPokemons(): Boolean {
+        return withContext(ioDispatcher) { pokemonDao.isEmpty() }
+    }
+
+    override suspend fun hasPokemons(): Boolean {
+        return withContext(ioDispatcher) { pokemonDao.hasData() }
     }
 }
