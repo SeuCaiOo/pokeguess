@@ -5,7 +5,7 @@ import br.com.seucaio.pokeguess.domain.repository.GameSettingsRepository
 import kotlinx.coroutines.flow.Flow
 
 class GetGameSettingsUseCase(private val repository: GameSettingsRepository) {
-    operator fun invoke(): Result<Flow<GameSettings>> {
-        return runCatching { repository.gameSettings }
+    operator fun invoke(): Flow<GameSettings> {
+        return repository.gameSettings
     }
 }

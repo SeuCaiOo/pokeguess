@@ -6,4 +6,5 @@ import kotlinx.coroutines.flow.Flow
 interface GameSettingsRepository {
     val gameSettings: Flow<GameSettings>
     suspend fun saveSettings(settings: GameSettings)
+    suspend fun clearSettings()
 }
