@@ -7,10 +7,7 @@ import androidx.navigation.toRoute
 import br.com.seucaio.pokeguess.domain.model.Generation
 import br.com.seucaio.pokeguess.domain.usecase.GetPokemonsUseCase
 import br.com.seucaio.pokeguess.navigation.PokeGuessRoute
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
 class PokemonViewModel(

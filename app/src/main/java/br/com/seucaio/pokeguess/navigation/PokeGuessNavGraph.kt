@@ -29,7 +29,7 @@ fun PokeGuessNavGraph(
         menuScreen(navController)
         gameScreen(navController)
         scoreScreen(navController)
-        pokemonScreen(navController)
+        pokemonScreen()
     }
 }
 
@@ -117,7 +117,7 @@ private fun NavGraphBuilder.scoreScreen(navController: NavHostController) {
     }
 }
 
-private fun NavGraphBuilder.pokemonScreen(navController: NavHostController) {
+private fun NavGraphBuilder.pokemonScreen() {
     composable<PokeGuessRoute.Pokemons> {
         PokemonScreen(modifier = Modifier)
     }

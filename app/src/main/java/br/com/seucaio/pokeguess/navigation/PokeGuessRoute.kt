@@ -1,6 +1,5 @@
 package br.com.seucaio.pokeguess.navigation
 
-import br.com.seucaio.pokeguess.domain.model.Generation
 import kotlinx.serialization.Serializable
 
 @Serializable
