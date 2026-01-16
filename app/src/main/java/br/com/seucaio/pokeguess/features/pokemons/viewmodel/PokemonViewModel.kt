@@ -7,7 +7,10 @@ import androidx.navigation.toRoute
 import br.com.seucaio.pokeguess.domain.model.Generation
 import br.com.seucaio.pokeguess.domain.usecase.GetPokemonsUseCase
 import br.com.seucaio.pokeguess.navigation.PokeGuessRoute
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
 class PokemonViewModel(
@@ -24,6 +27,9 @@ class PokemonViewModel(
         initialValue = PokemonUiState(generation = currentGeneration)
     )
 
+    private val _uiEvent = MutableSharedFlow<PokemonUiEvent>()
+    val uiEvent: SharedFlow<PokemonUiEvent> = _uiEvent.asSharedFlow()
+
     init {
         handleAction(PokemonUiAction.ListPokemonsByGeneration(currentGeneration))
     }
@@ -31,6 +37,7 @@ class PokemonViewModel(
     fun handleAction(action: PokemonUiAction) {
         when (action) {
             is PokemonUiAction.ListPokemonsByGeneration -> loadPokemons()
+            is PokemonUiAction.BackButtonClicked -> navigateToBack()
         }
     }
 
@@ -42,6 +49,10 @@ class PokemonViewModel(
                 onFailure = { error -> saveUiStateHandle { setError(error) } }
             )
         }
+    }
+
+    private fun navigateToBack() {
+        viewModelScope.launch { _uiEvent.emit(PokemonUiEvent.NavigateToBack) }
     }
 
     private fun saveUiStateHandle(block: PokemonUiState.() -> PokemonUiState) {

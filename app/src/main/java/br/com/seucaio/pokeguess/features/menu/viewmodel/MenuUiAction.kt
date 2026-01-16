@@ -9,4 +9,5 @@ sealed interface MenuUiAction {
     data class NumberOfRoundsChanged(val rounds: Int) : MenuUiAction
     data class PlayerNameChanged(val name: String) : MenuUiAction
     data object PokemonListClicked : MenuUiAction
+    data object BackButtonClicked : MenuUiAction
 }

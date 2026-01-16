@@ -7,14 +7,6 @@ import br.com.seucaio.pokeguess.features.history.viewmodel.HistoryUiState
 class HistoryUiStatePreviewProvider : PreviewParameterProvider<HistoryUiState> {
     override val values: Sequence<HistoryUiState> = sequenceOf(
         HistoryUiState(
-            isLoading = true,
-            matches = listOf()
-        ),
-        HistoryUiState(
-            isLoading = false,
-            matches = emptyList()
-        ),
-        HistoryUiState(
             isLoading = false,
             matches = listOf(
                 GameMatch(
@@ -38,6 +30,14 @@ class HistoryUiStatePreviewProvider : PreviewParameterProvider<HistoryUiState> {
                     totalRounds = 10
                 )
             )
+        ),
+        HistoryUiState(
+            isLoading = true,
+            matches = listOf()
+        ),
+        HistoryUiState(
+            isLoading = false,
+            matches = emptyList()
         )
     )
 }

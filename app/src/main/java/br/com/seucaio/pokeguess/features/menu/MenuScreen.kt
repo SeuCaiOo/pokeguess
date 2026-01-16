@@ -36,8 +36,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import br.com.seucaio.pokeguess.R
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessButton
-import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessContainer
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessOutlinedButton
+import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessScaffold
+import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessTopAppBar
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.SettingsItem
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.PokeGuessTheme
 import br.com.seucaio.pokeguess.domain.model.Generation
@@ -51,11 +52,13 @@ import org.koin.androidx.compose.koinViewModel
 fun MenuScreen(
     onNavigateToGame: (Generation, Boolean, Int, String?, Boolean) -> Unit,
     onNavigateToPokemons: (Generation) -> Unit,
+    onNavigateToBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: MenuViewModel = koinViewModel()
 ) {
     val latestOnNavigateToGame by rememberUpdatedState(onNavigateToGame)
     val latestOnNavigateToPokemons by rememberUpdatedState(onNavigateToPokemons)
+    val latestOnNavigateToBack by rememberUpdatedState(onNavigateToBack)
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -75,6 +78,10 @@ fun MenuScreen(
                 is MenuUiEvent.NavigateToPokemons -> {
                     latestOnNavigateToPokemons(state.selectedGeneration)
                 }
+
+                is MenuUiEvent.NavigateToBack -> {
+                    latestOnNavigateToBack()
+                }
             }
         }
     }
@@ -92,8 +99,14 @@ fun MenuContent(
     onState: MenuUiState,
     modifier: Modifier = Modifier,
 ) {
-    PokeGuessContainer(
+    PokeGuessScaffold(
         modifier = modifier,
+        topAppBar = {
+            PokeGuessTopAppBar(
+                title = stringResource(R.string.settings),
+                onBackButtonClick = { onAction(MenuUiAction.BackButtonClicked) }
+            )
+        },
         centerContent = {
             SettingsSection(
                 menuState = onState,
