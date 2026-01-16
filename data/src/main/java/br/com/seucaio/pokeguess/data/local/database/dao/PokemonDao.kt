@@ -17,6 +17,15 @@ interface PokemonDao {
     @Query("SELECT * FROM pokemons")
     suspend fun getAll(): List<PokemonEntity>
 
+    @Query("SELECT NOT EXISTS(SELECT 1 FROM pokemons)")
+    suspend fun isEmpty(): Boolean
+
+    @Query("SELECT EXISTS(SELECT 1 FROM pokemons)")
+    suspend fun hasData(): Boolean
+
+    @Query("SELECT * FROM pokemons WHERE id > :offset LIMIT :limit")
+    suspend fun getByGeneration(offset: Int, limit: Int): List<PokemonEntity>
+
     @Query("DELETE FROM pokemons")
     suspend fun deleteAll()
 }
