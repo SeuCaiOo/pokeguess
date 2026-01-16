@@ -18,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -27,6 +28,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import br.com.seucaio.pokeguess.BuildConfig
 import br.com.seucaio.pokeguess.R
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessButton
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessContainer
@@ -91,7 +93,7 @@ private fun HomeBranding(modifier: Modifier = Modifier) {
         Box(
             modifier = Modifier
                 .background(
-                    color = MaterialTheme.colorScheme.secondary,
+                    color = colorResource(id = R.color.ic_launcher_background),
                     shape = CircleShape
                 ),
             contentAlignment = Alignment.Center
@@ -100,7 +102,7 @@ private fun HomeBranding(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .fillMaxWidth(fraction = 0.5f)
                     .aspectRatio(1f),
-                painter = painterResource(id = R.mipmap.ic_launcher_monochrome),
+                painter = painterResource(id = R.mipmap.ic_launcher_foreground),
                 contentDescription = stringResource(R.string.pokemon_logo),
             )
         }
@@ -113,6 +115,11 @@ private fun HomeBranding(modifier: Modifier = Modifier) {
                 }
                 withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.primary)) {
                     append(stringResource(R.string.guess))
+                }
+                if (BuildConfig.DEBUG) {
+                    withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.secondary)) {
+                        append(" DEV")
+                    }
                 }
             },
             fontSize = 32.sp,
