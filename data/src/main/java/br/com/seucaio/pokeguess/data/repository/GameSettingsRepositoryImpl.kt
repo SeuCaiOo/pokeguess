@@ -29,7 +29,6 @@ class GameSettingsRepositoryImpl(
         )
     }
 
-
     override suspend fun saveSettings(settings: GameSettings) {
         dataStore.edit { preferences ->
             preferences[PLAYER_NAME] = settings.playerName
