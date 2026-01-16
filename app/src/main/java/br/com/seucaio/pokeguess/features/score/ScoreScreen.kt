@@ -27,8 +27,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import br.com.seucaio.pokeguess.R
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessButton
-import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessContainer
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessOutlinedButton
+import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessScaffold
+import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessTopAppBar
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokemonFrame
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.model.PokemonFrameData
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.HighAccuracyColor
@@ -76,14 +77,15 @@ fun ScoreContent(
     onAction: (ScoreUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    PokeGuessContainer(
+    PokeGuessScaffold(
         modifier = modifier,
-        topContent = {
-            Text(
-                text = stringResource(R.string.score),
-                style = MaterialTheme.typography.displaySmall
+        topAppBar = {
+            PokeGuessTopAppBar(
+                title = stringResource(R.string.score),
+                onBackButtonClick = { onAction(ScoreUiAction.PlayAgainClicked) }
             )
-            Spacer(modifier = Modifier.height(16.dp))
+        },
+        topContent = {
             ScoreResultCard(gameStatsUi = uiState.gameStatsUi)
         },
         centerContent = {

@@ -28,6 +28,7 @@ class HistoryViewModel(
         when (action) {
             is HistoryUiAction.LoadHistory -> loadHistory()
             is HistoryUiAction.MatchClicked -> navigateToScoreByMatchId(action.matchId)
+            is HistoryUiAction.BackButtonClicked -> navigateToBack()
         }
     }
 
@@ -60,5 +61,9 @@ class HistoryViewModel(
                 )
             }
         }
+    }
+
+    private fun navigateToBack() {
+        viewModelScope.launch { _uiEvent.emit(HistoryUiEvent.NavigateToBack) }
     }
 }

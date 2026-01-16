@@ -2,16 +2,13 @@ package br.com.seucaio.pokeguess.features.pokemons
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -19,9 +16,10 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import br.com.seucaio.pokeguess.R
-import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessContainer
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessErrorContent
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessLoadingContent
+import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessScaffold
+import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessTopAppBar
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokemonFrame
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.model.PokemonFrameData
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.PokeGuessTheme
@@ -34,16 +32,25 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun PokemonScreen(
+    onNavigateToBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PokemonViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    val latestOnNavigateToBack by rememberUpdatedState(onNavigateToBack)
+
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collect { event ->
+            when (event) {
+                else -> latestOnNavigateToBack()
+            }
+        }
+    }
+
     PokemonContent(
         uiState = uiState,
-        onListPokemon = {
-            viewModel.handleAction(PokemonUiAction.ListPokemonsByGeneration(uiState.generation))
-        },
+        uiAction = viewModel::handleAction,
         modifier = modifier
     )
 }
@@ -51,18 +58,16 @@ fun PokemonScreen(
 @Composable
 fun PokemonContent(
     uiState: PokemonUiState,
-    onListPokemon: () -> Unit,
+    uiAction: (PokemonUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    PokeGuessContainer(
+    PokeGuessScaffold(
         modifier = modifier,
-        topContent = {
-            Text(
-                text = uiState.generation.displayName,
-                style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.fillMaxWidth()
+        topAppBar = {
+            PokeGuessTopAppBar(
+                title = uiState.generation.displayName,
+                onBackButtonClick = { uiAction(PokemonUiAction.BackButtonClicked) }
             )
-            Spacer(modifier = Modifier.height(16.dp))
         },
         centerContent = {
             when {
@@ -73,7 +78,9 @@ fun PokemonContent(
                 uiState.errorMessage != null -> {
                     PokeGuessErrorContent(
                         message = uiState.errorMessage,
-                        onRetry = { onListPokemon() },
+                        onRetry = {
+                            uiAction(PokemonUiAction.ListPokemonsByGeneration(uiState.generation))
+                        },
                     )
                 }
 
@@ -122,7 +129,7 @@ private fun PokemonScreenPreview(
     PokeGuessTheme {
         PokemonContent(
             uiState = uiState,
-            onListPokemon = {},
+            uiAction = {},
         )
     }
 }

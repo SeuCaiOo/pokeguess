@@ -22,10 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -38,8 +35,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import br.com.seucaio.pokeguess.R
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessButton
-import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessContainer
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessErrorContent
+import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessScaffold
+import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessTopAppBar
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokemonFrame
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.GreenPokeQuiz
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.PokeGuessTheme
@@ -55,11 +53,13 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun GameScreen(
     onGameOver: (Int, Int, Boolean) -> Unit,
+    onNavigateToBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: GameViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val latestOnGameOver by rememberUpdatedState(onGameOver)
+    val latestOnNavigateToBack by rememberUpdatedState(onNavigateToBack)
 
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { event ->
@@ -68,24 +68,8 @@ fun GameScreen(
                     latestOnGameOver(event.score, event.total, event.withFriends)
                 }
 
-                is GameUiEvent.NavigateBack -> {
-                    // Handle back navigation if needed, or if it's handled by activity/nav
-                    // controller
-                }
+                is GameUiEvent.NavigateBack -> latestOnNavigateToBack()
             }
-        }
-    }
-
-    // Reset guess input is tricky with UDF if state doesn't explicit clear it.
-    // For now, we can rely on ViewModel state updates. Ideally ViewModel holds current guess.
-    // But to minimize refactor scope, let's keep guess state local but reactive to pokemon changes.
-    var guess by remember { mutableStateOf("") }
-
-    // Reset guess when pokemon changes (New ID or similar check would be better, but Object
-    // reference works for now)
-    LaunchedEffect(uiState.pokemon) {
-        if (uiState.pokemon != null) {
-            guess = ""
         }
     }
 
@@ -125,6 +109,7 @@ fun GameScreenContent(
                 onGuessChange = { uiAction(GameUiAction.GuessChanged(it)) },
                 onCheckGuess = { uiAction(GameUiAction.SubmitGuess(it)) },
                 onNextPokemon = { uiAction(GameUiAction.NextPokemon) },
+                onNavigateToBack = { uiAction(GameUiAction.OnBackPressed) },
                 modifier = modifier
             )
         }
@@ -136,11 +121,17 @@ private fun GameSuccessContent(
     uiState: GameUiState,
     onGuessChange: (String) -> Unit,
     onCheckGuess: (String) -> Unit,
+    onNavigateToBack: () -> Unit,
     onNextPokemon: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    PokeGuessContainer(
+    PokeGuessScaffold(
         modifier = modifier,
+        topAppBar = {
+            PokeGuessTopAppBar(
+                onBackButtonClick = { onNavigateToBack() }
+            )
+        },
         topContent = { GameHeader(uiState.gameUi) },
         centerContent = {
             GameBody(

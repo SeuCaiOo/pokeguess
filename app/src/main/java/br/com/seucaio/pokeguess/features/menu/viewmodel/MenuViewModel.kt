@@ -47,6 +47,8 @@ class MenuViewModel(
             }
 
             is MenuUiAction.PokemonListClicked -> navigateToPokemons()
+
+            is MenuUiAction.BackButtonClicked -> navigateToBack()
         }
     }
 
@@ -56,6 +58,10 @@ class MenuViewModel(
 
     private fun navigateToPokemons() {
         viewModelScope.launch { _uiEvent.emit(MenuUiEvent.NavigateToPokemons) }
+    }
+
+    private fun navigateToBack() {
+        viewModelScope.launch { _uiEvent.emit(MenuUiEvent.NavigateToBack) }
     }
 
     private fun saveUiStateHandle(block: MenuUiState.() -> MenuUiState) {

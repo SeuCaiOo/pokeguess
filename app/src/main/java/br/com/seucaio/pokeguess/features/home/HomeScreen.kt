@@ -31,8 +31,8 @@ import androidx.compose.ui.unit.sp
 import br.com.seucaio.pokeguess.BuildConfig
 import br.com.seucaio.pokeguess.R
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessButton
-import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessContainer
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessOutlinedButton
+import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessScaffold
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.PokeGuessTheme
 import br.com.seucaio.pokeguess.features.home.viewmodel.HomeUiAction
 import br.com.seucaio.pokeguess.features.home.viewmodel.HomeUiEvent
@@ -72,8 +72,9 @@ fun HomeContent(
     onAction: (HomeUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    PokeGuessContainer(
+    PokeGuessScaffold(
         modifier = modifier,
+        topAppBar = { },
         centerContent = { HomeBranding() },
         bottomContent = {
             HomeActions(

@@ -1,11 +1,13 @@
 package br.com.seucaio.pokeguess.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.toRoute
 import br.com.seucaio.pokeguess.features.game.GameScreen
 import br.com.seucaio.pokeguess.features.history.HistoryScreen
@@ -19,6 +21,10 @@ fun PokeGuessNavGraph(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val showBackButton =
+        navBackStackEntry != null && navController.previousBackStackEntry != null
+
     NavHost(
         modifier = modifier,
         navController = navController,
@@ -27,9 +33,9 @@ fun PokeGuessNavGraph(
         homeScreen(navController)
         historyScreen(navController)
         menuScreen(navController)
+        pokemonScreen(navController)
         gameScreen(navController)
         scoreScreen(navController)
-        pokemonScreen()
     }
 }
 
@@ -55,7 +61,8 @@ private fun NavGraphBuilder.historyScreen(navController: NavHostController) {
                         matchId = matchId
                     )
                 )
-            }
+            },
+            onNavigateToBack = { navController.popBackStack() }
         )
     }
 }
@@ -78,7 +85,8 @@ private fun NavGraphBuilder.menuScreen(navController: NavHostController) {
                 navController.navigate(PokeGuessRoute.Pokemons(generation.name)) {
                     popUpTo<PokeGuessRoute.Menu> { inclusive = false }
                 }
-            }
+            },
+            onNavigateToBack = { navController.popBackStack() }
         )
     }
 }
@@ -94,7 +102,8 @@ private fun NavGraphBuilder.gameScreen(navController: NavHostController) {
                         withFriends = withFriends
                     )
                 ) { popUpTo<PokeGuessRoute.Game> { inclusive = true } }
-            }
+            },
+            onNavigateToBack = { navController.popBackStack() }
         )
     }
 }
@@ -117,8 +126,8 @@ private fun NavGraphBuilder.scoreScreen(navController: NavHostController) {
     }
 }
 
-private fun NavGraphBuilder.pokemonScreen() {
+private fun NavGraphBuilder.pokemonScreen(navController: NavHostController) {
     composable<PokeGuessRoute.Pokemons> {
-        PokemonScreen(modifier = Modifier)
+        PokemonScreen(modifier = Modifier, onNavigateToBack = { navController.popBackStack() })
     }
 }
