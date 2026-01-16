@@ -45,11 +45,17 @@ class MenuViewModel(
             is MenuUiAction.PlayerNameChanged -> saveUiStateHandle {
                 updateSettings(currentSettingsState.setName(action.name))
             }
+
+            is MenuUiAction.PokemonListClicked -> navigateToPokemons()
         }
     }
 
     private fun navigateToGame() {
         viewModelScope.launch { _uiEvent.emit(MenuUiEvent.NavigateToGame) }
+    }
+
+    private fun navigateToPokemons() {
+        viewModelScope.launch { _uiEvent.emit(MenuUiEvent.NavigateToPokemons) }
     }
 
     private fun saveUiStateHandle(block: MenuUiState.() -> MenuUiState) {

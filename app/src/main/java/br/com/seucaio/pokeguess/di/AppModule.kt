@@ -7,6 +7,7 @@ import br.com.seucaio.pokeguess.domain.usecase.CalculateGameStatsUseCase
 import br.com.seucaio.pokeguess.domain.usecase.GetAllMatchesUseCase
 import br.com.seucaio.pokeguess.domain.usecase.GetLastMatchUseCase
 import br.com.seucaio.pokeguess.domain.usecase.GetMatchByIdUseCase
+import br.com.seucaio.pokeguess.domain.usecase.GetPokemonsUseCase
 import br.com.seucaio.pokeguess.domain.usecase.ProcessGuessUseCase
 import br.com.seucaio.pokeguess.domain.usecase.StartGameMatchUseCase
 import br.com.seucaio.pokeguess.domain.usecase.StartTimerUseCase
@@ -14,6 +15,7 @@ import br.com.seucaio.pokeguess.features.game.viewmodel.GameViewModel
 import br.com.seucaio.pokeguess.features.history.viewmodel.HistoryViewModel
 import br.com.seucaio.pokeguess.features.home.viewmodel.HomeViewModel
 import br.com.seucaio.pokeguess.features.menu.viewmodel.MenuViewModel
+import br.com.seucaio.pokeguess.features.pokemons.viewmodel.PokemonViewModel
 import br.com.seucaio.pokeguess.features.score.viewmodel.ScoreViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -46,4 +48,11 @@ val appModule = module {
     }
 
     viewModel { HistoryViewModel(getAllMatchesUseCase = get<GetAllMatchesUseCase>()) }
+
+    viewModel { params ->
+        PokemonViewModel(
+            savedStateHandle = params.get(),
+            getPokemonsUseCase = get<GetPokemonsUseCase>()
+        )
+    }
 }

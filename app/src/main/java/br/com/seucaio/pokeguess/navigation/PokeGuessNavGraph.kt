@@ -11,6 +11,7 @@ import br.com.seucaio.pokeguess.features.game.GameScreen
 import br.com.seucaio.pokeguess.features.history.HistoryScreen
 import br.com.seucaio.pokeguess.features.home.HomeScreen
 import br.com.seucaio.pokeguess.features.menu.MenuScreen
+import br.com.seucaio.pokeguess.features.pokemons.PokemonScreen
 import br.com.seucaio.pokeguess.features.score.ScoreScreen
 
 @Composable
@@ -28,6 +29,7 @@ fun PokeGuessNavGraph(
         menuScreen(navController)
         gameScreen(navController)
         scoreScreen(navController)
+        pokemonScreen(navController)
     }
 }
 
@@ -71,6 +73,11 @@ private fun NavGraphBuilder.menuScreen(navController: NavHostController) {
                         withFriends = withFriends
                     )
                 ) { popUpTo<PokeGuessRoute.Menu> { inclusive = false } }
+            },
+            onNavigateToPokemons = { generation ->
+                navController.navigate(PokeGuessRoute.Pokemons(generation.name)) {
+                    popUpTo<PokeGuessRoute.Menu> { inclusive = false }
+                }
             }
         )
     }
@@ -107,5 +114,11 @@ private fun NavGraphBuilder.scoreScreen(navController: NavHostController) {
                 }
             }
         )
+    }
+}
+
+private fun NavGraphBuilder.pokemonScreen(navController: NavHostController) {
+    composable<PokeGuessRoute.Pokemons> {
+        PokemonScreen(modifier = Modifier)
     }
 }
