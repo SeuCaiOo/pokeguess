@@ -1,5 +1,6 @@
 package br.com.seucaio.pokeguess.navigation
 
+import br.com.seucaio.pokeguess.domain.model.Generation
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -9,6 +10,11 @@ sealed interface PokeGuessRoute {
 
     @Serializable
     data object History : PokeGuessRoute
+
+    @Serializable
+    data class Pokemons(
+        val generation: String
+    ) : PokeGuessRoute
 
     @Serializable
     data class Menu(val withFriends: Boolean) : PokeGuessRoute
