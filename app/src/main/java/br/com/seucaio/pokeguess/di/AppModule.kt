@@ -5,10 +5,12 @@ import br.com.seucaio.pokeguess.domain.di.domainModule
 import br.com.seucaio.pokeguess.domain.usecase.AdvanceRoundUseCase
 import br.com.seucaio.pokeguess.domain.usecase.CalculateGameStatsUseCase
 import br.com.seucaio.pokeguess.domain.usecase.GetAllMatchesUseCase
+import br.com.seucaio.pokeguess.domain.usecase.GetGameSettingsUseCase
 import br.com.seucaio.pokeguess.domain.usecase.GetLastMatchUseCase
 import br.com.seucaio.pokeguess.domain.usecase.GetMatchByIdUseCase
 import br.com.seucaio.pokeguess.domain.usecase.GetPokemonsUseCase
 import br.com.seucaio.pokeguess.domain.usecase.ProcessGuessUseCase
+import br.com.seucaio.pokeguess.domain.usecase.SaveGameSettingsUseCase
 import br.com.seucaio.pokeguess.domain.usecase.StartGameMatchUseCase
 import br.com.seucaio.pokeguess.domain.usecase.StartTimerUseCase
 import br.com.seucaio.pokeguess.features.game.viewmodel.GameViewModel
@@ -26,7 +28,13 @@ val appModule = module {
 
     viewModel { HomeViewModel() }
 
-    viewModel { params -> MenuViewModel(savedStateHandle = params.get()) }
+    viewModel { params ->
+        MenuViewModel(
+            savedStateHandle = params.get(),
+            getGameSettingsUseCase = get<GetGameSettingsUseCase>(),
+            saveGameSettingsUseCase = get<SaveGameSettingsUseCase>()
+        )
+    }
 
     viewModel { params ->
         GameViewModel(

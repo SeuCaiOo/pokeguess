@@ -28,6 +28,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.bundles.retrofit)
     implementation(libs.bundles.room)
+    implementation(libs.androidx.datastore.preferences)
     ksp(libs.androidx.room.compiler)
 
     detektPlugins(libs.detekt.formatting)

@@ -26,5 +26,11 @@ enum class Generation(val displayName: String, val offset: Int, val limit: Int) 
     VIII("Generation VIII", 809, 89),
 
     // #1-898
-    ALL("All Generations", I.offset, VIII.offset.plus(VIII.limit))
+    ALL("All Generations", I.offset, VIII.offset.plus(VIII.limit));
+
+    companion object {
+        fun getGeneration(value: String?): Generation {
+            return if (value.isNullOrEmpty()) Generation.I else Generation.valueOf(value)
+        }
+    }
 }

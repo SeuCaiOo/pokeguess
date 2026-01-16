@@ -4,52 +4,77 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import br.com.seucaio.pokeguess.features.menu.model.SettingsUi
+import br.com.seucaio.pokeguess.domain.usecase.GetGameSettingsUseCase
+import br.com.seucaio.pokeguess.domain.usecase.SaveGameSettingsUseCase
+import br.com.seucaio.pokeguess.features.menu.viewmodel.MenuUiState.Companion.toGameSettings
 import br.com.seucaio.pokeguess.navigation.PokeGuessRoute
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class MenuViewModel(
     private val savedStateHandle: SavedStateHandle,
+    private val getGameSettingsUseCase: GetGameSettingsUseCase,
+    private val saveGameSettingsUseCase: SaveGameSettingsUseCase,
 ) : ViewModel() {
 
     private val route = savedStateHandle.toRoute<PokeGuessRoute.Menu>()
+    private val isFirstLaunch = !savedStateHandle.contains(KEY_UI_STATE)
     private val currentState get() = uiState.value
-    private val currentSettingsState get() = currentState.settingsUi
+    private val currentSettingsState get() = currentState.toGameSettings()
 
     val uiState: StateFlow<MenuUiState> = savedStateHandle.getStateFlow(
         key = KEY_UI_STATE,
-        initialValue = MenuUiState(settingsUi = SettingsUi(withFriends = route.withFriends))
+        initialValue = MenuUiState(withFriends = route.withFriends)
     )
 
     private val _uiEvent = MutableSharedFlow<MenuUiEvent>()
     val uiEvent: SharedFlow<MenuUiEvent> = _uiEvent
 
+    init {
+        if (isFirstLaunch) setSavedSettings()
+    }
+
     fun handleAction(action: MenuUiAction) {
         when (action) {
-            is MenuUiAction.StartGameClicked -> navigateToGame()
+            is MenuUiAction.StartGameClicked -> {
+                saveSettings()
+                navigateToGame()
+            }
+
             is MenuUiAction.GenerationSelected -> saveUiStateHandle {
-                updateSettings(currentSettingsState.setGeneration(action.generation))
+                setGeneration(action.generation)
             }
 
             is MenuUiAction.TimerToggled -> saveUiStateHandle {
-                updateSettings(currentSettingsState.setTimer(action.enabled))
+                setTimer(action.enabled)
             }
 
             is MenuUiAction.NumberOfRoundsChanged -> saveUiStateHandle {
-                updateSettings(currentSettingsState.setNumberRounds(action.rounds))
+                setNumberRounds(action.rounds)
             }
 
             is MenuUiAction.PlayerNameChanged -> saveUiStateHandle {
-                updateSettings(currentSettingsState.setName(action.name))
+                setName(action.name)
             }
 
             is MenuUiAction.PokemonListClicked -> navigateToPokemons()
 
             is MenuUiAction.BackButtonClicked -> navigateToBack()
         }
+    }
+
+    private fun setSavedSettings() {
+        viewModelScope.launch {
+            val savedSettings = getGameSettingsUseCase().first()
+            saveUiStateHandle { savedSettings.toMenuUiState() }
+        }
+    }
+
+    private fun saveSettings() {
+        viewModelScope.launch { saveGameSettingsUseCase(currentSettingsState) }
     }
 
     private fun navigateToGame() {
