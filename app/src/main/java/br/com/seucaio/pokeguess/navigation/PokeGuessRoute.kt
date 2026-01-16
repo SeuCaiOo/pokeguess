@@ -11,6 +11,11 @@ sealed interface PokeGuessRoute {
     data object History : PokeGuessRoute
 
     @Serializable
+    data class Pokemons(
+        val generation: String
+    ) : PokeGuessRoute
+
+    @Serializable
     data class Menu(val withFriends: Boolean) : PokeGuessRoute
 
     @Serializable

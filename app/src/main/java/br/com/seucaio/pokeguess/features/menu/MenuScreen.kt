@@ -37,6 +37,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import br.com.seucaio.pokeguess.R
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessButton
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessContainer
+import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessOutlinedButton
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.SettingsItem
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.PokeGuessTheme
 import br.com.seucaio.pokeguess.domain.model.Generation
@@ -49,10 +50,12 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun MenuScreen(
     onNavigateToGame: (Generation, Boolean, Int, String?, Boolean) -> Unit,
+    onNavigateToPokemons: (Generation) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: MenuViewModel = koinViewModel()
 ) {
     val latestOnNavigateToGame by rememberUpdatedState(onNavigateToGame)
+    val latestOnNavigateToPokemons by rememberUpdatedState(onNavigateToPokemons)
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -67,6 +70,10 @@ fun MenuScreen(
                         state.playerName,
                         state.withFriends
                     )
+                }
+
+                is MenuUiEvent.NavigateToPokemons -> {
+                    latestOnNavigateToPokemons(state.selectedGeneration)
                 }
             }
         }
@@ -101,7 +108,12 @@ fun MenuContent(
             )
         },
         bottomContent = {
-            Spacer(modifier = Modifier.height(48.dp))
+            PokeGuessOutlinedButton(
+                text = stringResource(R.string.pokemon_list),
+                onClick = { onAction(MenuUiAction.PokemonListClicked) },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(16.dp))
             PokeGuessButton(
                 text = stringResource(R.string.start_game),
                 color = MaterialTheme.colorScheme.secondary,
