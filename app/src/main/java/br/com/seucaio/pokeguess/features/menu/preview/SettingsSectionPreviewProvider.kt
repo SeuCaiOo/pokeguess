@@ -3,12 +3,18 @@ package br.com.seucaio.pokeguess.features.menu.preview
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import br.com.seucaio.pokeguess.features.menu.viewmodel.MenuUiState
 
-class MenuUiStatePreviewProvider : PreviewParameterProvider<MenuUiState> {
+class SettingsSectionPreviewProvider : PreviewParameterProvider<MenuUiState> {
     override val values: Sequence<MenuUiState> = sequenceOf(
+        MenuUiState(),
         MenuUiState(
             players = listOf(
                 "Player 1",
             ),
+            timerEnabled = true,
+            withFriends = true
+        ),
+        MenuUiState(
+            players = listOf(""),
             withFriends = true
         ),
         MenuUiState(
@@ -17,11 +23,8 @@ class MenuUiStatePreviewProvider : PreviewParameterProvider<MenuUiState> {
                 "Player 2",
                 ""
             ),
+            rounds = 5,
             withFriends = true
-        ),
-        MenuUiState(
-            players = listOf(""),
-            withFriends = false
         )
     )
 }
