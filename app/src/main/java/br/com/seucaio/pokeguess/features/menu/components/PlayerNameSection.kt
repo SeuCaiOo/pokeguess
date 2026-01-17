@@ -111,7 +111,7 @@ private fun PlayerListItem(
                 text = stringResource(R.string.confirm),
                 color = MaterialTheme.colorScheme.secondary,
                 enabled = uiState.confirmPlayers,
-                onClick = { onAction(MenuUiAction.StartGameClicked) },
+                onClick = { onAction(MenuUiAction.PlayersBottomSheetVisibilityChanged(false)) },
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -136,7 +136,7 @@ private fun SoloPlayerItem(
             text = stringResource(R.string.confirm),
             color = MaterialTheme.colorScheme.secondary,
             enabled = uiState.confirmPlayers,
-            onClick = { onAction(MenuUiAction.StartGameClicked) },
+            onClick = { onAction(MenuUiAction.PlayersBottomSheetVisibilityChanged(false)) },
             modifier = Modifier.fillMaxWidth()
         )
     }
