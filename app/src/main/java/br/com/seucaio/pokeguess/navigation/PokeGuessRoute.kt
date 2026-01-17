@@ -1,5 +1,6 @@
 package br.com.seucaio.pokeguess.navigation
 
+import br.com.seucaio.pokeguess.domain.model.GameSettings
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -19,13 +20,7 @@ sealed interface PokeGuessRoute {
     data class Menu(val withFriends: Boolean) : PokeGuessRoute
 
     @Serializable
-    data class Game(
-        val generation: String,
-        val timerEnabled: Boolean,
-        val rounds: Int,
-        val withFriends: Boolean = false,
-        val players: List<String> = emptyList()
-    ) : PokeGuessRoute
+    data class Game(val settings: GameSettings) : PokeGuessRoute
 
     @Serializable
     data class Score(

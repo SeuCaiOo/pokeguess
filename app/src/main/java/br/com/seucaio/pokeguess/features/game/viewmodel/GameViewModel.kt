@@ -4,12 +4,14 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import br.com.seucaio.pokeguess.domain.model.GameSettings
 import br.com.seucaio.pokeguess.domain.model.Generation
 import br.com.seucaio.pokeguess.domain.usecase.AdvanceRoundUseCase
 import br.com.seucaio.pokeguess.domain.usecase.ProcessGuessUseCase
 import br.com.seucaio.pokeguess.domain.usecase.StartGameMatchUseCase
 import br.com.seucaio.pokeguess.domain.usecase.StartTimerUseCase
 import br.com.seucaio.pokeguess.features.game.model.GameUi
+import br.com.seucaio.pokeguess.navigation.NavTypeUtils
 import br.com.seucaio.pokeguess.navigation.PokeGuessRoute
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -29,22 +31,24 @@ class GameViewModel(
     private val advanceRoundUseCase: AdvanceRoundUseCase,
 ) : ViewModel() {
 
-    private val route = savedStateHandle.toRoute<PokeGuessRoute.Game>()
-    private val currentGeneration: Generation = Generation.valueOf(route.generation)
+    private val route = savedStateHandle.toRoute<PokeGuessRoute.Game>(
+        typeMap = NavTypeUtils.typeMapOf<GameSettings>()
+    )
+    private val currentGeneration: Generation = route.settings.generation
     private val currentState get() = uiState.value
     private val currentGameState get() = currentState.gameUi
-    private val remainingTime = if (route.timerEnabled) TIMER_START_VALUE else 0
+    private val remainingTime = if (route.settings.timerEnabled) TIMER_START_VALUE else 0
 
     val uiState: StateFlow<GameUiState> =
         savedStateHandle.getStateFlow(
             key = KEY_UI_STATE,
             initialValue = GameUiState(
                 isLoading = true,
-                withFriends = route.withFriends,
+                withFriends = route.settings.withFriends,
                 gameUi = GameUi(
                     remainingTime = remainingTime,
-                    isTimerEnabled = route.timerEnabled,
-                    totalRounds = route.rounds
+                    isTimerEnabled = route.settings.timerEnabled,
+                    totalRounds = route.settings.rounds
                 )
             )
         )
@@ -76,7 +80,7 @@ class GameViewModel(
             startGameMatchUseCase(
                 generation = currentGeneration,
                 totalRounds = currentState.gameUi.totalRounds,
-                players = route.players
+                players = route.settings.players
             )
                 .onSuccess { pokemons ->
                     saveUiStateHandle { setMatchsPokemon(pokemons) }

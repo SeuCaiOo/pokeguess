@@ -46,17 +46,19 @@ import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessScaffold
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessTopAppBar
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.SettingsItem
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.PokeGuessTheme
+import br.com.seucaio.pokeguess.domain.model.GameSettings
 import br.com.seucaio.pokeguess.domain.model.Generation
 import br.com.seucaio.pokeguess.features.menu.preview.MenuUiStatePreviewProvider
 import br.com.seucaio.pokeguess.features.menu.viewmodel.MenuUiAction
 import br.com.seucaio.pokeguess.features.menu.viewmodel.MenuUiEvent
 import br.com.seucaio.pokeguess.features.menu.viewmodel.MenuUiState
+import br.com.seucaio.pokeguess.features.menu.viewmodel.MenuUiState.Companion.toGameSettings
 import br.com.seucaio.pokeguess.features.menu.viewmodel.MenuViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MenuScreen(
-    onNavigateToGame: (Generation, Boolean, Int, List<String>, Boolean) -> Unit,
+    onNavigateToGame: (settings: GameSettings) -> Unit,
     onNavigateToPokemons: (Generation) -> Unit,
     onNavigateToBack: () -> Unit,
     modifier: Modifier = Modifier,
@@ -72,13 +74,7 @@ fun MenuScreen(
         viewModel.uiEvent.collect { event ->
             when (event) {
                 is MenuUiEvent.NavigateToGame -> {
-                    latestOnNavigateToGame(
-                        state.selectedGeneration,
-                        state.timerEnabled,
-                        state.rounds,
-                        state.players,
-                        state.withFriends,
-                    )
+                    latestOnNavigateToGame(state.toGameSettings())
                 }
 
                 is MenuUiEvent.NavigateToPokemons -> {
