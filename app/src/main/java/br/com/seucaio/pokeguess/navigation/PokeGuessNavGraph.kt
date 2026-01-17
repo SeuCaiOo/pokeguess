@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.toRoute
+import br.com.seucaio.pokeguess.domain.model.GameSettings
 import br.com.seucaio.pokeguess.features.game.GameScreen
 import br.com.seucaio.pokeguess.features.history.HistoryScreen
 import br.com.seucaio.pokeguess.features.home.HomeScreen
@@ -70,16 +71,10 @@ private fun NavGraphBuilder.historyScreen(navController: NavHostController) {
 private fun NavGraphBuilder.menuScreen(navController: NavHostController) {
     composable<PokeGuessRoute.Menu> {
         MenuScreen(
-            onNavigateToGame = { generation, timerEnabled, rounds, playerName, withFriends ->
-                navController.navigate(
-                    PokeGuessRoute.Game(
-                        generation = generation.name,
-                        timerEnabled = timerEnabled,
-                        rounds = rounds,
-                        playerName = playerName,
-                        withFriends = withFriends
-                    )
-                ) { popUpTo<PokeGuessRoute.Menu> { inclusive = false } }
+            onNavigateToGame = { settings ->
+                navController.navigate(PokeGuessRoute.Game(settings)) {
+                    popUpTo<PokeGuessRoute.Menu> { inclusive = false }
+                }
             },
             onNavigateToPokemons = { generation ->
                 navController.navigate(PokeGuessRoute.Pokemons(generation.name)) {
@@ -92,7 +87,7 @@ private fun NavGraphBuilder.menuScreen(navController: NavHostController) {
 }
 
 private fun NavGraphBuilder.gameScreen(navController: NavHostController) {
-    composable<PokeGuessRoute.Game> {
+    composable<PokeGuessRoute.Game>(typeMap = NavTypeUtils.typeMapOf<GameSettings>()) {
         GameScreen(
             onGameOver = { score, total, withFriends ->
                 navController.navigate(

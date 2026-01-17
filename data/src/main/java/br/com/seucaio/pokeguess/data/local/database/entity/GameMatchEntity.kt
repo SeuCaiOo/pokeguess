@@ -13,8 +13,8 @@ data class GameMatchEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "game_id")
     val gameId: Int? = 0,
-    @ColumnInfo(name = "player_name")
-    val playerName: String?,
+    @ColumnInfo(name = "players")
+    val players: List<String> = emptyList(),
     @ColumnInfo(name = "total_rounds")
     val totalRounds: Int,
     val score: Int? = null,

@@ -36,9 +36,6 @@ interface GameMatchDao {
     @Query("SELECT * FROM game_matchs WHERE game_id = :gameId")
     suspend fun getMatchByGameId(gameId: Int): GameMatchEntity?
 
-    @Query("SELECT * FROM game_matchs WHERE player_name = :playerName")
-    suspend fun getMatchListByPlayerName(playerName: String): List<GameMatchEntity>
-
     @Query("SELECT * FROM game_matchs WHERE finished_at IS NULL ORDER BY created_at DESC LIMIT 1")
     fun getCurrentMatchActive(): GameMatchEntity?
 

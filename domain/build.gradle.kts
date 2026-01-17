@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 kotlin {
@@ -19,6 +20,9 @@ android {
 
 dependencies {
     implementation(project(":core:common"))
+
+    // Serialization
+    api(libs.kotlinx.serialization.json)
 
     detektPlugins(libs.detekt.formatting)
 }

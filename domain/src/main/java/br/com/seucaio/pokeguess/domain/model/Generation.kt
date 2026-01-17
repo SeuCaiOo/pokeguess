@@ -1,5 +1,7 @@
 package br.com.seucaio.pokeguess.domain.model
 
+import kotlinx.serialization.Serializable
+
 enum class Generation(val displayName: String, val offset: Int, val limit: Int) {
     // #1-151 (Kanto)
     I("Generation I", 0, 151),
