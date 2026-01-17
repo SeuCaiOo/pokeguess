@@ -61,6 +61,7 @@ fun HistoryScreen(
                     event.total,
                     event.withFriends
                 )
+
                 is HistoryUiEvent.NavigateToBack -> latestOnNavigateToBack()
             }
         }
@@ -156,11 +157,15 @@ private fun HistoryItem(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = match.playerName ?: "Player",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
-                )
+                Column {
+                    match.players.forEach {
+                        Text(
+                            text = it,
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
                 Text(
                     text = date,
                     style = MaterialTheme.typography.bodySmall,
