@@ -2,7 +2,9 @@ package br.com.seucaio.pokeguess.domain.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
+@Serializable
 @Parcelize
 data class GameSettings(
     val generation: Generation,
@@ -10,4 +12,7 @@ data class GameSettings(
     val rounds: Int,
     val withFriends: Boolean,
     val players: List<String>
-) : Parcelable
+) : Parcelable {
+    val selectedGeneration: Generation
+        get() = Generation.getGeneration(generation.name)
+}
