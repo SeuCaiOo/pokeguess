@@ -25,7 +25,6 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":domain"))
 
-    implementation(libs.kotlinx.serialization.json)
     implementation(libs.bundles.retrofit)
     implementation(libs.bundles.room)
     implementation(libs.androidx.datastore.preferences)
