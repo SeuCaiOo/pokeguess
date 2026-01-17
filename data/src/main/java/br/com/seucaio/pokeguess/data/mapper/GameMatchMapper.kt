@@ -8,7 +8,7 @@ object GameMatchMapper {
         if (this == null) throw NoSuchElementException("GameMatch not found")
         return GameMatch(
             id = gameId,
-            playerName = playerName,
+            players = players,
             totalRounds = totalRounds,
             score = score,
             rounds = rounds,
@@ -20,7 +20,7 @@ object GameMatchMapper {
     fun GameMatch.toEntity(): GameMatchEntity {
         return GameMatchEntity(
             gameId = id,
-            playerName = playerName,
+            players = players,
             totalRounds = totalRounds,
             score = score,
             rounds = rounds,

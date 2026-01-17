@@ -19,7 +19,6 @@ interface GameMatchLocalDataSource {
 
     suspend fun getAll(): List<GameMatchEntity>
     suspend fun getMatchByGameId(gameId: Int): GameMatchEntity?
-    suspend fun getMatchListByPlayerName(playerName: String): List<GameMatchEntity>
     suspend fun getLastFinishedGameMatch(): GameMatchEntity?
     suspend fun getCurrentMatchActive(): GameMatchEntity?
     suspend fun deleteAll()
@@ -63,10 +62,6 @@ class GameMatchLocalDataSourceImpl(
 
     override suspend fun getMatchByGameId(gameId: Int): GameMatchEntity? {
         return withContext(ioDispatcher) { gameMatchDao.getMatchByGameId(gameId) }
-    }
-
-    override suspend fun getMatchListByPlayerName(playerName: String): List<GameMatchEntity> {
-        return withContext(ioDispatcher) { gameMatchDao.getMatchListByPlayerName(playerName) }
     }
 
     override suspend fun getLastFinishedGameMatch(): GameMatchEntity? {
