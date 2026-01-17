@@ -70,14 +70,14 @@ private fun NavGraphBuilder.historyScreen(navController: NavHostController) {
 private fun NavGraphBuilder.menuScreen(navController: NavHostController) {
     composable<PokeGuessRoute.Menu> {
         MenuScreen(
-            onNavigateToGame = { generation, timerEnabled, rounds, playerName, withFriends ->
+            onNavigateToGame = { generation, timerEnabled, rounds, players, withFriends ->
                 navController.navigate(
                     PokeGuessRoute.Game(
                         generation = generation.name,
                         timerEnabled = timerEnabled,
                         rounds = rounds,
-                        playerName = playerName,
-                        withFriends = withFriends
+                        withFriends = withFriends,
+                        players = players
                     )
                 ) { popUpTo<PokeGuessRoute.Menu> { inclusive = false } }
             },

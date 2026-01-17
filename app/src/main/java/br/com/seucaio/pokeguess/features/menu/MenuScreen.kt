@@ -56,7 +56,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MenuScreen(
-    onNavigateToGame: (Generation, Boolean, Int, String?, Boolean) -> Unit,
+    onNavigateToGame: (Generation, Boolean, Int, List<String>, Boolean) -> Unit,
     onNavigateToPokemons: (Generation) -> Unit,
     onNavigateToBack: () -> Unit,
     modifier: Modifier = Modifier,
@@ -76,8 +76,8 @@ fun MenuScreen(
                         state.selectedGeneration,
                         state.timerEnabled,
                         state.rounds,
-                        state.playerName,
-                        state.withFriends
+                        state.players,
+                        state.withFriends,
                     )
                 }
 

@@ -16,7 +16,6 @@ data class MenuUiState(
     val roundsFilled get() = rounds > 0
     val selectedGeneration get() = generation
     val multiPlayer: Boolean get() = players.size > 1
-    val playerName: String = players.firstOrNull().orEmpty()
     val startGameIsAvailable: Boolean
         get() {
             return if (withFriends) {

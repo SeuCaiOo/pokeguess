@@ -76,7 +76,7 @@ class GameViewModel(
             startGameMatchUseCase(
                 generation = currentGeneration,
                 totalRounds = currentState.gameUi.totalRounds,
-                playerName = route.playerName,
+                players = route.players
             )
                 .onSuccess { pokemons ->
                     saveUiStateHandle { setMatchsPokemon(pokemons) }
