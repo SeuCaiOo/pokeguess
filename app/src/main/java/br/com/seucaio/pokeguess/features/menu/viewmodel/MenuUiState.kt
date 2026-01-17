@@ -11,12 +11,20 @@ data class MenuUiState(
     val timerEnabled: Boolean = false,
     val rounds: Int = 0,
     val withFriends: Boolean = false,
-    val playerName: String = "",
+    val players: List<String> = listOf(""),
 ) : Parcelable {
-    val nameFilled get() = playerName.isNotBlank()
     val roundsFilled get() = rounds > 0
     val selectedGeneration get() = generation
-    val startGameIsAvailable get() = nameFilled && roundsFilled
+    val multiPlayer: Boolean get() = players.size > 1
+    val playerName: String = players.firstOrNull().orEmpty()
+    val startGameIsAvailable: Boolean
+        get() {
+            return if (withFriends) {
+                if (multiPlayer) players.all { it.isNotBlank() } && roundsFilled else false
+            } else {
+                players.firstOrNull().orEmpty().isNotBlank() && roundsFilled
+            }
+        }
 
     fun setGeneration(generation: Generation): MenuUiState = copy(generation = generation)
 
@@ -24,13 +32,28 @@ data class MenuUiState(
 
     fun setNumberRounds(rounds: Int): MenuUiState = copy(rounds = rounds)
 
-    fun setName(name: String): MenuUiState = copy(playerName = name)
+    fun addPlayer(): MenuUiState {
+        val newPlayers = players.toMutableList().also { it.add("") }.toList()
+        return copy(players = newPlayers)
+    }
+
+    fun setPlayer(name: String, index: Int = 0): MenuUiState {
+        val newPlayers = players.toMutableList().also {
+            it.getOrNull(index)?.let { _ -> it[index] = name } ?: it.add(name)
+        }.toList()
+        return copy(players = newPlayers)
+    }
+
+    fun removePlayer(index: Int): MenuUiState {
+        val newPlayers = players.toMutableList().also { it.removeAt(index) }.toList()
+        return copy(players = newPlayers)
+    }
 
     fun setWithFriends(withFriends: Boolean): MenuUiState = copy(withFriends = withFriends)
 
-    fun GameSettings.toMenuUiState(): MenuUiState {
+    fun GameSettings.toMenuUiState(withFriends: Boolean = this.withFriends): MenuUiState {
         return MenuUiState(
-            playerName = playerName,
+            players = players,
             generation = generation,
             rounds = rounds,
             timerEnabled = timerEnabled,
@@ -40,7 +63,7 @@ data class MenuUiState(
 
     companion object {
         fun MenuUiState.toGameSettings() = GameSettings(
-            playerName = playerName,
+            players = players,
             generation = generation,
             rounds = rounds,
             timerEnabled = timerEnabled,
