@@ -48,18 +48,22 @@ import org.koin.androidx.compose.koinViewModel
 fun ScoreScreen(
     onPlayAgain: () -> Unit,
     onBackToHome: () -> Unit,
+    onNavigateToBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ScoreViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val latestOnPlayAgain by rememberUpdatedState(onPlayAgain)
     val latestOnBackToHome by rememberUpdatedState(onBackToHome)
+    val latestOnNavigateToBack by rememberUpdatedState(onNavigateToBack)
+
 
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { event ->
             when (event) {
                 is ScoreUiEvent.NavigateToMenu -> latestOnPlayAgain()
                 is ScoreUiEvent.NavigateToHome -> latestOnBackToHome()
+                is ScoreUiEvent.NavigateToBack -> latestOnNavigateToBack()
             }
         }
     }
@@ -82,7 +86,7 @@ fun ScoreContent(
         topAppBar = {
             PokeGuessTopAppBar(
                 title = stringResource(R.string.score),
-                onBackButtonClick = { onAction(ScoreUiAction.PlayAgainClicked) }
+                onBackButtonClick = { onAction(ScoreUiAction.BackButtonClicked) }
             )
         },
         topContent = {
