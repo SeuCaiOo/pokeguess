@@ -79,7 +79,8 @@ fun HomeContent(
         bottomContent = {
             HomeActions(
                 onPlaySolo = { onAction(HomeUiAction.SoloModeSelected) },
-                onHistory = { onAction(HomeUiAction.HistorySelected) }
+                onHistory = { onAction(HomeUiAction.HistorySelected) },
+                onPlayWithFriends = { onAction(HomeUiAction.FriendsModeSelected) }
             )
         }
     )
@@ -88,8 +89,8 @@ fun HomeContent(
 @Composable
 private fun HomeBranding(modifier: Modifier = Modifier) {
     Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(
             modifier = Modifier
@@ -138,6 +139,7 @@ private fun HomeBranding(modifier: Modifier = Modifier) {
 @Composable
 private fun HomeActions(
     onPlaySolo: () -> Unit,
+    onPlayWithFriends: () -> Unit,
     onHistory: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -152,13 +154,13 @@ private fun HomeActions(
             onClick = onPlaySolo,
         )
 
-        // TODO implement local multiplayer
-//        Spacer(modifier = Modifier.height(16.dp))
-//        PokeGuessOutlinedButton(
-//            modifier = Modifier.fillMaxWidth(),
-//            text = stringResource(R.string.play_with_friends),
-//            onClick = onPlayWithFriends,
-//        )
+        Spacer(modifier = Modifier.height(16.dp))
+        PokeGuessButton(
+            modifier = Modifier.fillMaxWidth(),
+            text = stringResource(R.string.play_with_friends),
+            color = MaterialTheme.colorScheme.secondary,
+            onClick = onPlayWithFriends,
+        )
         Spacer(modifier = Modifier.height(16.dp))
         PokeGuessOutlinedButton(
             modifier = Modifier.fillMaxWidth(),
