@@ -37,5 +37,6 @@
     <string name="players">Players</string>
     <string name="whats_your_name">What\'s your name?</string>
     <string name="insert_your_name">Insert your name</string>
+    <string name="insert_player_name">Insert player names</string>
     <string name="confirm">Confirm</string>
 </resources>

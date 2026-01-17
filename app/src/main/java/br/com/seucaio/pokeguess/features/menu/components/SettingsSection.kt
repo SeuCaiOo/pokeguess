@@ -188,7 +188,7 @@ fun PlayerName(
         title = stringResource(R.string.players),
         description = if (withFriends) {
             players.filter { it.isNotBlank() }.joinToString(", ")
-                .ifBlank { stringResource(R.string.players) }
+                .ifBlank { stringResource(R.string.insert_player_name) }
         } else {
             players.firstOrNull().orEmpty()
                 .ifBlank { stringResource(R.string.insert_your_name) }
