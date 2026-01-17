@@ -11,6 +11,7 @@ import br.com.seucaio.pokeguess.navigation.PokeGuessRoute
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -31,7 +32,7 @@ class MenuViewModel(
     )
 
     private val _uiEvent = MutableSharedFlow<MenuUiEvent>()
-    val uiEvent: SharedFlow<MenuUiEvent> = _uiEvent
+    val uiEvent: SharedFlow<MenuUiEvent> = _uiEvent.asSharedFlow()
 
     init {
         if (isFirstLaunch) setSavedSettings()
@@ -57,10 +58,14 @@ class MenuViewModel(
             }
 
             is MenuUiAction.PlayerNameChanged -> saveUiStateHandle {
-                setName(action.name)
+                setPlayer(name = action.name, index = action.index)
             }
 
             is MenuUiAction.PokemonListClicked -> navigateToPokemons()
+
+            is MenuUiAction.AddNewPlayerClicked -> saveUiStateHandle { addPlayer() }
+
+            is MenuUiAction.RemovePlayerClicked -> saveUiStateHandle { removePlayer(action.index) }
 
             is MenuUiAction.BackButtonClicked -> navigateToBack()
         }
@@ -69,7 +74,12 @@ class MenuViewModel(
     private fun setSavedSettings() {
         viewModelScope.launch {
             val savedSettings = getGameSettingsUseCase().first()
-            saveUiStateHandle { savedSettings.toMenuUiState() }
+
+            if (savedSettings.withFriends != route.withFriends) {
+                saveUiStateHandle { setWithFriends(route.withFriends) }
+            } else {
+                saveUiStateHandle { savedSettings.toMenuUiState() }
+            }
         }
     }
 

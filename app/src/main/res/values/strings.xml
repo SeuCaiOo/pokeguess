@@ -33,4 +33,6 @@
     <string name="match_result_format">Score: %1$d/%2$d</string>
     <string name="pokemon_list">Pokémon List</string>
     <string name="no_pokemons_found">No Pokémons found</string>
+    <string name="player">Player</string>
+    <string name="players">Players</string>
 </resources>

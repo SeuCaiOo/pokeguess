@@ -50,6 +50,7 @@ class ScoreViewModel(
         when (action) {
             is ScoreUiAction.PlayAgainClicked -> navigateToPlayAgain()
             is ScoreUiAction.BackToHomeClicked -> navigateToHome()
+            is ScoreUiAction.BackButtonClicked -> navigateBack()
         }
     }
 
@@ -80,4 +81,9 @@ class ScoreViewModel(
     private fun navigateToHome() {
         viewModelScope.launch { _uiEvent.emit(ScoreUiEvent.NavigateToHome) }
     }
+
+    private fun navigateBack() {
+        viewModelScope.launch { _uiEvent.emit(ScoreUiEvent.NavigateToBack) }
+    }
 }
+

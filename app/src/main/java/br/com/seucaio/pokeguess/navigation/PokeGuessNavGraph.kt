@@ -121,7 +121,8 @@ private fun NavGraphBuilder.scoreScreen(navController: NavHostController) {
                 navController.navigate(PokeGuessRoute.Home) {
                     popUpTo<PokeGuessRoute.Home> { inclusive = false }
                 }
-            }
+            },
+            onNavigateToBack = { navController.popBackStack() }
         )
     }
 }
