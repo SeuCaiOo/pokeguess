@@ -12,10 +12,18 @@ data class MenuUiState(
     val rounds: Int = 0,
     val withFriends: Boolean = false,
     val players: List<String> = listOf(""),
+    val showPlayersBottomSheet: Boolean = false,
 ) : Parcelable {
     val roundsFilled get() = rounds > 0
     val selectedGeneration get() = generation
     val multiPlayer: Boolean get() = players.size > 1
+    val confirmPlayers: Boolean get() {
+        return if (withFriends) {
+            if (multiPlayer) players.all { it.isNotBlank() } else false
+        } else {
+            players.firstOrNull().orEmpty().isNotBlank()
+        }
+    }
     val startGameIsAvailable: Boolean
         get() {
             return if (withFriends) {
@@ -49,6 +57,8 @@ data class MenuUiState(
     }
 
     fun setWithFriends(withFriends: Boolean): MenuUiState = copy(withFriends = withFriends)
+
+    fun setPlayersBottomSheetVisibility(visible: Boolean): MenuUiState = copy(showPlayersBottomSheet = visible)
 
     fun GameSettings.toMenuUiState(withFriends: Boolean = this.withFriends): MenuUiState {
         return MenuUiState(

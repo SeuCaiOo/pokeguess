@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
@@ -37,6 +39,7 @@ fun SettingsItem(
         ) {
             Column(modifier = Modifier.weight(1f, fill = false).padding(end = 16.dp)) {
                 Text(text = title, style = MaterialTheme.typography.labelLarge)
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(text = description, style = MaterialTheme.typography.bodyLarge)
             }
             content()
