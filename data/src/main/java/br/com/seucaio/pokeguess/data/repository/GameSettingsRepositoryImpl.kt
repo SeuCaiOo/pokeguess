@@ -21,21 +21,34 @@ class GameSettingsRepositoryImpl(
 ) : GameSettingsRepository {
     override val gameSettings: Flow<GameSettings> = dataStore.data.map { preferences ->
         GameSettings(
-            playerName = preferences[PLAYER_NAME].orEmpty(),
             generation = Generation.getGeneration(preferences[GENERATION]),
             rounds = preferences[ROUNDS].orZero(),
             timerEnabled = preferences[TIMER_ENABLED].orFalse(),
-            withFriends = preferences[WITH_FRIENDS].orFalse()
+            withFriends = preferences[WITH_FRIENDS].orFalse(),
+            players = getPlayerKeys(preferences).toPlayersKey().map { preferences[it].orEmpty() }
+
         )
+    }
+
+    private fun getPlayerKeys(preferences: Preferences) : List<String> {
+        var index = 0
+        val playerKeys = mutableListOf<String>()
+        while (preferences[stringPreferencesKey("player_name_$index")] != null) {
+            playerKeys.add(stringPreferencesKey("player_name_$index").name)
+            index++
+        }
+        return playerKeys
     }
 
     override suspend fun saveSettings(settings: GameSettings) {
         dataStore.edit { preferences ->
-            preferences[PLAYER_NAME] = settings.playerName
             preferences[GENERATION] = settings.generation.name
             preferences[ROUNDS] = settings.rounds
             preferences[TIMER_ENABLED] = settings.timerEnabled
             preferences[WITH_FRIENDS] = settings.withFriends
+            settings.players.toPlayersKey().forEachIndexed { index, key ->
+                preferences[key] = settings.players[index]
+            }
         }
     }
 
@@ -44,10 +57,14 @@ class GameSettingsRepositoryImpl(
     }
 
     companion object {
-        private val PLAYER_NAME = stringPreferencesKey("player_name")
         private val GENERATION = stringPreferencesKey("generation")
         private val ROUNDS = intPreferencesKey("rounds")
         private val TIMER_ENABLED = booleanPreferencesKey("timer_enabled")
         private val WITH_FRIENDS = booleanPreferencesKey("with_friends")
+        fun List<String>.toPlayersKey(): List<Preferences.Key<String>> {
+            return List(this.size) { index ->
+                stringPreferencesKey("player_name_$index")
+            }
+        }
     }
 }

@@ -9,5 +9,5 @@ data class GameSettings(
     val timerEnabled: Boolean,
     val rounds: Int,
     val withFriends: Boolean,
-    val playerName: String,
+    val players: List<String>
 ) : Parcelable
