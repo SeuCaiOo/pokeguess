@@ -12,16 +12,16 @@ class StartGameMatchUseCase(
     suspend operator fun invoke(
         totalRounds: Int,
         generation: Generation,
-        playerName: String? = null,
+        players: List<String> = emptyList()
     ): Result<List<Pokemon>> {
         return runCatching {
             getPokemonsUseCase(generation).getOrThrow().let { pokemons ->
                 pokemons.shuffled().take(totalRounds).also { matchPokemons ->
                     gameMatchRepository.saveMatch(
                         GameMatch(
-                            playerName = playerName,
                             totalRounds = totalRounds,
                             rounds = matchPokemons.associate { it.id to "" },
+                            players = players,
                         )
                     )
                 }
