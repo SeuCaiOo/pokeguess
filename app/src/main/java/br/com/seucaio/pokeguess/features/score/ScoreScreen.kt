@@ -1,5 +1,7 @@
 package br.com.seucaio.pokeguess.features.score
 
+import android.R.attr.text
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -7,8 +9,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -19,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -46,7 +51,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ScoreScreen(
-    onPlayAgain: () -> Unit,
+    onPlayAgain: (Boolean) -> Unit,
     onBackToHome: () -> Unit,
     onNavigateToBack: () -> Unit,
     modifier: Modifier = Modifier,
@@ -60,7 +65,7 @@ fun ScoreScreen(
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { event ->
             when (event) {
-                is ScoreUiEvent.NavigateToMenu -> latestOnPlayAgain()
+                is ScoreUiEvent.NavigateToMenu -> latestOnPlayAgain(event.withFriends)
                 is ScoreUiEvent.NavigateToHome -> latestOnBackToHome()
                 is ScoreUiEvent.NavigateToBack -> latestOnNavigateToBack()
             }
@@ -119,7 +124,8 @@ private fun ScoreResultCard(
         )
     ) {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(16.dp)
         ) {
             with(gameStatsUi) {
                 Text(
@@ -165,19 +171,20 @@ private fun PokemonList(
     pokemonsWithGuesses: Map<Pokemon, String>,
     modifier: Modifier = Modifier,
 ) {
-    LazyColumn(
+    LazyRow(
         modifier = modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        contentPadding = PaddingValues(16.dp)
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = PaddingValues(8.dp)
     ) {
         items(pokemonsWithGuesses.keys.toList()) { pokemon ->
             val isCorrect = pokemon.name == pokemonsWithGuesses[pokemon]
             Column(
-                modifier = Modifier.fillMaxWidth(
-                    fraction = 0.8f
-                ),
-                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillParentMaxWidth(fraction = 0.6f)
+                    .clip(RoundedCornerShape(24.dp))
+                    .background(MaterialTheme.colorScheme.surface),
+//                horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
                 PokemonFrame(
@@ -188,11 +195,20 @@ private fun PokemonList(
                         guessCorrectly = isCorrect
                     )
                 )
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = "Player guess: ${pokemonsWithGuesses[pokemon].orEmpty()}",
-                    style = MaterialTheme.typography.titleMedium,
-                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                ) {
+                    Text(
+                        text = stringResource(R.string.your_guess),
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+                    Text(
+                        text = pokemonsWithGuesses[pokemon].orEmpty(),
+                        style = MaterialTheme.typography.titleLarge,
+                    )
+                }
             }
         }
     }

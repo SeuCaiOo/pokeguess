@@ -1,16 +1,19 @@
 package br.com.seucaio.pokeguess.features.score.viewmodel
 
+import android.os.Parcelable
 import br.com.seucaio.pokeguess.domain.model.GameMatch
 import br.com.seucaio.pokeguess.domain.model.Pokemon
 import br.com.seucaio.pokeguess.features.score.model.GameStatsUi
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class ScoreUiState(
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
     val gameStatsUi: GameStatsUi = GameStatsUi.default(),
     val withFriends: Boolean = false,
     val gameMatch: GameMatch? = null
-) {
+) : Parcelable {
     val pokemons: Map<Pokemon, String>
         get() = gameMatch?.pokemonsWithGuesses.orEmpty()
 
