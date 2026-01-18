@@ -1,0 +1,122 @@
+package br.com.seucaio.pokeguess.features.game.components
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
+import br.com.seucaio.pokeguess.R
+import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessButton
+import br.com.seucaio.pokeguess.core.designsystem.ui.theme.PokeGuessTheme
+import br.com.seucaio.pokeguess.features.game.preview.GameBodySectionPreviewProvider
+import br.com.seucaio.pokeguess.features.game.preview.GuessSectionPreviewProvider
+import br.com.seucaio.pokeguess.features.game.viewmodel.GameUiAction
+import br.com.seucaio.pokeguess.features.game.viewmodel.GameUiState
+
+@Composable
+fun GuessSection(
+    uiState: GameUiState,
+    uiAction: (GameUiAction) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val guess = uiState.guessTyped
+
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 16.dp),
+    ) {
+        Text(
+            text = stringResource(R.string.who_that_pokemon),
+            style = MaterialTheme.typography.headlineSmall,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+        GuessTextField(
+            guess = guess,
+            onGuessChange = { newValue -> uiAction(GameUiAction.GuessChanged(newValue)) },
+            onSubmitGuess = { uiAction(GameUiAction.SubmitGuess(guess)) },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+        PokeGuessButton(
+            text = stringResource(
+                if (uiState.guessTyped.isNotBlank()) {
+                    R.string.confirm
+                } else {
+                    R.string.skip
+                }
+            ),
+            color = MaterialTheme.colorScheme.secondary,
+            onClick = {
+                if (uiState.guessTyped.isNotBlank()) {
+                    uiAction(GameUiAction.SubmitGuess(guess))
+                } else {
+                    uiAction(GameUiAction.SkipGuess)
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
+}
+
+@Composable
+private fun GuessTextField(
+    guess: String,
+    onGuessChange: (String) -> Unit,
+    onSubmitGuess: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    OutlinedTextField(
+        value = guess,
+        onValueChange = { newValue -> onGuessChange(newValue) },
+        placeholder = { Text(stringResource(R.string.insert_your_guess)) },
+        singleLine = true,
+        maxLines = 1,
+        keyboardActions = KeyboardActions(onDone = { onSubmitGuess(guess) }),
+        keyboardOptions = KeyboardOptions(
+            capitalization = KeyboardCapitalization.None,
+            autoCorrectEnabled = false,
+            keyboardType = KeyboardType.Text,
+            imeAction = ImeAction.Done,
+            platformImeOptions = null,
+            showKeyboardOnFocus = null,
+            hintLocales = null
+        ),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 16.dp)
+    )
+}
+
+@PreviewLightDark
+@Composable
+private fun GuessSectionPreview(
+    @PreviewParameter(GuessSectionPreviewProvider::class) uiState: GameUiState
+) {
+    PokeGuessTheme {
+        Surface {
+            GuessSection(
+                uiState = uiState,
+                uiAction = {}
+            )
+        }
+    }
+}
