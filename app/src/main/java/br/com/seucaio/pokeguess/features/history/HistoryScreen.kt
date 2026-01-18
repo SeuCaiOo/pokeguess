@@ -125,7 +125,7 @@ private fun HistoryList(
     ) {
         items(matches) { match ->
             HistoryItem(
-                modifier = Modifier.padding(horizontal = 16.dp),
+                modifier = Modifier,
                 match = match,
                 onMatchClick = onMatchClick
             )

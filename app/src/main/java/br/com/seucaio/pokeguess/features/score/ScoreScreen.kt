@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -165,18 +165,16 @@ private fun PokemonList(
     pokemonsWithGuesses: Map<Pokemon, String>,
     modifier: Modifier = Modifier,
 ) {
-    LazyColumn(
+    LazyRow(
         modifier = modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        contentPadding = PaddingValues(16.dp)
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = PaddingValues(8.dp)
     ) {
         items(pokemonsWithGuesses.keys.toList()) { pokemon ->
             val isCorrect = pokemon.name == pokemonsWithGuesses[pokemon]
             Column(
-                modifier = Modifier.fillMaxWidth(
-                    fraction = 0.8f
-                ),
+                modifier = Modifier.fillParentMaxWidth(fraction = 0.8f),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
