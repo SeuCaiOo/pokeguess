@@ -68,6 +68,10 @@ class MenuViewModel(
             is MenuUiAction.RemovePlayerClicked -> saveUiStateHandle { removePlayer(action.index) }
 
             is MenuUiAction.BackButtonClicked -> navigateToBack()
+
+            is MenuUiAction.PlayersBottomSheetVisibilityChanged -> saveUiStateHandle {
+                setPlayersBottomSheetVisibility(action.visible)
+            }
         }
     }
 

@@ -12,4 +12,5 @@ sealed interface MenuUiAction {
     data object BackButtonClicked : MenuUiAction
     data object AddNewPlayerClicked : MenuUiAction
     data class RemovePlayerClicked(val index: Int) : MenuUiAction
+    data class PlayersBottomSheetVisibilityChanged(val visible: Boolean) : MenuUiAction
 }

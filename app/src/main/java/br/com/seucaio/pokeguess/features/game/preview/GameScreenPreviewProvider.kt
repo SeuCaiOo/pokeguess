@@ -5,7 +5,7 @@ import br.com.seucaio.pokeguess.domain.model.Pokemon
 import br.com.seucaio.pokeguess.features.game.model.GameUi
 import br.com.seucaio.pokeguess.features.game.viewmodel.GameUiState
 
-class GameUiStatePreviewProvider : PreviewParameterProvider<GameUiState> {
+class GameScreenPreviewProvider : PreviewParameterProvider<GameUiState> {
     override val values: Sequence<GameUiState> = sequenceOf(
         GameUiState(
             isLoading = false,

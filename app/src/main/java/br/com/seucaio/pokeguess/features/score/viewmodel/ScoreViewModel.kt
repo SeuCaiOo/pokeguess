@@ -86,4 +86,3 @@ class ScoreViewModel(
         viewModelScope.launch { _uiEvent.emit(ScoreUiEvent.NavigateToBack) }
     }
 }
-

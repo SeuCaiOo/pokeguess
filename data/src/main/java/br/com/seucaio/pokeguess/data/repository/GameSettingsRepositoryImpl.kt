@@ -30,7 +30,7 @@ class GameSettingsRepositoryImpl(
         )
     }
 
-    private fun getPlayerKeys(preferences: Preferences) : List<String> {
+    private fun getPlayerKeys(preferences: Preferences): List<String> {
         var index = 0
         val playerKeys = mutableListOf<String>()
         while (preferences[stringPreferencesKey("player_name_$index")] != null) {
