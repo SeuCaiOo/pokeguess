@@ -8,7 +8,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.toRoute
 import br.com.seucaio.pokeguess.domain.model.GameSettings
 import br.com.seucaio.pokeguess.features.game.GameScreen
 import br.com.seucaio.pokeguess.features.history.HistoryScreen
@@ -104,12 +103,11 @@ private fun NavGraphBuilder.gameScreen(navController: NavHostController) {
 }
 
 private fun NavGraphBuilder.scoreScreen(navController: NavHostController) {
-    composable<PokeGuessRoute.Score> { backStackEntry ->
-        val scoreRoute = backStackEntry.toRoute<PokeGuessRoute.Score>()
+    composable<PokeGuessRoute.Score> {
         ScoreScreen(
-            onPlayAgain = {
+            onPlayAgain = { withFriends ->
                 navController.navigate(
-                    PokeGuessRoute.Menu(withFriends = scoreRoute.withFriends)
+                    PokeGuessRoute.Menu(withFriends = withFriends)
                 ) { popUpTo<PokeGuessRoute.Menu> { inclusive = true } }
             },
             onBackToHome = {

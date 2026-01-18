@@ -46,7 +46,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ScoreScreen(
-    onPlayAgain: () -> Unit,
+    onPlayAgain: (Boolean) -> Unit,
     onBackToHome: () -> Unit,
     onNavigateToBack: () -> Unit,
     modifier: Modifier = Modifier,
@@ -60,7 +60,7 @@ fun ScoreScreen(
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { event ->
             when (event) {
-                is ScoreUiEvent.NavigateToMenu -> latestOnPlayAgain()
+                is ScoreUiEvent.NavigateToMenu -> latestOnPlayAgain(event.withFriends)
                 is ScoreUiEvent.NavigateToHome -> latestOnBackToHome()
                 is ScoreUiEvent.NavigateToBack -> latestOnNavigateToBack()
             }

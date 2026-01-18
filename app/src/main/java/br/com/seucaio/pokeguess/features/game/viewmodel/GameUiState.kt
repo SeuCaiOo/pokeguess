@@ -36,7 +36,7 @@ data class GameUiState(
     }
 
     fun setError(error: Throwable): GameUiState {
-        return copy(isLoading = false, errorMessage = error.message ?: "Unknown error")
+        return copy(isLoading = false, errorMessage = error.message)
     }
 
     fun setMatchsPokemon(pokemonMatchs: List<Pokemon>): GameUiState {
@@ -62,10 +62,6 @@ data class GameUiState(
     }
 
     fun updateGameUi(gameUi: GameUi): GameUiState = copy(gameUi = gameUi)
-
-    fun updateGameUiState(update: GameUi.() -> GameUi): GameUiState {
-        return copy(gameUi = gameUi.update())
-    }
 
     fun setGuessBottomSheetVisibility(visible: Boolean): GameUiState {
         return copy(showGuessBottomSheet = visible)
