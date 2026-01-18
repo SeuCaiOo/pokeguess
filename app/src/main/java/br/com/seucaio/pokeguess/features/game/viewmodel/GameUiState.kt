@@ -15,6 +15,8 @@ data class GameUiState(
     val gameUi: GameUi = GameUi(),
     val withFriends: Boolean = false,
     val guessTyped: String = "",
+    val showGuessBottomSheet: Boolean = false,
+    val skipGuess: Boolean = false
 ) : Parcelable {
     val gameTimerEnabled get() = gameUi.isTimerEnabled
     val gameRemainingTime get() = gameUi.remainingTime
@@ -41,23 +43,31 @@ data class GameUiState(
         return copy(
             isLoading = false,
             pokemonMatchs = pokemonMatchs,
-            pokemon = pokemonMatchs.first()
+            pokemon = pokemonMatchs.first(),
         )
     }
 
     fun setGuess(guess: String): GameUiState = copy(guessTyped = guess)
 
     fun checkGuess(guess: String, gameUi: GameUi): GameUiState {
-        return copy(guessTyped = guess, gameUi = gameUi)
+        return copy(guessTyped = guess, gameUi = gameUi, showGuessBottomSheet = false)
+    }
+
+    fun skipGuess(): GameUiState {
+        return copy(skipGuess = true, showGuessBottomSheet = false)
     }
 
     fun nextRound(gameUi: GameUi, nextPokemon: Pokemon?): GameUiState {
-        return copy(guessTyped = "", gameUi = gameUi, pokemon = nextPokemon)
+        return copy(guessTyped = "", skipGuess = false, gameUi = gameUi, pokemon = nextPokemon)
     }
 
     fun updateGameUi(gameUi: GameUi): GameUiState = copy(gameUi = gameUi)
 
     fun updateGameUiState(update: GameUi.() -> GameUi): GameUiState {
         return copy(gameUi = gameUi.update())
+    }
+
+    fun setGuessBottomSheetVisibility(visible: Boolean): GameUiState {
+        return copy(showGuessBottomSheet = visible)
     }
 }

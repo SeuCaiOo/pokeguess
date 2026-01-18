@@ -70,6 +70,10 @@ class GameViewModel(
             is GameUiAction.NextPokemon -> nextRound()
             is GameUiAction.OnBackPressed -> navigateBack()
             is GameUiAction.GuessChanged -> saveUiStateHandle { setGuess(action.guess) }
+            is GameUiAction.SkipGuess -> saveUiStateHandle { skipGuess() }
+            is GameUiAction.GuessBottomSheetVisibilityChanged -> saveUiStateHandle {
+                setGuessBottomSheetVisibility(action.visible)
+            }
         }
     }
 
