@@ -38,7 +38,6 @@ import br.com.seucaio.pokeguess.R
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.SettingsItem
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.PokeGuessTheme
 import br.com.seucaio.pokeguess.domain.model.Generation
-import br.com.seucaio.pokeguess.features.menu.preview.MenuScreenPreviewProvider
 import br.com.seucaio.pokeguess.features.menu.preview.SettingsSectionPreviewProvider
 import br.com.seucaio.pokeguess.features.menu.viewmodel.MenuUiState
 
@@ -49,7 +48,7 @@ fun SettingsSection(
     onGenerationSelect: (Generation) -> Unit = {},
     onTimerToggle: (Boolean) -> Unit = {},
     onRoundsChange: (Int) -> Unit = {},
-    onBottomSheetVisibilityChanged: (Boolean) -> Unit = {}
+    onBottomSheetVisibilityChange: (Boolean) -> Unit = {}
 ) {
     val latestOnRoundsChange by rememberUpdatedState(onRoundsChange)
     Column(
@@ -78,7 +77,7 @@ fun SettingsSection(
         PlayerName(
             withFriends = menuState.withFriends,
             players = menuState.players,
-            onBottomSheetVisibilityChanged
+            onBottomSheetVisibilityChange
         )
     }
 }
@@ -180,7 +179,7 @@ private fun NumberRounds(
 fun PlayerName(
     withFriends: Boolean,
     players: List<String>,
-    onBottomSheetVisibilityChanged: (Boolean) -> Unit,
+    onBottomSheetVisibilityChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     SettingsItem(
@@ -193,7 +192,7 @@ fun PlayerName(
             players.firstOrNull().orEmpty()
                 .ifBlank { stringResource(R.string.insert_your_name) }
         },
-        onClick = { onBottomSheetVisibilityChanged(true) }
+        onClick = { onBottomSheetVisibilityChange(true) }
     ) {
         Icon(imageVector = Icons.Default.Edit, contentDescription = null)
     }

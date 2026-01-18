@@ -98,13 +98,12 @@ fun MenuContent(
                 onGenerationSelect = { onAction(MenuUiAction.GenerationSelected(it)) },
                 onTimerToggle = { onAction(MenuUiAction.TimerToggled(it)) },
                 onRoundsChange = { onAction(MenuUiAction.NumberOfRoundsChanged(it)) },
-                onBottomSheetVisibilityChanged = {
+                onBottomSheetVisibilityChange = {
                     onAction(MenuUiAction.PlayersBottomSheetVisibilityChanged(true))
                 }
             )
         },
         centerContent = {
-
         },
         bottomContent = {
             PokeGuessOutlinedButton(
@@ -128,7 +127,7 @@ fun MenuContent(
             onDismissRequest = { onAction(MenuUiAction.PlayersBottomSheetVisibilityChanged(false)) },
             sheetState = sheetState,
             containerColor = MaterialTheme.colorScheme.surface,
-            modifier = modifier
+            modifier = Modifier
         ) {
             PlayerNameSection(
                 uiState = onState,
@@ -141,7 +140,6 @@ fun MenuContent(
         }
     }
 }
-
 
 @PreviewLightDark
 @Composable

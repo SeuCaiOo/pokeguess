@@ -57,7 +57,6 @@ fun ScoreScreen(
     val latestOnBackToHome by rememberUpdatedState(onBackToHome)
     val latestOnNavigateToBack by rememberUpdatedState(onNavigateToBack)
 
-
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { event ->
             when (event) {
