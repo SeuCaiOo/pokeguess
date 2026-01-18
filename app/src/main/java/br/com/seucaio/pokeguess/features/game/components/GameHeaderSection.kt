@@ -18,10 +18,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.PokeGuessTheme
-import br.com.seucaio.pokeguess.features.game.model.GameUi
-import br.com.seucaio.pokeguess.features.game.preview.GameBodySectionPreviewProvider
 import br.com.seucaio.pokeguess.features.game.preview.GameHeaderSectionPreviewProvider
-import br.com.seucaio.pokeguess.features.game.viewmodel.GameUiAction
 import br.com.seucaio.pokeguess.features.game.viewmodel.GameUiState
 
 @Composable
