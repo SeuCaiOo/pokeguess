@@ -12,13 +12,15 @@ interface RoundDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(round: RoundEntity): Long
 
-    @Query("""
+    @Query(
+        """
         SELECT r.*, p.name as pokemon_name, p.image_url as pokemon_image_url 
         FROM rounds r
         INNER JOIN pokemons p ON r.pokemon_id = p.id
         WHERE r.game_id = :gameId 
         ORDER BY r.round_number ASC
-    """)
+    """
+    )
     suspend fun getRoundsWithPokemonByGameId(gameId: Int): List<RoundWithPokemon>
 }
 

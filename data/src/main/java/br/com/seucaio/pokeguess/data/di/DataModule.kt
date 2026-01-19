@@ -6,11 +6,20 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import br.com.seucaio.pokeguess.data.local.database.PokeGuessDatabase
 import br.com.seucaio.pokeguess.data.local.database.dao.GameMatchDao
+import br.com.seucaio.pokeguess.data.local.database.dao.GameMatchPlayerDao
+import br.com.seucaio.pokeguess.data.local.database.dao.PlayerDao
 import br.com.seucaio.pokeguess.data.local.database.dao.PokemonDao
+import br.com.seucaio.pokeguess.data.local.database.dao.RoundDao
 import br.com.seucaio.pokeguess.data.local.source.GameMatchLocalDataSource
 import br.com.seucaio.pokeguess.data.local.source.GameMatchLocalDataSourceImpl
+import br.com.seucaio.pokeguess.data.local.source.GameMatchPlayerLocalDataSource
+import br.com.seucaio.pokeguess.data.local.source.GameMatchPlayerLocalDataSourceImpl
+import br.com.seucaio.pokeguess.data.local.source.PlayerLocalDataSource
+import br.com.seucaio.pokeguess.data.local.source.PlayerLocalDataSourceImpl
 import br.com.seucaio.pokeguess.data.local.source.PokemonLocalDataSource
 import br.com.seucaio.pokeguess.data.local.source.PokemonLocalDataSourceImpl
+import br.com.seucaio.pokeguess.data.local.source.RoundLocalDataSource
+import br.com.seucaio.pokeguess.data.local.source.RoundLocalDataSourceImpl
 import br.com.seucaio.pokeguess.data.remote.service.PokemonApiService
 import br.com.seucaio.pokeguess.data.remote.service.RetrofitConfig
 import br.com.seucaio.pokeguess.data.remote.service.interceptor.NetworkInterceptor
@@ -18,9 +27,11 @@ import br.com.seucaio.pokeguess.data.remote.source.PokemonRemoteDataSource
 import br.com.seucaio.pokeguess.data.remote.source.PokemonRemoteDataSourceImpl
 import br.com.seucaio.pokeguess.data.repository.GameMatchRepositoryImpl
 import br.com.seucaio.pokeguess.data.repository.GameSettingsRepositoryImpl
+import br.com.seucaio.pokeguess.data.repository.PlayerRepositoryImpl
 import br.com.seucaio.pokeguess.data.repository.PokemonRepositoryImpl
 import br.com.seucaio.pokeguess.domain.repository.GameMatchRepository
 import br.com.seucaio.pokeguess.domain.repository.GameSettingsRepository
+import br.com.seucaio.pokeguess.domain.repository.PlayerRepository
 import br.com.seucaio.pokeguess.domain.repository.PokemonRepository
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -43,6 +54,9 @@ val dataModule = module {
     single<PokeGuessDatabase> { PokeGuessDatabase.getDatabase(context = get()) }
     single<PokemonDao> { get<PokeGuessDatabase>().pokemonDao() }
     single<GameMatchDao> { get<PokeGuessDatabase>().gameMatchDao() }
+    single<PlayerDao> { get<PokeGuessDatabase>().playerDao() }
+    single<RoundDao> { get<PokeGuessDatabase>().roundDao() }
+    single<GameMatchPlayerDao> { get<PokeGuessDatabase>().gameMatchPlayerDao() }
     // endregion
 
     // region DataStore
@@ -63,8 +77,18 @@ val dataModule = module {
     single<GameMatchLocalDataSource> {
         GameMatchLocalDataSourceImpl(gameMatchDao = get<GameMatchDao>())
     }
+    single<PlayerLocalDataSource> {
+        PlayerLocalDataSourceImpl(playerDao = get<PlayerDao>())
+    }
+    single<RoundLocalDataSource> {
+        RoundLocalDataSourceImpl(roundDao = get<RoundDao>())
+    }
+    single<GameMatchPlayerLocalDataSource> {
+        GameMatchPlayerLocalDataSourceImpl(gameMatchPlayerDao = get<GameMatchPlayerDao>())
+    }
     // endregion
 
+    // region Repository
     single<PokemonRepository> {
         PokemonRepositoryImpl(
             remoteDataSource = get<PokemonRemoteDataSource>(),
@@ -73,8 +97,13 @@ val dataModule = module {
     }
     single<GameMatchRepository> {
         GameMatchRepositoryImpl(
-            localDataSource = get<GameMatchLocalDataSource>()
+            matchLocalDataSource = get<GameMatchLocalDataSource>(),
+            matchPlayerLocalDataSource = get<GameMatchPlayerLocalDataSource>(),
+            roundLocalDataSource = get<RoundLocalDataSource>()
         )
+    }
+    single<PlayerRepository> {
+        PlayerRepositoryImpl(localDataSource = get<PlayerLocalDataSource>())
     }
     single<GameSettingsRepository> {
         GameSettingsRepositoryImpl(
@@ -82,4 +111,5 @@ val dataModule = module {
             context = androidContext()
         )
     }
+    // endregion
 }

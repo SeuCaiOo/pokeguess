@@ -6,15 +6,15 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "game_matchs",
+    tableName = "game_matches",
     indices = [Index(value = ["game_id"], unique = true)]
 )
 data class GameMatchEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "game_id")
     val gameId: Int? = 0,
-    @ColumnInfo(name = "players")
-    val players: List<String> = emptyList(),
+    @ColumnInfo(name = "player_names")
+    val playerNames: List<String> = emptyList(),
     @ColumnInfo(name = "total_rounds")
     val totalRounds: Int,
     val score: Int? = null,

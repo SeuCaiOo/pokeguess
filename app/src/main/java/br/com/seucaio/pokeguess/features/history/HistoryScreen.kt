@@ -158,7 +158,7 @@ private fun HistoryItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column {
-                    match.players.forEach {
+                    match.playerNames.forEach {
                         Text(
                             text = it,
                             style = MaterialTheme.typography.titleMedium,
