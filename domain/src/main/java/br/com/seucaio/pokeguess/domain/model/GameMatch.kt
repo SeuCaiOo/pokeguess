@@ -6,7 +6,8 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class GameMatch(
     val id: Int? = null,
-    val players: List<String> = emptyList(),
+    val playerNames: List<String> = emptyList(),
+    val players: List<Player> = emptyList(),
     val totalRounds: Int,
     val score: Int? = null,
     val rounds: Map<Int, String> = emptyMap(),

@@ -19,7 +19,7 @@ class ScoreUiStatePreviewProvider : PreviewParameterProvider<ScoreUiState> {
             ),
             gameMatch = GameMatch(
                 id = 1,
-                players = listOf("Player 1"),
+                playerNames = listOf("Player 1"),
                 score = 10,
                 totalRounds = 10,
                 rounds = mapOf(

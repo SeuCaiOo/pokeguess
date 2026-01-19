@@ -19,6 +19,10 @@ import br.com.seucaio.pokeguess.domain.usecase.SaveUserGuessUseCase
 import br.com.seucaio.pokeguess.domain.usecase.StartGameMatchUseCase
 import br.com.seucaio.pokeguess.domain.usecase.StartTimerUseCase
 import br.com.seucaio.pokeguess.domain.usecase.ValidateGuessUseCase
+import br.com.seucaio.pokeguess.domain.usecase.match.FinishMatchUseCase
+import br.com.seucaio.pokeguess.domain.usecase.match.GetMatchDetailsUseCase
+import br.com.seucaio.pokeguess.domain.usecase.match.GetMatchHistoryUseCase
+import br.com.seucaio.pokeguess.domain.usecase.match.StartNewMatchUseCase
 import org.koin.dsl.module
 
 val domainModule = module {
@@ -38,4 +42,10 @@ val domainModule = module {
     factory { GetMatchByIdUseCase(get<GameMatchRepository>(), get<PokemonRepository>()) }
     factory { GetGameSettingsUseCase(get<GameSettingsRepository>()) }
     factory { SaveGameSettingsUseCase(get<GameSettingsRepository>()) }
+
+    // New UseCases for Multi-Player
+    factory { StartNewMatchUseCase(get(), get()) }
+    factory { GetMatchHistoryUseCase(get()) }
+    factory { GetMatchDetailsUseCase(get()) }
+    factory { FinishMatchUseCase(get()) }
 }

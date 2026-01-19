@@ -8,7 +8,7 @@ import kotlinx.coroutines.withContext
 
 interface GameMatchLocalDataSource {
     suspend fun insertAll(matches: List<GameMatchEntity>)
-    suspend fun insert(match: GameMatchEntity)
+    suspend fun insert(match: GameMatchEntity): Long
     suspend fun update(match: GameMatchEntity)
     suspend fun updateRound(
         gameId: Int?,
@@ -32,12 +32,12 @@ class GameMatchLocalDataSourceImpl(
         return withContext(ioDispatcher) { gameMatchDao.insertAll(matches) }
     }
 
-    override suspend fun insert(match: GameMatchEntity) {
+    override suspend fun insert(match: GameMatchEntity): Long {
         return withContext(ioDispatcher) { gameMatchDao.insert(match) }
     }
 
     override suspend fun update(match: GameMatchEntity) {
-        return withContext(ioDispatcher) { gameMatchDao.update(match) }
+        withContext(ioDispatcher) { gameMatchDao.update(match) }
     }
 
     override suspend fun updateRound(
@@ -73,6 +73,6 @@ class GameMatchLocalDataSourceImpl(
     }
 
     override suspend fun deleteAll() {
-        return withContext(ioDispatcher) { gameMatchDao.deleteAll() }
+        withContext(ioDispatcher) { gameMatchDao.deleteAll() }
     }
 }

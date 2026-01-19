@@ -21,7 +21,7 @@ class StartGameMatchUseCase(
                         GameMatch(
                             totalRounds = totalRounds,
                             rounds = matchPokemons.associate { it.id to "" },
-                            players = players,
+                            playerNames = players,
                         )
                     )
                 }
