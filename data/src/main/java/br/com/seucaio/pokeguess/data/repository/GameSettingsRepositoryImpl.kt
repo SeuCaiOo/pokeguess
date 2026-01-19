@@ -40,6 +40,7 @@ class GameSettingsRepositoryImpl(
     }
 
     override suspend fun saveSettings(settings: GameSettings) {
+        clearSettings()
         dataStore.edit { preferences ->
             preferences[GENERATION] = settings.generation.name
             preferences[ROUNDS] = settings.rounds
