@@ -17,20 +17,13 @@ data class MenuUiState(
     val roundsFilled get() = rounds > 0
     val selectedGeneration get() = generation
     val multiPlayer: Boolean get() = players.size > 1
-    val confirmPlayers: Boolean get() {
-        return if (withFriends) {
-            if (multiPlayer) players.all { it.isNotBlank() } else false
-        } else {
-            players.firstOrNull().orEmpty().isNotBlank()
+    val confirmPlayers: Boolean
+        get() {
+            return if (multiPlayer) players.all { it.isNotBlank() } else false
         }
-    }
     val startGameIsAvailable: Boolean
         get() {
-            return if (withFriends) {
-                if (multiPlayer) players.all { it.isNotBlank() } && roundsFilled else false
-            } else {
-                players.firstOrNull().orEmpty().isNotBlank() && roundsFilled
-            }
+            return if (multiPlayer) players.all { it.isNotBlank() } && roundsFilled else false
         }
 
     fun setGeneration(generation: Generation): MenuUiState = copy(generation = generation)
@@ -56,17 +49,15 @@ data class MenuUiState(
         return copy(players = newPlayers)
     }
 
-    fun setWithFriends(withFriends: Boolean): MenuUiState = copy(withFriends = withFriends)
+    fun setPlayersBottomSheetVisibility(visible: Boolean): MenuUiState =
+        copy(showPlayersBottomSheet = visible)
 
-    fun setPlayersBottomSheetVisibility(visible: Boolean): MenuUiState = copy(showPlayersBottomSheet = visible)
-
-    fun GameSettings.toMenuUiState(withFriends: Boolean = this.withFriends): MenuUiState {
+    fun GameSettings.toMenuUiState(): MenuUiState {
         return MenuUiState(
             players = players,
             generation = generation,
             rounds = rounds,
-            timerEnabled = timerEnabled,
-            withFriends = withFriends
+            timerEnabled = timerEnabled
         )
     }
 
@@ -76,7 +67,6 @@ data class MenuUiState(
             generation = generation,
             rounds = rounds,
             timerEnabled = timerEnabled,
-            withFriends = withFriends
         )
     }
 }

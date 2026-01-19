@@ -28,7 +28,7 @@ class MenuViewModel(
 
     val uiState: StateFlow<MenuUiState> = savedStateHandle.getStateFlow(
         key = KEY_UI_STATE,
-        initialValue = MenuUiState(withFriends = route.withFriends)
+        initialValue = MenuUiState()
     )
 
     private val _uiEvent = MutableSharedFlow<MenuUiEvent>()
@@ -78,12 +78,7 @@ class MenuViewModel(
     private fun setSavedSettings() {
         viewModelScope.launch {
             val savedSettings = getGameSettingsUseCase().first()
-
-            if (savedSettings.withFriends != route.withFriends) {
-                saveUiStateHandle { setWithFriends(route.withFriends) }
-            } else {
-                saveUiStateHandle { savedSettings.toMenuUiState() }
-            }
+            saveUiStateHandle { savedSettings.toMenuUiState() }
         }
     }
 

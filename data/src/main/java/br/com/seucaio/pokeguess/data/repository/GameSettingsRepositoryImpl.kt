@@ -24,7 +24,6 @@ class GameSettingsRepositoryImpl(
             generation = Generation.getGeneration(preferences[GENERATION]),
             rounds = preferences[ROUNDS].orZero(),
             timerEnabled = preferences[TIMER_ENABLED].orFalse(),
-            withFriends = preferences[WITH_FRIENDS].orFalse(),
             players = getPlayerKeys(preferences).toPlayersKey().map { preferences[it].orEmpty() }
 
         )
@@ -45,7 +44,6 @@ class GameSettingsRepositoryImpl(
             preferences[GENERATION] = settings.generation.name
             preferences[ROUNDS] = settings.rounds
             preferences[TIMER_ENABLED] = settings.timerEnabled
-            preferences[WITH_FRIENDS] = settings.withFriends
             settings.players.toPlayersKey().forEachIndexed { index, key ->
                 preferences[key] = settings.players[index]
             }
@@ -60,7 +58,6 @@ class GameSettingsRepositoryImpl(
         private val GENERATION = stringPreferencesKey("generation")
         private val ROUNDS = intPreferencesKey("rounds")
         private val TIMER_ENABLED = booleanPreferencesKey("timer_enabled")
-        private val WITH_FRIENDS = booleanPreferencesKey("with_friends")
         fun List<String>.toPlayersKey(): List<Preferences.Key<String>> {
             return List(this.size) { index ->
                 stringPreferencesKey("player_name_$index")
