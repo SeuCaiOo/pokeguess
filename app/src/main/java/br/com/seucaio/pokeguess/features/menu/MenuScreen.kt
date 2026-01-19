@@ -82,8 +82,6 @@ fun MenuContent(
     onState: MenuUiState,
     modifier: Modifier = Modifier,
 ) {
-    val sheetState = rememberModalBottomSheetState()
-
     PokeGuessScaffold(
         modifier = modifier,
         topAppBar = {
@@ -125,8 +123,9 @@ fun MenuContent(
     if (onState.showPlayersBottomSheet) {
         ModalBottomSheet(
             onDismissRequest = { onAction(MenuUiAction.PlayersBottomSheetVisibilityChanged(false)) },
-            sheetState = sheetState,
+            sheetState = rememberModalBottomSheetState(),
             containerColor = MaterialTheme.colorScheme.surface,
+            dragHandle = null,
             modifier = Modifier
         ) {
             PlayerNameSection(

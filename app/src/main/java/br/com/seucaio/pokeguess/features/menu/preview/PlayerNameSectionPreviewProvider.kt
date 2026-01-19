@@ -7,15 +7,7 @@ class PlayerNameSectionPreviewProvider : PreviewParameterProvider<MenuUiState> {
     override val values: Sequence<MenuUiState> = sequenceOf(
         MenuUiState(),
         MenuUiState(
-            players = listOf(""),
-        ),
-        MenuUiState(
             players = listOf("Player 1"),
-        ),
-        MenuUiState(
-            players = listOf(
-                "Player 1",
-            ),
         ),
         MenuUiState(
             players = listOf(

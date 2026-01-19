@@ -11,7 +11,7 @@ data class MenuUiState(
     val timerEnabled: Boolean = false,
     val rounds: Int = 0,
     val players: List<String> = listOf(""),
-    val showPlayersBottomSheet: Boolean = false,
+    val showPlayersBottomSheet: Boolean = true,
 ) : Parcelable {
     val roundsFilled get() = rounds > 0
     val selectedGeneration get() = generation
