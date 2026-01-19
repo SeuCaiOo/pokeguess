@@ -8,7 +8,6 @@ class PlayerNameSectionPreviewProvider : PreviewParameterProvider<MenuUiState> {
         MenuUiState(),
         MenuUiState(
             players = listOf(""),
-            withFriends = true
         ),
         MenuUiState(
             players = listOf("Player 1"),
@@ -17,14 +16,12 @@ class PlayerNameSectionPreviewProvider : PreviewParameterProvider<MenuUiState> {
             players = listOf(
                 "Player 1",
             ),
-            withFriends = true
         ),
         MenuUiState(
             players = listOf(
                 "Player 1",
                 "Player 2",
             ),
-            withFriends = true
         ),
         MenuUiState(
             players = listOf(
@@ -32,7 +29,6 @@ class PlayerNameSectionPreviewProvider : PreviewParameterProvider<MenuUiState> {
                 "Player 2",
                 ""
             ),
-            withFriends = true
         )
     )
 }

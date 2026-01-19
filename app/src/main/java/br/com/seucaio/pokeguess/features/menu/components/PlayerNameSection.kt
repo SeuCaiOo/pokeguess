@@ -39,34 +39,24 @@ fun PlayerNameSection(
     modifier: Modifier = Modifier
 ) {
     val players = uiState.players
-    val withFriends = uiState.withFriends
 
     Column(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 16.dp),
     ) {
-        val label = stringResource(if (withFriends) R.string.players else R.string.player)
+        val label = stringResource(R.string.players)
         Text(
             text = label,
             style = MaterialTheme.typography.headlineSmall,
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(16.dp))
-
-        if (!withFriends) {
-            SoloPlayerItem(
-                players = players,
-                onAction = onAction,
-                uiState = uiState,
-            )
-        } else {
-            PlayerListItem(
-                players = players,
-                onAction = onAction,
-                uiState = uiState
-            )
-        }
+        PlayerListItem(
+            players = players,
+            onAction = onAction,
+            uiState = uiState
+        )
     }
 }
 
@@ -115,30 +105,6 @@ private fun PlayerListItem(
                 modifier = Modifier.fillMaxWidth()
             )
         }
-    }
-}
-
-@Composable
-private fun SoloPlayerItem(
-    players: List<String>,
-    onAction: (MenuUiAction) -> Unit,
-    uiState: MenuUiState,
-    modifier: Modifier = Modifier
-) {
-    Column(modifier = modifier) {
-        PlayerNameItem(
-            name = players.firstOrNull().orEmpty(),
-            onNameChange = { _, name -> onAction(MenuUiAction.PlayerNameChanged(name = name)) },
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        PokeGuessButton(
-            text = stringResource(R.string.confirm),
-            color = MaterialTheme.colorScheme.secondary,
-            enabled = uiState.confirmPlayers,
-            onClick = { onAction(MenuUiAction.PlayersBottomSheetVisibilityChanged(false)) },
-            modifier = Modifier.fillMaxWidth()
-        )
     }
 }
 

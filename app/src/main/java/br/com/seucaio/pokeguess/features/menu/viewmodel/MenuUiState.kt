@@ -10,7 +10,6 @@ data class MenuUiState(
     val generation: Generation = Generation.I,
     val timerEnabled: Boolean = false,
     val rounds: Int = 0,
-    val withFriends: Boolean = false,
     val players: List<String> = listOf(""),
     val showPlayersBottomSheet: Boolean = false,
 ) : Parcelable {
@@ -19,7 +18,7 @@ data class MenuUiState(
     val multiPlayer: Boolean get() = players.size > 1
     val confirmPlayers: Boolean
         get() {
-            return if (multiPlayer) players.all { it.isNotBlank() } else false
+            return players.all { it.isNotBlank() }
         }
     val startGameIsAvailable: Boolean
         get() {

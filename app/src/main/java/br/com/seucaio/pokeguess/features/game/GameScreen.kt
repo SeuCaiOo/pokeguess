@@ -72,8 +72,6 @@ fun GameScreenContent(
     uiAction: (GameUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
-
     PokeGuessScaffold(
         modifier = modifier,
         topAppBar = {
