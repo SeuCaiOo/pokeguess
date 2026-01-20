@@ -72,7 +72,7 @@ private fun PlayerListItem(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         itemsIndexed(
-            items = uiState.players,
+            items = uiState.playerNames,
             key = { index, _ -> index }
         ) { i, name ->
             PlayerNameItem(
