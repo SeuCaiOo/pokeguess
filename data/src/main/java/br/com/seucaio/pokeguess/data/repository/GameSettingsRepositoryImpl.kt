@@ -26,7 +26,7 @@ class GameSettingsRepositoryImpl(
             rounds = preferences[ROUNDS].orZero(),
             timerEnabled = preferences[TIMER_ENABLED].orFalse(),
             difficulty = Difficulty.getDifficulty(preferences[DIFFICULTY]),
-            players = getPlayerKeys(preferences).toPlayersKey().map { preferences[it].orEmpty() }
+            playerNames = getPlayerKeys(preferences).toPlayersKey().map { preferences[it].orEmpty() }
 
         )
     }
@@ -48,8 +48,8 @@ class GameSettingsRepositoryImpl(
             preferences[ROUNDS] = settings.rounds
             preferences[TIMER_ENABLED] = settings.timerEnabled
             preferences[DIFFICULTY] = settings.difficulty.name
-            settings.players.toPlayersKey().forEachIndexed { index, key ->
-                preferences[key] = settings.players[index]
+            settings.playerNames.toPlayersKey().forEachIndexed { index, key ->
+                preferences[key] = settings.playerNames[index]
             }
         }
     }

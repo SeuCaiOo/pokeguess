@@ -10,7 +10,7 @@ data class GameSettings(
     val generation: Generation,
     val timerEnabled: Boolean,
     val rounds: Int,
-    val players: List<String>,
+    val playerNames: List<String>,
     val difficulty: Difficulty
 ) : Parcelable {
     val selectedGeneration: Generation

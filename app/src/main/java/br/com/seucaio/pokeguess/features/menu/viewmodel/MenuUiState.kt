@@ -52,7 +52,7 @@ data class MenuUiState(
         copy(showPlayersBottomSheet = visible)
 
     fun GameSettings.toMenuUiState(): MenuUiState {
-        val players = players.ifEmpty { listOf("") }
+        val players = playerNames.ifEmpty { listOf("") }
         return MenuUiState(
             players = players,
             generation = generation,
@@ -64,7 +64,7 @@ data class MenuUiState(
 
     companion object {
         fun MenuUiState.toGameSettings() = GameSettings(
-            players = players,
+            playerNames = players,
             generation = generation,
             difficulty = difficulty,
             rounds = rounds,
