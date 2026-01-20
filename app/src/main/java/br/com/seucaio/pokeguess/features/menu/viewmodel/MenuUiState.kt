@@ -1,6 +1,7 @@
 package br.com.seucaio.pokeguess.features.menu.viewmodel
 
 import android.os.Parcelable
+import br.com.seucaio.pokeguess.domain.model.Difficulty
 import br.com.seucaio.pokeguess.domain.model.GameSettings
 import br.com.seucaio.pokeguess.domain.model.Generation
 import kotlinx.parcelize.Parcelize
@@ -8,6 +9,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class MenuUiState(
     val generation: Generation = Generation.I,
+    val difficulty: Difficulty = Difficulty.EASY,
     val timerEnabled: Boolean = false,
     val rounds: Int = 0,
     val players: List<String> = listOf(""),
@@ -22,6 +24,8 @@ data class MenuUiState(
         get() = players.all { it.isNotBlank() } && roundsFilled
 
     fun setGeneration(generation: Generation): MenuUiState = copy(generation = generation)
+
+    fun setDifficulty(difficulty: Difficulty): MenuUiState = copy(difficulty = difficulty)
 
     fun setTimer(enabled: Boolean): MenuUiState = copy(timerEnabled = enabled)
 
@@ -52,6 +56,7 @@ data class MenuUiState(
         return MenuUiState(
             players = players,
             generation = generation,
+            difficulty = difficulty,
             rounds = rounds,
             timerEnabled = timerEnabled
         )
@@ -61,6 +66,7 @@ data class MenuUiState(
         fun MenuUiState.toGameSettings() = GameSettings(
             players = players,
             generation = generation,
+            difficulty = difficulty,
             rounds = rounds,
             timerEnabled = timerEnabled,
         )

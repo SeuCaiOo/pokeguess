@@ -9,6 +9,7 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import br.com.seucaio.pokeguess.core.common.extension.orFalse
 import br.com.seucaio.pokeguess.core.common.extension.orZero
+import br.com.seucaio.pokeguess.domain.model.Difficulty
 import br.com.seucaio.pokeguess.domain.model.GameSettings
 import br.com.seucaio.pokeguess.domain.model.Generation
 import br.com.seucaio.pokeguess.domain.repository.GameSettingsRepository
@@ -24,6 +25,7 @@ class GameSettingsRepositoryImpl(
             generation = Generation.getGeneration(preferences[GENERATION]),
             rounds = preferences[ROUNDS].orZero(),
             timerEnabled = preferences[TIMER_ENABLED].orFalse(),
+            difficulty = Difficulty.getDifficulty(preferences[DIFFICULTY]),
             players = getPlayerKeys(preferences).toPlayersKey().map { preferences[it].orEmpty() }
 
         )
@@ -45,6 +47,7 @@ class GameSettingsRepositoryImpl(
             preferences[GENERATION] = settings.generation.name
             preferences[ROUNDS] = settings.rounds
             preferences[TIMER_ENABLED] = settings.timerEnabled
+            preferences[DIFFICULTY] = settings.difficulty.name
             settings.players.toPlayersKey().forEachIndexed { index, key ->
                 preferences[key] = settings.players[index]
             }
@@ -59,6 +62,7 @@ class GameSettingsRepositoryImpl(
         private val GENERATION = stringPreferencesKey("generation")
         private val ROUNDS = intPreferencesKey("rounds")
         private val TIMER_ENABLED = booleanPreferencesKey("timer_enabled")
+        private val DIFFICULTY = stringPreferencesKey("difficulty")
         fun List<String>.toPlayersKey(): List<Preferences.Key<String>> {
             return List(this.size) { index ->
                 stringPreferencesKey("player_name_$index")

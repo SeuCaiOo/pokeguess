@@ -42,5 +42,9 @@
     <string name="confirm">Confirm</string>
     <string name="insert_your_guess">Insert your guess</string>
     <string name="i_don_known">I don\'t know</string>
-    <string name="your_guess">Your guess</string>"
+    <string name="your_guess">Your guess</string>
+    <string name="difficulty">Difficulty</string>
+    <string name="easy">Easy</string>
+    <string name="medium">Medium</string>
+    <string name="hard">Hard</string>
 </resources>
