@@ -26,6 +26,9 @@ interface PlayerDao {
     @Query("SELECT * FROM players WHERE name IN (:playerNames)")
     suspend fun getPlayersByNames(playerNames: List<String>): List<PlayerEntity>
 
+    @Query("SELECT name FROM players")
+    suspend fun getAllNames(): List<String>
+
     @Query("SELECT * FROM players")
     suspend fun getAllPlayers(): List<PlayerEntity>
 }

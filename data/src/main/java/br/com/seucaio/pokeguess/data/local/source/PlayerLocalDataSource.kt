@@ -20,10 +20,14 @@ class PlayerLocalDataSourceImpl(
 
     override suspend fun insertPlayers(players: List<PlayerEntity>) {
         withContext(ioDispatcher) {
-            val playerNames = players.map { it.name }
-            playerDao.getPlayersByNames(playerNames)
-                .filter { playerEntity -> playerEntity.name !in playerNames }
-                .also { playerDao.insertAll(it) }
+            if (playerDao.getPlayersByNames(players.map { it.name }).isEmpty()) {
+                playerDao.insertAll(players)
+            } else {
+                playerDao.getAllNames().also { allNames ->
+                    players.filterNot { allNames.contains(it.name) }
+                        .also { newPlayers -> playerDao.insertAll(newPlayers) }
+                }
+            }
         }
     }
 
