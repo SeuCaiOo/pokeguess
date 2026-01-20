@@ -94,6 +94,7 @@ fun MenuContent(
             SettingsSection(
                 menuState = onState,
                 onGenerationSelect = { onAction(MenuUiAction.GenerationSelected(it)) },
+                onDifficultySelect = { onAction(MenuUiAction.DifficultySelected(it)) },
                 onTimerToggle = { onAction(MenuUiAction.TimerToggled(it)) },
                 onRoundsChange = { onAction(MenuUiAction.NumberOfRoundsChanged(it)) },
                 onBottomSheetVisibilityChange = {
