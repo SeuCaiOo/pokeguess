@@ -41,21 +41,18 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeScreen(
-    onNavigateToMenuSolo: () -> Unit,
-    onNavigateToMenuFriends: () -> Unit,
+    onNavigateToMenu: () -> Unit,
     onNavigateToHistory: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = koinViewModel()
 ) {
-    val latestOnNavigateToMenuSolo by rememberUpdatedState(onNavigateToMenuSolo)
-    val latestOnNavigateToMenuFriends by rememberUpdatedState(onNavigateToMenuFriends)
+    val latestOnNavigateToMenu by rememberUpdatedState(onNavigateToMenu)
     val latestOnNavigateToHistory by rememberUpdatedState(onNavigateToHistory)
 
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { event ->
             when (event) {
-                is HomeUiEvent.NavigateToSoloMode -> latestOnNavigateToMenuSolo()
-                is HomeUiEvent.NavigateToFriendsMode -> latestOnNavigateToMenuFriends()
+                is HomeUiEvent.NavigateToMenu -> latestOnNavigateToMenu()
                 is HomeUiEvent.NavigateToHistory -> latestOnNavigateToHistory()
             }
         }
@@ -78,9 +75,8 @@ fun HomeContent(
         centerContent = { HomeBranding() },
         bottomContent = {
             HomeActions(
-                onPlaySolo = { onAction(HomeUiAction.SoloModeSelected) },
-                onHistory = { onAction(HomeUiAction.HistorySelected) },
-                onPlayWithFriends = { onAction(HomeUiAction.FriendsModeSelected) }
+                onPlay = { onAction(HomeUiAction.PlaySelected) },
+                onHistory = { onAction(HomeUiAction.HistorySelected) }
             )
         }
     )
@@ -138,8 +134,7 @@ private fun HomeBranding(modifier: Modifier = Modifier) {
 
 @Composable
 private fun HomeActions(
-    onPlaySolo: () -> Unit,
-    onPlayWithFriends: () -> Unit,
+    onPlay: () -> Unit,
     onHistory: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -150,17 +145,10 @@ private fun HomeActions(
     ) {
         PokeGuessButton(
             modifier = Modifier.fillMaxWidth(),
-            text = stringResource(R.string.play_solo),
-            onClick = onPlaySolo,
+            text = stringResource(R.string.play),
+            onClick = onPlay,
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
-        PokeGuessButton(
-            modifier = Modifier.fillMaxWidth(),
-            text = stringResource(R.string.play_with_friends),
-            color = MaterialTheme.colorScheme.secondary,
-            onClick = onPlayWithFriends,
-        )
         Spacer(modifier = Modifier.height(16.dp))
         PokeGuessOutlinedButton(
             modifier = Modifier.fillMaxWidth(),

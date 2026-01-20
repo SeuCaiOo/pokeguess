@@ -3,11 +3,9 @@ package br.com.seucaio.pokeguess.features.menu.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
 import br.com.seucaio.pokeguess.domain.usecase.GetGameSettingsUseCase
 import br.com.seucaio.pokeguess.domain.usecase.SaveGameSettingsUseCase
 import br.com.seucaio.pokeguess.features.menu.viewmodel.MenuUiState.Companion.toGameSettings
-import br.com.seucaio.pokeguess.navigation.PokeGuessRoute
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,14 +19,13 @@ class MenuViewModel(
     private val saveGameSettingsUseCase: SaveGameSettingsUseCase,
 ) : ViewModel() {
 
-    private val route = savedStateHandle.toRoute<PokeGuessRoute.Menu>()
     private val isFirstLaunch = !savedStateHandle.contains(KEY_UI_STATE)
     private val currentState get() = uiState.value
     private val currentSettingsState get() = currentState.toGameSettings()
 
     val uiState: StateFlow<MenuUiState> = savedStateHandle.getStateFlow(
         key = KEY_UI_STATE,
-        initialValue = MenuUiState(withFriends = route.withFriends)
+        initialValue = MenuUiState()
     )
 
     private val _uiEvent = MutableSharedFlow<MenuUiEvent>()
@@ -78,12 +75,7 @@ class MenuViewModel(
     private fun setSavedSettings() {
         viewModelScope.launch {
             val savedSettings = getGameSettingsUseCase().first()
-
-            if (savedSettings.withFriends != route.withFriends) {
-                saveUiStateHandle { setWithFriends(route.withFriends) }
-            } else {
-                saveUiStateHandle { savedSettings.toMenuUiState() }
-            }
+            saveUiStateHandle { savedSettings.toMenuUiState() }
         }
     }
 

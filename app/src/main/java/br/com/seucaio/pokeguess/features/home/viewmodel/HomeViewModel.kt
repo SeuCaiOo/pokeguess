@@ -14,18 +14,13 @@ class HomeViewModel : ViewModel() {
 
     fun handleAction(action: HomeUiAction) {
         when (action) {
-            is HomeUiAction.SoloModeSelected -> navigateToSoloMode()
-            is HomeUiAction.FriendsModeSelected -> navigateToMenuFriends()
+            is HomeUiAction.PlaySelected -> navigateToMenu()
             is HomeUiAction.HistorySelected -> navigateToHistory()
         }
     }
 
-    private fun navigateToSoloMode() {
-        viewModelScope.launch { _uiEvent.emit(HomeUiEvent.NavigateToSoloMode) }
-    }
-
-    private fun navigateToMenuFriends() {
-        viewModelScope.launch { _uiEvent.emit(HomeUiEvent.NavigateToFriendsMode) }
+    private fun navigateToMenu() {
+        viewModelScope.launch { _uiEvent.emit(HomeUiEvent.NavigateToMenu) }
     }
 
     private fun navigateToHistory() {

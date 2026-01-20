@@ -17,7 +17,7 @@ sealed interface PokeGuessRoute {
     ) : PokeGuessRoute
 
     @Serializable
-    data class Menu(val withFriends: Boolean) : PokeGuessRoute
+    data class Menu(val withFriends: Boolean = false) : PokeGuessRoute
 
     @Serializable
     data class Game(val settings: GameSettings) : PokeGuessRoute

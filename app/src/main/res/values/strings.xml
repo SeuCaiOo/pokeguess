@@ -4,6 +4,7 @@
     <string name="pokemon">Pokémon</string>
     <string name="guess">Guess</string>
     <string name="pokemon_logo">Pokémon Logo</string>
+    <string name="play">Play</string>
     <string name="play_solo">Play Solo</string>
     <string name="play_with_friends">Play with Friends</string>
     <string name="type_pokemon_name">Type Pokémon name …</string>

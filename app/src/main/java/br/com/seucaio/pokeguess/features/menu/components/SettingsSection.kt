@@ -75,9 +75,8 @@ fun SettingsSection(
 
         Spacer(modifier = Modifier.height(16.dp))
         PlayerName(
-            withFriends = menuState.withFriends,
             players = menuState.players,
-            onBottomSheetVisibilityChange
+            onBottomSheetVisibilityChange = onBottomSheetVisibilityChange
         )
     }
 }
@@ -177,7 +176,6 @@ private fun NumberRounds(
 
 @Composable
 fun PlayerName(
-    withFriends: Boolean,
     players: List<String>,
     onBottomSheetVisibilityChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
@@ -185,13 +183,8 @@ fun PlayerName(
     SettingsItem(
         modifier = modifier,
         title = stringResource(R.string.players),
-        description = if (withFriends) {
-            players.filter { it.isNotBlank() }.joinToString(", ")
-                .ifBlank { stringResource(R.string.insert_player_name) }
-        } else {
-            players.firstOrNull().orEmpty()
-                .ifBlank { stringResource(R.string.insert_your_name) }
-        },
+        description = players.filter { it.isNotBlank() }.joinToString(", ")
+            .ifBlank { stringResource(R.string.insert_player_name) },
         onClick = { onBottomSheetVisibilityChange(true) }
     ) {
         Icon(imageVector = Icons.Default.Edit, contentDescription = null)

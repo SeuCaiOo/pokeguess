@@ -11,11 +11,9 @@ class SettingsSectionPreviewProvider : PreviewParameterProvider<MenuUiState> {
                 "Player 1",
             ),
             timerEnabled = true,
-            withFriends = true
         ),
         MenuUiState(
             players = listOf(""),
-            withFriends = true
         ),
         MenuUiState(
             players = listOf(
@@ -24,7 +22,6 @@ class SettingsSectionPreviewProvider : PreviewParameterProvider<MenuUiState> {
                 ""
             ),
             rounds = 5,
-            withFriends = true
         )
     )
 }

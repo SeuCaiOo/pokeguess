@@ -72,38 +72,6 @@ fun GameScreenContent(
     uiAction: (GameUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    when {
-        uiState.isLoading -> {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) { CircularProgressIndicator() }
-        }
-
-        uiState.errorMessage != null -> {
-            PokeGuessErrorContent(
-                message = uiState.errorMessage,
-                onRetry = { uiAction(GameUiAction.StartGame) },
-            )
-        }
-
-        uiState.pokemon != null -> {
-            GameSuccessContent(
-                uiState = uiState,
-                uiAction = uiAction,
-                modifier = modifier
-            )
-        }
-    }
-}
-
-@Composable
-private fun GameSuccessContent(
-    uiState: GameUiState,
-    uiAction: (GameUiAction) -> Unit,
-    modifier: Modifier = Modifier
-) {
     PokeGuessScaffold(
         modifier = modifier,
         topAppBar = {
@@ -111,14 +79,37 @@ private fun GameSuccessContent(
                 onBackButtonClick = { uiAction(GameUiAction.OnBackPressed) }
             )
         },
-        topContent = { GameHeaderSection(uiState) },
+        topContent = {
+            if (uiState.pokemon == null) return@PokeGuessScaffold
+            GameHeaderSection(uiState)
+        },
         centerContent = {
-            GameBodySection(
-                uiState = uiState,
-                uiAction = uiAction,
-            )
+            when {
+                uiState.isLoading -> {
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) { CircularProgressIndicator() }
+                }
+
+                uiState.errorMessage != null -> {
+                    PokeGuessErrorContent(
+                        message = uiState.errorMessage,
+                        onRetry = { uiAction(GameUiAction.StartGame) },
+                    )
+                }
+
+                uiState.pokemon != null -> {
+                    GameBodySection(
+                        uiState = uiState,
+                        uiAction = uiAction,
+                    )
+                }
+            }
         },
         bottomContent = {
+            if (uiState.pokemon == null) return@PokeGuessScaffold
             if (uiState.gameUi.guessSubmitted) {
                 PokeGuessButton(
                     text = stringResource(R.string.next),

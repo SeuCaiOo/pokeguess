@@ -44,7 +44,6 @@ class GameViewModel(
             key = KEY_UI_STATE,
             initialValue = GameUiState(
                 isLoading = true,
-                withFriends = route.settings.withFriends,
                 gameUi = GameUi(
                     remainingTime = remainingTime,
                     isTimerEnabled = route.settings.timerEnabled,

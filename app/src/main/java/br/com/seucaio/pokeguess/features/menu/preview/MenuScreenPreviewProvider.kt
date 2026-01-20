@@ -10,7 +10,6 @@ class MenuScreenPreviewProvider : PreviewParameterProvider<MenuUiState> {
             players = listOf(
                 "Player 1",
             ),
-            withFriends = true
         ),
         MenuUiState(
             players = listOf(
@@ -18,7 +17,6 @@ class MenuScreenPreviewProvider : PreviewParameterProvider<MenuUiState> {
                 "Player 2",
                 ""
             ),
-            withFriends = true
         )
     )
 }

@@ -10,28 +10,16 @@ data class MenuUiState(
     val generation: Generation = Generation.I,
     val timerEnabled: Boolean = false,
     val rounds: Int = 0,
-    val withFriends: Boolean = false,
     val players: List<String> = listOf(""),
-    val showPlayersBottomSheet: Boolean = false,
+    val showPlayersBottomSheet: Boolean = players.hasNoPlayers(),
 ) : Parcelable {
     val roundsFilled get() = rounds > 0
     val selectedGeneration get() = generation
     val multiPlayer: Boolean get() = players.size > 1
-    val confirmPlayers: Boolean get() {
-        return if (withFriends) {
-            if (multiPlayer) players.all { it.isNotBlank() } else false
-        } else {
-            players.firstOrNull().orEmpty().isNotBlank()
-        }
-    }
+    val confirmPlayers: Boolean
+        get() = players.all { it.isNotBlank() }
     val startGameIsAvailable: Boolean
-        get() {
-            return if (withFriends) {
-                if (multiPlayer) players.all { it.isNotBlank() } && roundsFilled else false
-            } else {
-                players.firstOrNull().orEmpty().isNotBlank() && roundsFilled
-            }
-        }
+        get() = players.all { it.isNotBlank() } && roundsFilled
 
     fun setGeneration(generation: Generation): MenuUiState = copy(generation = generation)
 
@@ -56,17 +44,16 @@ data class MenuUiState(
         return copy(players = newPlayers)
     }
 
-    fun setWithFriends(withFriends: Boolean): MenuUiState = copy(withFriends = withFriends)
+    fun setPlayersBottomSheetVisibility(visible: Boolean): MenuUiState =
+        copy(showPlayersBottomSheet = visible)
 
-    fun setPlayersBottomSheetVisibility(visible: Boolean): MenuUiState = copy(showPlayersBottomSheet = visible)
-
-    fun GameSettings.toMenuUiState(withFriends: Boolean = this.withFriends): MenuUiState {
+    fun GameSettings.toMenuUiState(): MenuUiState {
+        val players = players.ifEmpty { listOf("") }
         return MenuUiState(
             players = players,
             generation = generation,
             rounds = rounds,
-            timerEnabled = timerEnabled,
-            withFriends = withFriends
+            timerEnabled = timerEnabled
         )
     }
 
@@ -76,7 +63,8 @@ data class MenuUiState(
             generation = generation,
             rounds = rounds,
             timerEnabled = timerEnabled,
-            withFriends = withFriends
         )
+
+        private fun List<String>.hasNoPlayers() = all { it.isBlank() }
     }
 }

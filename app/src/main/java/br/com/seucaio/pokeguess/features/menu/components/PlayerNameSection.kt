@@ -19,8 +19,12 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -38,41 +42,27 @@ fun PlayerNameSection(
     onAction: (MenuUiAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val players = uiState.players
-    val withFriends = uiState.withFriends
-
     Column(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 16.dp),
     ) {
-        val label = stringResource(if (withFriends) R.string.players else R.string.player)
+        val label = stringResource(R.string.players)
         Text(
             text = label,
             style = MaterialTheme.typography.headlineSmall,
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(16.dp))
-
-        if (!withFriends) {
-            SoloPlayerItem(
-                players = players,
-                onAction = onAction,
-                uiState = uiState,
-            )
-        } else {
-            PlayerListItem(
-                players = players,
-                onAction = onAction,
-                uiState = uiState
-            )
-        }
+        PlayerListItem(
+            onAction = onAction,
+            uiState = uiState
+        )
     }
 }
 
 @Composable
 private fun PlayerListItem(
-    players: List<String>,
     onAction: (MenuUiAction) -> Unit,
     uiState: MenuUiState,
     modifier: Modifier = Modifier
@@ -81,13 +71,15 @@ private fun PlayerListItem(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        itemsIndexed(items = players, key = { i, _ -> i }) { index, name ->
+        itemsIndexed(items = uiState.players,
+            key = { index, _ -> index }
+        ) { i, name ->
             PlayerNameItem(
                 name = name,
-                onNameChange = { index, name ->
-                    onAction(MenuUiAction.PlayerNameChanged(name = name, index = index))
+                onNameChange = { iName, name ->
+                    onAction(MenuUiAction.PlayerNameChanged(name = name, index = iName))
                 },
-                index = index,
+                index = i,
                 multiplayer = uiState.multiPlayer,
                 onDelePlayer = { onAction(MenuUiAction.RemovePlayerClicked(it)) },
                 modifier = Modifier.fillMaxWidth()
@@ -119,30 +111,6 @@ private fun PlayerListItem(
 }
 
 @Composable
-private fun SoloPlayerItem(
-    players: List<String>,
-    onAction: (MenuUiAction) -> Unit,
-    uiState: MenuUiState,
-    modifier: Modifier = Modifier
-) {
-    Column(modifier = modifier) {
-        PlayerNameItem(
-            name = players.firstOrNull().orEmpty(),
-            onNameChange = { _, name -> onAction(MenuUiAction.PlayerNameChanged(name = name)) },
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        PokeGuessButton(
-            text = stringResource(R.string.confirm),
-            color = MaterialTheme.colorScheme.secondary,
-            enabled = uiState.confirmPlayers,
-            onClick = { onAction(MenuUiAction.PlayersBottomSheetVisibilityChanged(false)) },
-            modifier = Modifier.fillMaxWidth()
-        )
-    }
-}
-
-@Composable
 fun PlayerNameItem(
     name: String,
     onNameChange: (Int, String) -> Unit,
@@ -151,6 +119,12 @@ fun PlayerNameItem(
     multiplayer: Boolean = false,
     onDelePlayer: (Int) -> Unit = {},
 ) {
+    val focusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(Unit) {
+        if (name.isBlank()) focusRequester.requestFocus()
+    }
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -162,7 +136,9 @@ fun PlayerNameItem(
             label = { Text(stringResource(R.string.whats_your_name)) },
             singleLine = true,
             maxLines = 1,
-            modifier = Modifier.fillMaxWidth(fraction = if (multiplayer) 0.9f else 1f)
+            modifier = Modifier
+                .fillMaxWidth(fraction = if (multiplayer) 0.9f else 1f)
+                .focusRequester(focusRequester)
         )
         if (multiplayer) {
             IconButton(
