@@ -1,6 +1,7 @@
 package br.com.seucaio.pokeguess.features.game.viewmodel
 
 import android.os.Parcelable
+import br.com.seucaio.pokeguess.R
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.model.PokemonFrameData
 import br.com.seucaio.pokeguess.domain.model.Pokemon
 import br.com.seucaio.pokeguess.features.game.model.GameUi
@@ -20,6 +21,9 @@ data class GameUiState(
 ) : Parcelable {
     val gameTimerEnabled get() = gameUi.isTimerEnabled
     val gameRemainingTime get() = gameUi.remainingTime
+
+    val guessFilled get() = guessTyped.isNotBlank()
+    val buttonConfirmRes get() = if (guessFilled) R.string.confirm else R.string.skip
 
     fun toPokemonFrameData(): PokemonFrameData {
         return PokemonFrameData(
