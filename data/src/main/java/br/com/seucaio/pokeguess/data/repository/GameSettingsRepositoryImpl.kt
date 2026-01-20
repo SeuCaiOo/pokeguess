@@ -26,8 +26,7 @@ class GameSettingsRepositoryImpl(
             rounds = preferences[ROUNDS].orZero(),
             timerEnabled = preferences[TIMER_ENABLED].orFalse(),
             difficulty = Difficulty.getDifficulty(preferences[DIFFICULTY]),
-            playerNames = getPlayerKeys(preferences).toPlayersKey().map { preferences[it].orEmpty() }
-
+            playerNames = getPlayerKeys(preferences).toPlayersKey().map { preferences[it].orEmpty() },
         )
     }
 

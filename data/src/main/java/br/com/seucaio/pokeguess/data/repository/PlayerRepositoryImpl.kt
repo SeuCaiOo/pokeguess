@@ -15,6 +15,10 @@ class PlayerRepositoryImpl(private val localDataSource: PlayerLocalDataSource) :
         return localDataSource.getPlayersByIds(playerIds).toDomainList()
     }
 
+    override suspend fun getPlayerByNames(playerNames: List<String>): List<Player> {
+        return localDataSource.getPlayerByNames(playerNames).toDomainList()
+    }
+
     override suspend fun getAllPlayers(): List<Player> {
         return localDataSource.getAllPlayers().toDomainList()
     }

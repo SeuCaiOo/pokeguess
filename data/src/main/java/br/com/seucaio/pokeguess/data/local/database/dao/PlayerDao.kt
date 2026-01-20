@@ -8,8 +8,11 @@ import br.com.seucaio.pokeguess.data.local.database.entity.PlayerEntity
 
 @Dao
 interface PlayerDao {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(player: PlayerEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(players: List<PlayerEntity>)
 
     @Query("SELECT * FROM players WHERE id = :playerId")
     suspend fun getPlayerById(playerId: Int): PlayerEntity?

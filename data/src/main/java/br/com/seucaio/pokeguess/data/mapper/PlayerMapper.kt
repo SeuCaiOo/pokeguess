@@ -11,7 +11,6 @@ object PlayerMapper {
 
     fun List<PlayerEntity>.toDomainList(): List<Player> = map { it.toDomain() }
 
-
     fun Player.toEntity(): PlayerEntity {
         return PlayerEntity(id = id, name = name)
     }
