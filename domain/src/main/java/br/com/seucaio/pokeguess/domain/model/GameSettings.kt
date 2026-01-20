@@ -11,7 +11,7 @@ data class GameSettings(
     val timerEnabled: Boolean,
     val rounds: Int,
     val players: List<String>,
-    val difficulty: Difficulty = Difficulty.EASY
+    val difficulty: Difficulty
 ) : Parcelable {
     val selectedGeneration: Generation
         get() = Generation.getGeneration(generation.name)

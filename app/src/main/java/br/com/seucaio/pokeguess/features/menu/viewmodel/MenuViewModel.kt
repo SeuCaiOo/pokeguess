@@ -46,6 +46,10 @@ class MenuViewModel(
                 setGeneration(action.generation)
             }
 
+            is MenuUiAction.DifficultySelected -> saveUiStateHandle {
+                setDifficulty(action.difficulty)
+            }
+
             is MenuUiAction.TimerToggled -> saveUiStateHandle {
                 setTimer(action.enabled)
             }
