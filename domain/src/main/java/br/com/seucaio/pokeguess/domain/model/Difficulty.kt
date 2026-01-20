@@ -6,5 +6,11 @@ import kotlinx.serialization.Serializable
 enum class Difficulty {
     EASY,
     MEDIUM,
-    HARD
+    HARD;
+
+    companion object {
+        fun getDifficulty(value: String?): Difficulty {
+            return if (value.isNullOrEmpty()) Difficulty.EASY else Difficulty.valueOf(value)
+        }
+    }
 }
