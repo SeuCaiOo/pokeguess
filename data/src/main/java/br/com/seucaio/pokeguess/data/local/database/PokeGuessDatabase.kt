@@ -7,19 +7,26 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import br.com.seucaio.pokeguess.data.local.Converters
 import br.com.seucaio.pokeguess.data.local.database.dao.GameMatchDao
+import br.com.seucaio.pokeguess.data.local.database.dao.PlayerDao
 import br.com.seucaio.pokeguess.data.local.database.dao.PokemonDao
 import br.com.seucaio.pokeguess.data.local.database.entity.GameMatchEntity
+import br.com.seucaio.pokeguess.data.local.database.entity.PlayerEntity
 import br.com.seucaio.pokeguess.data.local.database.entity.PokemonEntity
 
 @Database(
-    entities = [PokemonEntity::class, GameMatchEntity::class],
-    version = 1,
+    entities = [
+        PokemonEntity::class,
+        GameMatchEntity::class,
+        PlayerEntity::class
+    ],
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
 abstract class PokeGuessDatabase : RoomDatabase() {
     abstract fun pokemonDao(): PokemonDao
     abstract fun gameMatchDao(): GameMatchDao
+    abstract fun playerDao(): PlayerDao
 
     companion object {
         @Volatile
