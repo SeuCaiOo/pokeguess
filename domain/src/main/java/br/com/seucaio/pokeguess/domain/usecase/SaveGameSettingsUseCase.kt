@@ -9,7 +9,7 @@ class SaveGameSettingsUseCase(
     private val playerRepository: PlayerRepository
 ) {
     suspend operator fun invoke(settings: GameSettings) {
-        playerRepository.savePlayers(settings.players)
+        playerRepository.savePlayerByNames(settings.playerNames)
         settingsRepository.saveSettings(settings)
     }
 }

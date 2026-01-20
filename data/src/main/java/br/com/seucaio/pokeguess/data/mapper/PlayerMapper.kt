@@ -16,4 +16,8 @@ object PlayerMapper {
     }
 
     fun List<Player>.toEntityList(): List<PlayerEntity> = map { it.toEntity() }
+
+    fun String.toPlayerFromName(): Player = Player(name = this)
+
+    fun List<String>.toPlayerFromNames(): List<Player> = map { it.toPlayerFromName() }
 }
