@@ -62,13 +62,7 @@ fun GuessSection(
         PokeGuessButton(
             text = stringResource(uiState.buttonConfirmRes),
             color = MaterialTheme.colorScheme.secondary,
-            onClick = {
-                if (uiState.guessTyped.isNotBlank()) {
-                    uiAction(GameUiAction.SubmitGuess(guess))
-                } else {
-                    uiAction(GameUiAction.SkipGuess)
-                }
-            },
+            onClick = { uiAction(GameUiAction.SubmitGuess(guess)) },
             modifier = Modifier.fillMaxWidth()
         )
     }

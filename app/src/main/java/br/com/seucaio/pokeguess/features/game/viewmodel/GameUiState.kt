@@ -54,7 +54,12 @@ data class GameUiState(
     fun setGuess(guess: String): GameUiState = copy(guessTyped = guess)
 
     fun checkGuess(guess: String, gameUi: GameUi): GameUiState {
-        return copy(guessTyped = guess, gameUi = gameUi, showGuessBottomSheet = false)
+        return copy(
+            guessTyped = guess,
+            gameUi = gameUi,
+            skipGuess = guess.isBlank(),
+            showGuessBottomSheet = false
+        )
     }
 
     fun skipGuess(): GameUiState {
