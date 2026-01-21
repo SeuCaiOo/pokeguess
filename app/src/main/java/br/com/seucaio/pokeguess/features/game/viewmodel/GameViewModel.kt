@@ -88,7 +88,7 @@ class GameViewModel(
             )
                 .onSuccess { gameMatch ->
                     saveUiStateHandle {
-                        setMatchsPokemon(gameMatch.pokemons)
+                        setGameMatch(gameMatch)
                     }
                     if (currentState.gameTimerEnabled) startTimer()
                 }
@@ -144,6 +144,7 @@ class GameViewModel(
                     pokemonMatchs = currentState.pokemonMatchs,
                     currentPokemon = currentState.pokemon,
                     guessTyped = currentState.guessTyped,
+                    // TODO configurar multiplayer
                     player = route.settings.playerNames.first()
                 )
             ).onSuccess { result ->

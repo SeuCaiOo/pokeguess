@@ -3,6 +3,7 @@ package br.com.seucaio.pokeguess.features.game.viewmodel
 import android.os.Parcelable
 import br.com.seucaio.pokeguess.R
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.model.PokemonFrameData
+import br.com.seucaio.pokeguess.domain.model.GameMatch
 import br.com.seucaio.pokeguess.domain.model.Pokemon
 import br.com.seucaio.pokeguess.features.game.model.GameUi
 import kotlinx.parcelize.Parcelize
@@ -18,12 +19,15 @@ data class GameUiState(
     val guessTyped: String = "",
     val showGuessBottomSheet: Boolean = false,
     val skipGuess: Boolean = false,
+    val gamemMatch: GameMatch? = null,
 ) : Parcelable {
     val gameTimerEnabled get() = gameUi.isTimerEnabled
     val gameRemainingTime get() = gameUi.remainingTime
 
     val guessFilled get() = guessTyped.isNotBlank()
     val buttonConfirmRes get() = if (guessFilled) R.string.confirm else R.string.skip
+
+    val currentPlayer: String get() = gamemMatch?.players?.firstOrNull().orEmpty()
 
     fun toPokemonFrameData(): PokemonFrameData {
         return PokemonFrameData(
@@ -74,5 +78,9 @@ data class GameUiState(
 
     fun setGuessBottomSheetVisibility(visible: Boolean): GameUiState {
         return copy(showGuessBottomSheet = visible)
+    }
+
+    fun setGameMatch(gameMatch: GameMatch): GameUiState {
+        return copy(gamemMatch = gameMatch).setMatchsPokemon(pokemonMatchs = gameMatch.pokemons)
     }
 }
