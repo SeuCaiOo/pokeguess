@@ -40,17 +40,10 @@ fun TextGuessItem(
     val guess = uiState.guessTyped
 
     Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = 16.dp),
+        modifier = modifier.fillMaxWidth()
     ) {
-        Text(
-            text = stringResource(R.string.who_that_pokemon),
-            style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
+        GuessItemHeader(uiState.currentPlayer)
+        Spacer(modifier = Modifier.height(24.dp))
         GuessTextField(
             guess = guess,
             onGuessChange = { newValue -> uiAction(GameUiAction.GuessChanged(newValue)) },

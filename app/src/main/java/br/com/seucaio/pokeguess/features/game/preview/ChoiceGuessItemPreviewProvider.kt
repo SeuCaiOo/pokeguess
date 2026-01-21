@@ -1,6 +1,7 @@
 package br.com.seucaio.pokeguess.features.game.preview
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import br.com.seucaio.pokeguess.domain.model.GameMatch
 import br.com.seucaio.pokeguess.domain.model.Pokemon
 import br.com.seucaio.pokeguess.features.game.viewmodel.GameUiState
 
@@ -42,6 +43,11 @@ class ChoiceGuessItemPreviewProvider : PreviewParameterProvider<GameUiState> {
                     )
                 ),
 
+            ),
+            gamemMatch = GameMatch(
+                id = 1,
+                players = listOf("Player 1", "Player 2"),
+                totalRounds = 5,
             )
         ),
     )
