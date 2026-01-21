@@ -12,7 +12,8 @@ class AdvanceRoundUseCase(
         val score: Int,
         val pokemonMatchs: List<Pokemon>,
         val currentPokemon: Pokemon?,
-        val guessTyped: String
+        val guessTyped: String,
+        val player: String
     )
 
     suspend operator fun invoke(params: Params): Result<AdvanceRoundResult> {
@@ -23,7 +24,8 @@ class AdvanceRoundUseCase(
                 score = params.score,
                 guess = params.guessTyped,
                 pokemon = params.currentPokemon,
-                isGameOver = isGameOver
+                isGameOver = isGameOver,
+                player = params.player
             )
 
             if (isGameOver) {

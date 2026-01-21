@@ -11,6 +11,7 @@ data class GameMatch(
     val score: Int? = null,
     val rounds: Map<Int, String> = emptyMap(),
     val pokemons: List<Pokemon> = emptyList(),
+    val pokemonIds: List<Int> = emptyList(),
     val createdAt: Long = System.currentTimeMillis(),
     val finishedAt: Long? = null
 ) : Parcelable {

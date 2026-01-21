@@ -15,6 +15,8 @@ data class GameMatchEntity(
     val gameId: Int? = 0,
     @ColumnInfo(name = "players")
     val players: List<String> = emptyList(),
+    @ColumnInfo(name = "pokemons")
+    val pokemonIds: List<Int> = emptyList(),
     @ColumnInfo(name = "total_rounds")
     val totalRounds: Int,
     val score: Int? = null,

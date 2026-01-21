@@ -22,6 +22,8 @@ class StartGameMatchUseCase(
                             totalRounds = totalRounds,
                             rounds = matchPokemons.associate { it.id to "" },
                             players = players,
+                            pokemonIds = matchPokemons.map { it.id },
+                            pokemons = matchPokemons
                         )
                     )
                 }

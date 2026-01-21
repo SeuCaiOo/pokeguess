@@ -140,7 +140,8 @@ class GameViewModel(
                     score = currentGameState.score,
                     pokemonMatchs = currentState.pokemonMatchs,
                     currentPokemon = currentState.pokemon,
-                    guessTyped = currentState.guessTyped
+                    guessTyped = currentState.guessTyped,
+                    player = route.settings.playerNames.first()
                 )
             ).onSuccess { result ->
                 val remainingTime = if (currentGameState.isTimerEnabled) TIMER_START_VALUE else 0

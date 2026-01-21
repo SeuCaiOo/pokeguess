@@ -6,6 +6,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.util.Date
 
+@Suppress("TooManyFunctions")
 class Converters {
     private val json = Json {
         allowStructuredMapKeys = true
@@ -22,6 +23,16 @@ class Converters {
     }
 
     @TypeConverter
+    fun fromIntList(list: List<Int>?): String? {
+        return list?.let { json.encodeToString(it) }
+    }
+
+    @TypeConverter
+    fun fromIntString(value: String?): List<Int>? {
+        return value?.let { json.decodeFromString<List<Int>>(it) }
+    }
+
+    @TypeConverter
     fun fromMap(map: Map<Int, String>?): String? {
         return map?.let { json.encodeToString(it) }
     }
@@ -29,6 +40,16 @@ class Converters {
     @TypeConverter
     fun fromStringMap(value: String?): Map<Int, String>? {
         return value?.let { json.decodeFromString<Map<Int, String>>(it) }
+    }
+
+    @TypeConverter
+    fun fromStringStringMap(map: Map<String, String>?): String? {
+        return map?.let { json.encodeToString(it) }
+    }
+
+    @TypeConverter
+    fun fromStringToStringStringMap(value: String?): Map<String, String>? {
+        return value?.let { json.decodeFromString<Map<String, String>>(it) }
     }
 
     @TypeConverter

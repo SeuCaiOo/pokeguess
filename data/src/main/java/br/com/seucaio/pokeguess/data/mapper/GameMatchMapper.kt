@@ -9,6 +9,7 @@ object GameMatchMapper {
         return GameMatch(
             id = gameId,
             players = players,
+            pokemonIds = pokemonIds,
             totalRounds = totalRounds,
             score = score,
             rounds = rounds,
@@ -21,6 +22,7 @@ object GameMatchMapper {
         return GameMatchEntity(
             gameId = id,
             players = players,
+            pokemonIds = pokemons.map { it.id },
             totalRounds = totalRounds,
             score = score,
             rounds = rounds,

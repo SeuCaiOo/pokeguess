@@ -8,7 +8,8 @@ class SaveUserGuessUseCase(private val gameMatchRepository: GameMatchRepository)
         score: Int,
         guess: String,
         pokemon: Pokemon?,
-        isGameOver: Boolean = false
+        isGameOver: Boolean = false,
+        player: String
     ): Result<Unit> {
         return runCatching {
             gameMatchRepository.getLastMatch()?.let { gameMatch ->
