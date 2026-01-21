@@ -73,6 +73,16 @@ class Converters {
     }
 
     @TypeConverter
+    fun fromMapIntListString(map: Map<Int, List<String>>?): String? {
+        return map?.let { json.encodeToString(it) }
+    }
+
+    @TypeConverter
+    fun toMapIntListString(value: String?): Map<Int, List<String>>? {
+        return value?.let { json.decodeFromString<Map<Int, List<String>>>(it) }
+    }
+
+    @TypeConverter
     fun fromTimestamp(value: Long?): Date? = value?.let { Date(it) }
 
     @TypeConverter

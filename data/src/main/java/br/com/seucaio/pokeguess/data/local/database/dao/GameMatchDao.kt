@@ -19,7 +19,7 @@ interface GameMatchDao {
 
     @Query(
         """ 
-        UPDATE game_matchs SET rounds = :rounds, roundsMultiplayer = :roundsMultiplayer, score = :score, finished_at = :finishedAt 
+        UPDATE game_matchs SET rounds = :rounds, rounds_multiplayer = :roundsMultiplayer, score = :score, finished_at = :finishedAt 
         WHERE game_id = :gameId
         """
     )

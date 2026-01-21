@@ -17,16 +17,23 @@ class StartGameMatchUseCase(
         return runCatching {
             getPokemonsUseCase(generation).getOrThrow().let { pokemons ->
                 pokemons.shuffled().take(totalRounds).also { matchPokemons ->
+                    val matchPokemonsWithOption =
+                        matchPokemons.map { matchPokemon ->
+                            matchPokemon.setShuffledRandomNames(pokemons.map { it.name })
+                        }
+
                     gameMatchRepository.saveMatch(
                         GameMatch(
                             totalRounds = totalRounds,
-                            rounds = matchPokemons.associate { it.id to "" },
-                            roundsMultiplayer = matchPokemons.associate { pokemon ->
+                            rounds = matchPokemonsWithOption.associate { it.id to "" },
+                            roundsMultiplayer = matchPokemonsWithOption.associate { pokemon ->
                                 pokemon.id to players.associateWith { "" }
                             },
                             players = players,
-                            pokemonIds = matchPokemons.map { it.id },
-                            pokemons = matchPokemons
+                            pokemonIds = matchPokemonsWithOption.map { it.id },
+                            pokemonsWithOption = matchPokemonsWithOption
+                                .associate { it.id to it.randomNames },
+                            pokemons = matchPokemonsWithOption
                         )
                     )
                 }
