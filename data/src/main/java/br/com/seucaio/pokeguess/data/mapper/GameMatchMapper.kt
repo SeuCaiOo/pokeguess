@@ -13,6 +13,7 @@ object GameMatchMapper {
             totalRounds = totalRounds,
             score = score,
             rounds = rounds,
+            roundsMultiplayer = roundsMultiplayer,
             createdAt = createdAt,
             finishedAt = finishedAt
         )
@@ -26,6 +27,7 @@ object GameMatchMapper {
             totalRounds = totalRounds,
             score = score,
             rounds = rounds,
+            roundsMultiplayer = roundsMultiplayer,
             createdAt = createdAt,
             finishedAt = finishedAt
         )

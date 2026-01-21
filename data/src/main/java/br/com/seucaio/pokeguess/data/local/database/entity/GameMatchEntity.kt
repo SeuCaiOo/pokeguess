@@ -21,6 +21,7 @@ data class GameMatchEntity(
     val totalRounds: Int,
     val score: Int? = null,
     val rounds: Map<Int, String> = emptyMap(),
+    val roundsMultiplayer: Map<Int, Map<String, String>> = emptyMap(),
     @ColumnInfo(name = "created_at")
     val createdAt: Long = System.currentTimeMillis(),
     @ColumnInfo(name = "finished_at")

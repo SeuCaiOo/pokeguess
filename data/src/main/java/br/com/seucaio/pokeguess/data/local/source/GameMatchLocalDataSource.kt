@@ -14,6 +14,7 @@ interface GameMatchLocalDataSource {
         gameId: Int?,
         score: Int?,
         rounds: Map<Int, String>,
+        roundsMultiplayer: Map<Int, Map<String, String>>,
         finishedAt: Long?
     )
 
@@ -44,6 +45,7 @@ class GameMatchLocalDataSourceImpl(
         gameId: Int?,
         score: Int?,
         rounds: Map<Int, String>,
+        roundsMultiplayer: Map<Int, Map<String, String>>,
         finishedAt: Long?
     ) {
         return withContext(ioDispatcher) {
@@ -51,6 +53,7 @@ class GameMatchLocalDataSourceImpl(
                 gameId = gameId,
                 score = score,
                 rounds = rounds,
+                roundsMultiplayer = roundsMultiplayer,
                 finishedAt = finishedAt
             )
         }

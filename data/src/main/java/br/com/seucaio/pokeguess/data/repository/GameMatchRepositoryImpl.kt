@@ -23,6 +23,7 @@ class GameMatchRepositoryImpl(private val localDataSource: GameMatchLocalDataSou
                 gameId = it.gameId,
                 score = it.score,
                 rounds = it.rounds,
+                roundsMultiplayer = it.roundsMultiplayer,
                 finishedAt = if (isGameOver) System.currentTimeMillis() else null
             )
         }

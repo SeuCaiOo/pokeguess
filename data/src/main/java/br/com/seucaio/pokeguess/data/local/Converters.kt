@@ -63,6 +63,16 @@ class Converters {
     }
 
     @TypeConverter
+    fun fromNestedMap(map: Map<Int, Map<String, String>>?): String? {
+        return map?.let { json.encodeToString(it) }
+    }
+
+    @TypeConverter
+    fun fromNestedMapString(value: String?): Map<Int, Map<String, String>>? {
+        return value?.let { json.decodeFromString<Map<Int, Map<String, String>>>(it) }
+    }
+
+    @TypeConverter
     fun fromTimestamp(value: Long?): Date? = value?.let { Date(it) }
 
     @TypeConverter
