@@ -15,6 +15,7 @@ data class MenuUiState(
     val playerNames: List<String> = listOf(""),
     val showPlayersBottomSheet: Boolean = playerNames.hasNoPlayers(),
 ) : Parcelable {
+    val roundsLimit get() = HARD_ROUNDS
     val roundsFilled get() = rounds > 0
     val selectedGeneration get() = generation
     val multiPlayer: Boolean get() = playerNames.size > 1
@@ -25,7 +26,31 @@ data class MenuUiState(
 
     fun setGeneration(generation: Generation): MenuUiState = copy(generation = generation)
 
-    fun setDifficulty(difficulty: Difficulty): MenuUiState = copy(difficulty = difficulty)
+    fun setDifficulty(difficulty: Difficulty): MenuUiState {
+        val stateWithDifficulty = copy(difficulty = difficulty)
+        return when (difficulty) {
+            Difficulty.EASY -> {
+                stateWithDifficulty
+                    .setNumberRounds(EASY_ROUNDS)
+                    .setTimer(false)
+                    .setGeneration(Generation.I)
+            }
+
+            Difficulty.MEDIUM -> {
+                stateWithDifficulty
+                    .setNumberRounds(MEDIUM_ROUNDS)
+                    .setTimer(true)
+                    .setGeneration(Generation.ALL)
+            }
+
+            Difficulty.HARD -> {
+                stateWithDifficulty
+                    .setNumberRounds(HARD_ROUNDS)
+                    .setTimer(true)
+                    .setGeneration(Generation.ALL)
+            }
+        }
+    }
 
     fun setTimer(enabled: Boolean): MenuUiState = copy(timerEnabled = enabled)
 
@@ -63,6 +88,10 @@ data class MenuUiState(
     }
 
     companion object {
+        private const val EASY_ROUNDS = 5
+        private const val MEDIUM_ROUNDS = 10
+        private const val HARD_ROUNDS = 20
+
         fun MenuUiState.toGameSettings() = GameSettings(
             playerNames = playerNames,
             generation = generation,

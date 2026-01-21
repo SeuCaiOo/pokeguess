@@ -1,6 +1,7 @@
 package br.com.seucaio.pokeguess.features.game.preview
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import br.com.seucaio.pokeguess.domain.model.Difficulty
 import br.com.seucaio.pokeguess.domain.model.Pokemon
 import br.com.seucaio.pokeguess.features.game.model.GameUi
 import br.com.seucaio.pokeguess.features.game.viewmodel.GameUiState
@@ -11,61 +12,52 @@ class GameBodySectionPreviewProvider : PreviewParameterProvider<GameUiState> {
             pokemon = Pokemon(
                 id = 25,
                 name = "Pikachu",
-                imageUrl = "..."
+                imageUrl = "...",
+                randomNames = listOf(
+                    "Pikachu",
+                    "Raichu",
+                    "Sandshrew",
+                    "Vulpix"
+                )
+            ),
+            showGuessBottomSheet = true,
+            gameUi = GameUi(
+                difficulty = Difficulty.EASY
             )
         ),
         GameUiState(
             pokemon = Pokemon(
                 id = 25,
                 name = "Pikachu",
-                imageUrl = "..."
+                imageUrl = "...",
+                randomNames = listOf(
+                    "Pikachu",
+                    "Raichu",
+                    "Sandshrew",
+                    "Vulpix"
+                )
             ),
-            skipGuess = true
-        ),
-        GameUiState(
-            pokemon = Pokemon(
-                id = 25,
-                name = "Pikachu",
-                imageUrl = "..."
-            ),
-            guessTyped = "Pika"
-        ),
-        GameUiState(
-            pokemon = Pokemon(
-                id = 25,
-                name = "Pikachu",
-                imageUrl = "..."
-            ),
+            showGuessBottomSheet = true,
             gameUi = GameUi(
-                guessSubmitted = true,
-                correctGuess = true
-            ),
-            guessTyped = "Pikachu"
+                difficulty = Difficulty.EASY
+            )
         ),
         GameUiState(
             pokemon = Pokemon(
                 id = 25,
                 name = "Pikachu",
-                imageUrl = "..."
+                imageUrl = "...",
+                randomNames = listOf(
+                    "Pikachu",
+                    "Raichu",
+                    "Sandshrew",
+                    "Vulpix"
+                )
             ),
+            showGuessBottomSheet = true,
             gameUi = GameUi(
-                guessSubmitted = true,
-                correctGuess = false
-            ),
-            guessTyped = "",
-            skipGuess = true
-        ),
-        GameUiState(
-            pokemon = Pokemon(
-                id = 25,
-                name = "Pikachu",
-                imageUrl = "..."
-            ),
-            gameUi = GameUi(
-                guessSubmitted = true,
-                correctGuess = false
-            ),
-            guessTyped = "Pika"
+                difficulty = Difficulty.MEDIUM
+            )
         ),
     )
 }

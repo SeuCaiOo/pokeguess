@@ -47,7 +47,8 @@ class GameViewModel(
                 gameUi = GameUi(
                     remainingTime = remainingTime,
                     isTimerEnabled = route.settings.timerEnabled,
-                    totalRounds = route.settings.rounds
+                    totalRounds = route.settings.rounds,
+                    difficulty = route.settings.difficulty
                 )
             )
         )
@@ -85,8 +86,10 @@ class GameViewModel(
                 totalRounds = currentState.gameUi.totalRounds,
                 players = route.settings.playerNames
             )
-                .onSuccess { pokemons ->
-                    saveUiStateHandle { setMatchsPokemon(pokemons) }
+                .onSuccess { gameMatch ->
+                    saveUiStateHandle {
+                        setMatchsPokemon(gameMatch.pokemons)
+                    }
                     if (currentState.gameTimerEnabled) startTimer()
                 }
                 .onFailure { error -> saveUiStateHandle { setError(error) } }

@@ -1,31 +1,30 @@
 package br.com.seucaio.pokeguess.features.game.components
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardCapitalization
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import br.com.seucaio.pokeguess.R
-import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessButton
+import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokemonFrame
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.PokeGuessTheme
 import br.com.seucaio.pokeguess.features.game.preview.GuessSectionPreviewProvider
 import br.com.seucaio.pokeguess.features.game.viewmodel.GameUiAction
@@ -35,73 +34,69 @@ import br.com.seucaio.pokeguess.features.game.viewmodel.GameUiState
 fun GuessSection(
     uiState: GameUiState,
     uiAction: (GameUiAction) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
-    val guess = uiState.guessTyped
+    val guessSubmitted = uiState.gameUi.guessSubmitted
 
     Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = 16.dp),
+        modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = stringResource(R.string.who_that_pokemon),
-            style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.fillMaxWidth()
-        )
-
+        PokemonFrame(uiState.toPokemonFrameData())
         Spacer(modifier = Modifier.height(16.dp))
-        GuessTextField(
-            guess = guess,
-            onGuessChange = { newValue -> uiAction(GameUiAction.GuessChanged(newValue)) },
-            onSubmitGuess = { uiAction(GameUiAction.SubmitGuess(guess)) },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-        PokeGuessButton(
-            text = stringResource(uiState.buttonConfirmRes),
-            color = MaterialTheme.colorScheme.secondary,
-            onClick = { uiAction(GameUiAction.SubmitGuess(guess)) },
-            modifier = Modifier.fillMaxWidth()
+        GuessCardItem(
+            guess = uiState.guessTyped,
+            guessSubmitted = guessSubmitted,
+            guessSkipped = uiState.skipGuess,
+            onClickGuess = { uiAction(GameUiAction.GuessBottomSheetVisibilityChanged(true)) },
         )
     }
 }
 
 @Composable
-private fun GuessTextField(
+private fun GuessCardItem(
     guess: String,
-    onGuessChange: (String) -> Unit,
-    onSubmitGuess: (String) -> Unit,
+    guessSkipped: Boolean,
+    guessSubmitted: Boolean,
+    onClickGuess: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val focusRequester = remember { FocusRequester() }
-
-    LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
-    }
-
-    OutlinedTextField(
-        value = guess,
-        onValueChange = { newValue -> onGuessChange(newValue) },
-        placeholder = { Text(stringResource(R.string.insert_your_guess)) },
-        singleLine = true,
-        maxLines = 1,
-        keyboardActions = KeyboardActions(onDone = { onSubmitGuess(guess) }),
-        keyboardOptions = KeyboardOptions(
-            capitalization = KeyboardCapitalization.None,
-            autoCorrectEnabled = false,
-            keyboardType = KeyboardType.Text,
-            imeAction = ImeAction.Done,
-            platformImeOptions = null,
-            showKeyboardOnFocus = null,
-            hintLocales = null
-        ),
+    OutlinedCard(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 16.dp)
-            .focusRequester(focusRequester)
-    )
+            .then(if (!guessSubmitted) Modifier.clickable(onClick = onClickGuess) else Modifier),
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(
+                modifier = Modifier
+                    .weight(1f, fill = false)
+                    .padding(end = 16.dp)
+            ) {
+                val label = guess.ifEmpty {
+                    if (guessSkipped) {
+                        stringResource(R.string.i_don_known)
+                    } else {
+                        stringResource(R.string.who_that_pokemon)
+                    }
+                }
+
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.labelLarge
+                )
+            }
+            Icon(
+                imageVector = if (guessSubmitted) Icons.Default.Check else Icons.Default.Edit,
+                contentDescription = null
+            )
+        }
+    }
 }
 
 @PreviewLightDark

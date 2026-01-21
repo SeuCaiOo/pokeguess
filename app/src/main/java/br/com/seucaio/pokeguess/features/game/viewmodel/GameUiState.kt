@@ -17,7 +17,7 @@ data class GameUiState(
     val withFriends: Boolean = false,
     val guessTyped: String = "",
     val showGuessBottomSheet: Boolean = false,
-    val skipGuess: Boolean = false
+    val skipGuess: Boolean = false,
 ) : Parcelable {
     val gameTimerEnabled get() = gameUi.isTimerEnabled
     val gameRemainingTime get() = gameUi.remainingTime
