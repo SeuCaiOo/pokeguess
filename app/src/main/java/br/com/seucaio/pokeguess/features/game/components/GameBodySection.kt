@@ -40,7 +40,7 @@ fun GameBodySection(
             containerColor = MaterialTheme.colorScheme.surface,
             modifier = Modifier
         ) {
-            if (uiState.gameUi.difficulty == Difficulty.EASY) {
+            if (uiState.gameUi.difficulty != Difficulty.HARD) {
                 ChoiceGuessItem(
                     uiState = uiState,
                     uiAction = uiAction,
