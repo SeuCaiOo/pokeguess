@@ -83,6 +83,16 @@ class Converters {
     }
 
     @TypeConverter
+    fun fromStringIntMap(map: Map<String, Int>?): String? {
+        return map?.let { json.encodeToString(it) }
+    }
+
+    @TypeConverter
+    fun toStringIntMap(value: String?): Map<String, Int>? {
+        return value?.let { json.decodeFromString<Map<String, Int>>(it) }
+    }
+
+    @TypeConverter
     fun fromTimestamp(value: Long?): Date? = value?.let { Date(it) }
 
     @TypeConverter

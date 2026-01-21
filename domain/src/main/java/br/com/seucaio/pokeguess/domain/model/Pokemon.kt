@@ -13,8 +13,11 @@ data class Pokemon(
     val randomNames: List<String> = emptyList(),
 ) : Parcelable {
     fun setShuffledRandomNames(randomNames: List<String>): Pokemon {
-        return randomNames.shuffled().take(RANDOM_NAMES_COUNT).plus(name).shuffled().let {
-            this.copy(randomNames = it)
-        }
+        return randomNames
+            .filter { it != name }
+            .shuffled()
+            .take(RANDOM_NAMES_COUNT)
+            .plus(name)
+            .shuffled().let { this.copy(randomNames = it) }
     }
 }

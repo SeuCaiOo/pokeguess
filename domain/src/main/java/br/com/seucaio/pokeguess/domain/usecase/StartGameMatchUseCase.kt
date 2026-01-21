@@ -30,7 +30,8 @@ class StartGameMatchUseCase(
                                 pokemon.id to players.associateWith { "" }
                             },
                             players = players,
-                            pokemonIds = matchPokemonsWithOption.map { it.id },
+                            scorePlayers = players.associateWith { 0 },
+                            pokemonIds = matchPokemonsWithOption.associate { it.id to it.name },
                             pokemonsWithOption = matchPokemonsWithOption
                                 .associate { it.id to it.randomNames },
                             pokemons = matchPokemonsWithOption

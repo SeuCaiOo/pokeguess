@@ -13,6 +13,7 @@ interface GameMatchLocalDataSource {
     suspend fun updateRound(
         gameId: Int?,
         score: Int?,
+        scorePlayers: Map<String, Int>,
         rounds: Map<Int, String>,
         roundsMultiplayer: Map<Int, Map<String, String>>,
         finishedAt: Long?
@@ -44,6 +45,7 @@ class GameMatchLocalDataSourceImpl(
     override suspend fun updateRound(
         gameId: Int?,
         score: Int?,
+        scorePlayers: Map<String, Int>,
         rounds: Map<Int, String>,
         roundsMultiplayer: Map<Int, Map<String, String>>,
         finishedAt: Long?
@@ -52,6 +54,7 @@ class GameMatchLocalDataSourceImpl(
             gameMatchDao.updateRound(
                 gameId = gameId,
                 score = score,
+                scorePlayers = scorePlayers,
                 rounds = rounds,
                 roundsMultiplayer = roundsMultiplayer,
                 finishedAt = finishedAt
