@@ -47,7 +47,8 @@ class GameViewModel(
                 gameUi = GameUi(
                     remainingTime = remainingTime,
                     isTimerEnabled = route.settings.timerEnabled,
-                    totalRounds = route.settings.rounds
+                    totalRounds = route.settings.rounds,
+                    difficulty = route.settings.difficulty
                 )
             )
         )

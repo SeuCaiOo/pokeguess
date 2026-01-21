@@ -1,6 +1,7 @@
 package br.com.seucaio.pokeguess.features.game.model
 
 import android.os.Parcelable
+import br.com.seucaio.pokeguess.domain.model.Difficulty
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -12,7 +13,8 @@ data class GameUi(
     val remainingTime: Int = 0,
     val isTimerEnabled: Boolean = false,
     val correctGuess: Boolean = false,
-    val guessSubmitted: Boolean = false
+    val guessSubmitted: Boolean = false,
+    val difficulty: Difficulty = Difficulty.EASY
 ) : Parcelable {
     val progress: Float
         get() = currentRound.toFloat() / totalRounds.toFloat()

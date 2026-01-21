@@ -61,7 +61,6 @@ fun ChoiceGuessItem(
     }
 }
 
-
 @Composable
 private fun PlayerHeader(
     modifier: Modifier = Modifier
