@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -74,6 +75,13 @@ fun GameScreenContent(
 ) {
     PokeGuessScaffold(
         modifier = modifier,
+        gameProgressContent = {
+            LinearProgressIndicator(
+                progress = { uiState.gameUi.progress },
+                modifier = Modifier.fillMaxWidth(),
+                color = MaterialTheme.colorScheme.secondary
+            )
+        },
         topAppBar = {
             PokeGuessTopAppBar(
                 onBackButtonClick = { uiAction(GameUiAction.OnBackPressed) }
