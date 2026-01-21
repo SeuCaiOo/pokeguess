@@ -9,8 +9,12 @@ data class GameMatch(
     val players: List<String> = emptyList(),
     val totalRounds: Int,
     val score: Int? = null,
+    val scorePlayers: Map<String, Int> = emptyMap(),
     val rounds: Map<Int, String> = emptyMap(),
+    val roundsMultiplayer: Map<Int, Map<String, String>> = emptyMap(),
     val pokemons: List<Pokemon> = emptyList(),
+    val pokemonIds: Map<Int, String> = emptyMap(),
+    val pokemonsWithOption: Map<Int, List<String>> = emptyMap(),
     val createdAt: Long = System.currentTimeMillis(),
     val finishedAt: Long? = null
 ) : Parcelable {

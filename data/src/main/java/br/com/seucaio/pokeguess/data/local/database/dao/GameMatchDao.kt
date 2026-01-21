@@ -19,14 +19,20 @@ interface GameMatchDao {
 
     @Query(
         """ 
-        UPDATE game_matchs SET rounds = :rounds, score = :score, finished_at = :finishedAt 
+        UPDATE game_matchs SET rounds = :rounds, 
+                rounds_multiplayer = :roundsMultiplayer, 
+                score = :score, 
+                score_players = :scorePlayers, 
+                finished_at = :finishedAt    
         WHERE game_id = :gameId
         """
     )
     suspend fun updateRound(
         gameId: Int?,
         score: Int?,
+        scorePlayers: Map<String, Int>,
         rounds: Map<Int, String>,
+        roundsMultiplayer: Map<Int, Map<String, String>>,
         finishedAt: Long?,
     )
 

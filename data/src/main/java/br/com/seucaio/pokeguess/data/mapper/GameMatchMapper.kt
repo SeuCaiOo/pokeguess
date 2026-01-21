@@ -9,9 +9,13 @@ object GameMatchMapper {
         return GameMatch(
             id = gameId,
             players = players,
+            pokemonIds = pokemonIds,
+            pokemonsWithOption = pokemonsWithOption,
             totalRounds = totalRounds,
             score = score,
+            scorePlayers = scorePlayers,
             rounds = rounds,
+            roundsMultiplayer = roundsMultiplayer,
             createdAt = createdAt,
             finishedAt = finishedAt
         )
@@ -21,9 +25,13 @@ object GameMatchMapper {
         return GameMatchEntity(
             gameId = id,
             players = players,
+            pokemonIds = pokemonIds,
+            pokemonsWithOption = pokemonsWithOption,
             totalRounds = totalRounds,
             score = score,
+            scorePlayers = scorePlayers,
             rounds = rounds,
+            roundsMultiplayer = roundsMultiplayer,
             createdAt = createdAt,
             finishedAt = finishedAt
         )

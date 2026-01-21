@@ -15,10 +15,18 @@ data class GameMatchEntity(
     val gameId: Int? = 0,
     @ColumnInfo(name = "players")
     val players: List<String> = emptyList(),
+    @ColumnInfo(name = "pokemons")
+    val pokemonIds: Map<Int, String> = emptyMap(),
+    @ColumnInfo(name = "pokemons_with_option")
+    val pokemonsWithOption: Map<Int, List<String>> = emptyMap(),
     @ColumnInfo(name = "total_rounds")
     val totalRounds: Int,
     val score: Int? = null,
+    @ColumnInfo(name = "score_players")
+    val scorePlayers: Map<String, Int> = emptyMap(),
     val rounds: Map<Int, String> = emptyMap(),
+    @ColumnInfo(name = "rounds_multiplayer")
+    val roundsMultiplayer: Map<Int, Map<String, String>> = emptyMap(),
     @ColumnInfo(name = "created_at")
     val createdAt: Long = System.currentTimeMillis(),
     @ColumnInfo(name = "finished_at")
