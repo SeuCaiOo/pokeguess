@@ -86,6 +86,7 @@ fun SettingsSection(
         Spacer(modifier = Modifier.height(16.dp))
         NumberRounds(
             rounds = menuState.rounds,
+            roundsLimit = menuState.roundsLimit,
             onRoundsChange = latestOnRoundsChange
         )
 
@@ -208,6 +209,7 @@ private fun TimerToggle(
 @Composable
 private fun NumberRounds(
     rounds: Int,
+    roundsLimit: Int,
     onRoundsChange: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -238,7 +240,7 @@ private fun NumberRounds(
                 colors = IconButtonDefaults.iconButtonColors(
                     containerColor = MaterialTheme.colorScheme.outlineVariant,
                 ),
-                enabled = rounds < 10,
+                enabled = rounds < roundsLimit,
                 onClick = { latestOnRoundsChange(rounds + 1) }
             ) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = null)
