@@ -48,6 +48,9 @@ interface GameMatchDao {
     @Query("SELECT * FROM game_matchs WHERE finished_at IS NOT NULL ORDER BY finished_at DESC LIMIT 1")
     suspend fun geLastFinishedGameMatch(): GameMatchEntity?
 
+    @Query("DELETE FROM game_matchs WHERE finished_at IS NULL")
+    suspend fun clearNotFinishedMatches()
+
     @Query("DELETE FROM game_matchs")
     suspend fun deleteAll()
 }

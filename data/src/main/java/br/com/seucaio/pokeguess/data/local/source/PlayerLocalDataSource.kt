@@ -24,7 +24,7 @@ class PlayerLocalDataSourceImpl(
                 playerDao.insertAll(players)
             } else {
                 playerDao.getAllNames().also { allNames ->
-                    players.filterNot { allNames.contains(it.name) }
+                    players.filterNot { allNames.contains(it.name.trim()) }
                         .also { newPlayers -> playerDao.insertAll(newPlayers) }
                 }
             }
