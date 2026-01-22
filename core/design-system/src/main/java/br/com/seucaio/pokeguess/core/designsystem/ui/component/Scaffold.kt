@@ -18,35 +18,38 @@ fun PokeGuessScaffold(
     topAppBar: @Composable () -> Unit = {},
     topContent: @Composable () -> Unit = {},
     bottomContent: @Composable () -> Unit = {},
+    gameProgressContent: @Composable () -> Unit = {},
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.background,
         topBar = { topAppBar() }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-                .padding(innerPadding),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
+        Column(modifier = Modifier.padding(innerPadding)) {
+            gameProgressContent()
             Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                topContent()
-            }
-            Column(
-                modifier = Modifier.weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                centerContent()
-            }
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                bottomContent()
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    topContent()
+                }
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    centerContent()
+                }
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    bottomContent()
+                }
             }
         }
     }

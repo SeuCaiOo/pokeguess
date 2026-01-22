@@ -66,13 +66,14 @@ class GameViewModel(
     fun handleAction(action: GameUiAction) {
         when (action) {
             is GameUiAction.StartGame -> starGameMatch()
+            is GameUiAction.FillGuess -> saveUiStateHandle { fillGuessPlayer(guess = action.guess) }
             is GameUiAction.SubmitGuess -> checkGuess(action.guess)
             is GameUiAction.NextPokemon -> nextRound()
             is GameUiAction.OnBackPressed -> navigateBack()
             is GameUiAction.GuessChanged -> saveUiStateHandle { setGuess(action.guess) }
             is GameUiAction.SkipGuess -> saveUiStateHandle { skipGuess() }
             is GameUiAction.GuessBottomSheetVisibilityChanged -> saveUiStateHandle {
-                setGuessBottomSheetVisibility(action.visible)
+                setGuessBottomSheetVisibility(action.visible, action.index)
             }
         }
     }
@@ -88,7 +89,7 @@ class GameViewModel(
             )
                 .onSuccess { gameMatch ->
                     saveUiStateHandle {
-                        setMatchsPokemon(gameMatch.pokemons)
+                        setGameMatch(gameMatch = gameMatch)
                     }
                     if (currentState.gameTimerEnabled) startTimer()
                 }
@@ -126,7 +127,8 @@ class GameViewModel(
                             score = result.newScore,
                             correctGuess = result.isCorrect,
                             guessSubmitted = true
-                        )
+                        ),
+                        pokemonName = pokemon.name
                     )
                 }
             }
@@ -144,7 +146,7 @@ class GameViewModel(
                     pokemonMatchs = currentState.pokemonMatchs,
                     currentPokemon = currentState.pokemon,
                     guessTyped = currentState.guessTyped,
-                    player = route.settings.playerNames.first()
+                    roundPlayers = currentState.roundPlayers.map { it.toRoundPlayer() }
                 )
             ).onSuccess { result ->
                 val remainingTime = if (currentGameState.isTimerEnabled) TIMER_START_VALUE else 0

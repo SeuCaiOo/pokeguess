@@ -1,6 +1,7 @@
 package br.com.seucaio.pokeguess.domain.usecase
 
 import br.com.seucaio.pokeguess.domain.model.AdvanceRoundResult
+import br.com.seucaio.pokeguess.domain.model.GameRoundPlayer
 import br.com.seucaio.pokeguess.domain.model.Pokemon
 
 class AdvanceRoundUseCase(
@@ -13,7 +14,7 @@ class AdvanceRoundUseCase(
         val pokemonMatchs: List<Pokemon>,
         val currentPokemon: Pokemon?,
         val guessTyped: String,
-        val player: String
+        val roundPlayers: List<GameRoundPlayer>,
     )
 
     suspend operator fun invoke(params: Params): Result<AdvanceRoundResult> {
@@ -25,7 +26,8 @@ class AdvanceRoundUseCase(
                 guess = params.guessTyped,
                 pokemon = params.currentPokemon,
                 isGameOver = isGameOver,
-                player = params.player
+                player = params.roundPlayers.first().name,
+                roundPlayers = params.roundPlayers
             )
 
             if (isGameOver) {

@@ -17,6 +17,8 @@ class GameScreenPreviewProvider : PreviewParameterProvider<GameUiState> {
             gameUi = GameUi(
                 remainingTime = 7,
                 isTimerEnabled = true,
+                totalRounds = 5,
+                currentRound = 2,
             )
         ),
         GameUiState(
@@ -30,7 +32,9 @@ class GameScreenPreviewProvider : PreviewParameterProvider<GameUiState> {
                 remainingTime = 7,
                 isTimerEnabled = true,
                 guessSubmitted = true,
-                correctGuess = true
+                correctGuess = true,
+                totalRounds = 5,
+                currentRound = 2,
             )
         ),
         GameUiState(

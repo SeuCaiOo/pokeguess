@@ -30,7 +30,6 @@ fun GameHeaderSection(uiState: GameUiState, modifier: Modifier = Modifier) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text("Round: ${gameUi.progressText}")
-            Text("Score: ${gameUi.score}")
         }
 
         if (gameUi.isTimerEnabled) {

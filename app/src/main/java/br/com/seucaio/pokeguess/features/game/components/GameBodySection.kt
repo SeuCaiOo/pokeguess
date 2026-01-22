@@ -30,7 +30,7 @@ fun GameBodySection(
     GuessSection(
         uiState = uiState,
         uiAction = uiAction,
-        modifier = modifier
+        modifier = modifier.fillMaxWidth().padding(vertical = 16.dp)
     )
 
     if (uiState.showGuessBottomSheet) {

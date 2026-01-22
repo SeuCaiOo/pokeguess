@@ -1,5 +1,6 @@
 package br.com.seucaio.pokeguess.domain.usecase
 
+import br.com.seucaio.pokeguess.domain.model.GameRoundPlayer
 import br.com.seucaio.pokeguess.domain.model.Pokemon
 import br.com.seucaio.pokeguess.domain.repository.GameMatchRepository
 
@@ -9,7 +10,8 @@ class SaveUserGuessUseCase(private val gameMatchRepository: GameMatchRepository)
         guess: String,
         pokemon: Pokemon?,
         isGameOver: Boolean = false,
-        player: String
+        player: String,
+        roundPlayers: List<GameRoundPlayer>,
     ): Result<Unit> {
         return runCatching {
             gameMatchRepository.getLastMatch()?.let { gameMatch ->

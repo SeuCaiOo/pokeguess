@@ -2,9 +2,12 @@ package br.com.seucaio.pokeguess.features.game.viewmodel
 
 import android.os.Parcelable
 import br.com.seucaio.pokeguess.R
+import br.com.seucaio.pokeguess.core.common.extension.orZero
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.model.PokemonFrameData
+import br.com.seucaio.pokeguess.domain.model.GameMatch
 import br.com.seucaio.pokeguess.domain.model.Pokemon
 import br.com.seucaio.pokeguess.features.game.model.GameUi
+import br.com.seucaio.pokeguess.features.game.model.RoundPlayerUi
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -18,11 +21,22 @@ data class GameUiState(
     val guessTyped: String = "",
     val showGuessBottomSheet: Boolean = false,
     val skipGuess: Boolean = false,
+    val gamemMatch: GameMatch? = null,
+    val roundPlayers: List<RoundPlayerUi> = emptyList()
 ) : Parcelable {
     val gameTimerEnabled get() = gameUi.isTimerEnabled
     val gameRemainingTime get() = gameUi.remainingTime
 
-    val guessFilled get() = guessTyped.isNotBlank()
+    val selectedPlayer get() = roundPlayers.firstOrNull { it.selected }?.name.orEmpty()
+
+    val roundPlayerSelected: RoundPlayerUi get() = roundPlayers.single { it.selected }
+
+    val multiplayerGame get() = gamemMatch?.players?.size.orZero() > 1
+    val guessFilled: Boolean
+        get() {
+            return roundPlayers.isNotEmpty() && roundPlayers.all { it.filledGuess }
+        }
+
     val buttonConfirmRes get() = if (guessFilled) R.string.confirm else R.string.skip
 
     fun toPokemonFrameData(): PokemonFrameData {
@@ -51,28 +65,88 @@ data class GameUiState(
         )
     }
 
-    fun setGuess(guess: String): GameUiState = copy(guessTyped = guess)
+    fun setGuess(guess: String): GameUiState {
+        val newRoundPlayers = roundPlayers.toMutableList()
+        val index = newRoundPlayers.indexOfFirst { it.selected }
+        newRoundPlayers[index] = newRoundPlayers[index].changeGuess(guess)
+        return copy(
+            guessTyped = guess,
+            roundPlayers = newRoundPlayers
+        )
+    }
 
-    fun checkGuess(guess: String, gameUi: GameUi): GameUiState {
+    fun checkGuess(guess: String, gameUi: GameUi, pokemonName: String): GameUiState {
+        val newRoundPlayers = roundPlayers.toMutableList()
+
         return copy(
             guessTyped = guess,
             gameUi = gameUi,
             skipGuess = guess.isBlank(),
-            showGuessBottomSheet = false
+            showGuessBottomSheet = false,
+            roundPlayers = newRoundPlayers.map { it.checkGuess(pokemonName) }
         )
     }
 
     fun skipGuess(): GameUiState {
-        return copy(skipGuess = true, showGuessBottomSheet = false)
+        val newRoundPlayers = roundPlayers.toMutableList()
+        val index = newRoundPlayers.indexOfFirst { it.selected }
+        newRoundPlayers[index] = newRoundPlayers[index].setSkipGuess()
+        return copy(skipGuess = true, showGuessBottomSheet = false, roundPlayers = newRoundPlayers)
+    }
+
+    fun fillGuessPlayer(guess: String): GameUiState {
+        val newRoundPlayers = roundPlayers.toMutableList()
+        val index = newRoundPlayers.indexOfFirst { it.selected }
+        newRoundPlayers[index] = newRoundPlayers[index].setGuess(guess).unselect()
+        return copy(
+            roundPlayers = newRoundPlayers,
+            showGuessBottomSheet = false,
+            guessTyped = "",
+        )
     }
 
     fun nextRound(gameUi: GameUi, nextPokemon: Pokemon?): GameUiState {
-        return copy(guessTyped = "", skipGuess = false, gameUi = gameUi, pokemon = nextPokemon)
+        return copy(
+            guessTyped = "",
+            skipGuess = false,
+            gameUi = gameUi,
+            pokemon = nextPokemon,
+            roundPlayers = roundPlayers.map { it.resetRound() }
+        )
     }
 
     fun updateGameUi(gameUi: GameUi): GameUiState = copy(gameUi = gameUi)
 
-    fun setGuessBottomSheetVisibility(visible: Boolean): GameUiState {
-        return copy(showGuessBottomSheet = visible)
+    fun setGuessBottomSheetVisibility(
+        visible: Boolean,
+        index: Int?
+    ): GameUiState {
+        val newRoundPlayers = roundPlayers.toMutableList()
+        var resetTextField = false
+        index?.let { i ->
+            if (visible) {
+                roundPlayers.getOrNull(index)?.select()?.let { newRoundPlayers[i] = it }
+            } else {
+                roundPlayers.getOrNull(index)?.unselect()?.let { newRoundPlayers[i] = it }
+            }
+        } ?: run {
+            roundPlayers.firstOrNull { it.selected }?.let {
+                newRoundPlayers[roundPlayers.indexOf(it)] = it.unselect().changeGuess("")
+                resetTextField = true
+            }
+        }
+
+        return copy(
+            showGuessBottomSheet = visible,
+            roundPlayers = newRoundPlayers,
+            guessTyped = if (resetTextField) "" else guessTyped
+        )
+    }
+
+    fun setGameMatch(gameMatch: GameMatch): GameUiState {
+        return copy(
+            gamemMatch = gameMatch,
+            roundPlayers = gameMatch.players.map { RoundPlayerUi(name = it) },
+        ).setMatchsPokemon(pokemonMatchs = gameMatch.pokemons)
     }
 }
