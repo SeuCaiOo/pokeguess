@@ -42,20 +42,20 @@ fun TextGuessItem(
     Column(
         modifier = modifier.fillMaxWidth()
     ) {
-        GuessItemHeader(uiState.currentPlayer)
+        GuessItemHeader(uiState.selectedPlayer)
         Spacer(modifier = Modifier.height(24.dp))
         GuessTextField(
             guess = guess,
             onGuessChange = { newValue -> uiAction(GameUiAction.GuessChanged(newValue)) },
-            onSubmitGuess = { uiAction(GameUiAction.SubmitGuess(guess)) },
+            onSubmitGuess = { uiAction(GameUiAction.FillGuess(guess)) },
             modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(16.dp))
         PokeGuessButton(
-            text = stringResource(uiState.buttonConfirmRes),
+            text = stringResource(uiState.roundPlayerSelected.buttonBottomSheetRes),
             color = MaterialTheme.colorScheme.secondary,
-            onClick = { uiAction(GameUiAction.SubmitGuess(guess)) },
+            onClick = { uiAction(GameUiAction.FillGuess(guess)) },
             modifier = Modifier.fillMaxWidth()
         )
     }

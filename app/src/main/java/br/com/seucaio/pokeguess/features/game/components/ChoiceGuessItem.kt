@@ -40,11 +40,11 @@ fun ChoiceGuessItem(
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            GuessItemHeader(uiState.currentPlayer)
+            GuessItemHeader(uiState.selectedPlayer)
             Spacer(modifier = Modifier.height(24.dp))
             ChoicesGrid(
                 choices = choices,
-                onChoiceSelected = { uiAction(GameUiAction.SubmitGuess(it)) }
+                onChoiceSelected = { uiAction(GameUiAction.FillGuess(it)) }
             )
         }
     }

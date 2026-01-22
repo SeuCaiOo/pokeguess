@@ -129,6 +129,7 @@ fun GameScreenContent(
                 PokeGuessButton(
                     text = stringResource(uiState.buttonConfirmRes),
                     color = MaterialTheme.colorScheme.secondary,
+                    enabled = uiState.guessFilled,
                     onClick = { uiAction(GameUiAction.SubmitGuess(uiState.guessTyped)) },
                     modifier = Modifier.fillMaxWidth()
                 )
