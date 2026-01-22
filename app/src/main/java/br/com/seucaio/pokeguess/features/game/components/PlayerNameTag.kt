@@ -33,8 +33,7 @@ fun PlayerNameTag(
 
 @PreviewLightDark
 @Composable
-private fun PlayerNameTagPreview(
-) {
+private fun PlayerNameTagPreview() {
     PokeGuessTheme {
         Surface {
             PlayerNameTag(playerName = "Player 4")
