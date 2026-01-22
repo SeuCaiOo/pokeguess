@@ -49,4 +49,5 @@
     <string name="hard">Hard</string>
     <string name="choose_your_answer">Choose your answer</string>
     <string name="player_format">Player %1$d</string>
+    <string name="hidden_guess">********</string>
 </resources>

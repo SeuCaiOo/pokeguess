@@ -44,7 +44,7 @@ fun ChoiceGuessItem(
             Spacer(modifier = Modifier.height(24.dp))
             ChoicesGrid(
                 choices = choices,
-                onChoiceSelected = { uiAction(GameUiAction.FillGuess(it)) }
+                onChoiceSelect = { uiAction(GameUiAction.FillGuess(it)) }
             )
         }
     }
@@ -53,7 +53,7 @@ fun ChoiceGuessItem(
 @Composable
 private fun ChoicesGrid(
     choices: List<String>,
-    onChoiceSelected: (String) -> Unit
+    onChoiceSelect: (String) -> Unit
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         choices.chunked(2).forEach { rowChoices ->
@@ -64,7 +64,7 @@ private fun ChoicesGrid(
                 rowChoices.forEach { choice ->
                     ChoiceButton(
                         text = choice,
-                        onClick = { onChoiceSelected(choice) },
+                        onClick = { onChoiceSelect(choice) },
                         modifier = Modifier.weight(1f)
                     )
                 }
