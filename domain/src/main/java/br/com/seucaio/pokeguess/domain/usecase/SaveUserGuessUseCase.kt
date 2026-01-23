@@ -5,14 +5,18 @@ import br.com.seucaio.pokeguess.domain.model.Pokemon
 import br.com.seucaio.pokeguess.domain.repository.GameMatchRepository
 
 class SaveUserGuessUseCase(private val gameMatchRepository: GameMatchRepository) {
-    suspend operator fun invoke(
-        score: Int,
-        guess: String,
-        pokemon: Pokemon?,
-        isGameOver: Boolean = false,
-        player: String,
-        roundPlayers: List<GameRoundPlayer>,
-    ): Result<Unit> {
+
+    data class Params(
+        val pokemon: Pokemon?,
+        val isGameOver: Boolean = false,
+        val roundPlayers: List<GameRoundPlayer>,
+    )
+
+    suspend operator fun invoke(params: Params): Result<Unit> {
+        val pokemon = params.pokemon
+        val isGameOver = params.isGameOver
+        val roundPlayers = params.roundPlayers
+
         return runCatching {
             gameMatchRepository.getLastMatch()?.let { gameMatch ->
                 val updatedRoundsMultiplayer =
@@ -22,19 +26,26 @@ class SaveUserGuessUseCase(private val gameMatchRepository: GameMatchRepository)
                         updatedRoundsMultiplayer.put(
                             key = pokemonId,
                             value = updatedRoundsMultiplayer[pokemonId]?.toMutableMap()?.apply {
-                                put(player, guess)
+                                roundPlayers.forEach { roundPlayer ->
+                                    put(roundPlayer.name, roundPlayer.guess)
+                                }
                             } ?: emptyMap()
                         )
                     }
 
                 val updatedRounds = gameMatch.rounds.toMutableMap()
                 gameMatch.rounds.keys.firstOrNull { pId -> pId == pokemon?.id }
-                    ?.let { pokemon -> updatedRounds.put(key = pokemon, value = guess) }
+                    ?.let { pokemon ->
+                        roundPlayers.forEach { roundPlayer ->
+                            updatedRounds[pokemon] = roundPlayer.guess
+                        }
+                    }
 
                 val updatedMatch = gameMatch.copy(
-                    score = score,
                     scorePlayers = gameMatch.scorePlayers.toMutableMap().apply {
-                        put(player, score)
+                        roundPlayers.forEach { roundPlayer ->
+                            put(roundPlayer.name, roundPlayer.score)
+                        }
                     },
                     rounds = updatedRounds,
                     roundsMultiplayer = updatedRoundsMultiplayer

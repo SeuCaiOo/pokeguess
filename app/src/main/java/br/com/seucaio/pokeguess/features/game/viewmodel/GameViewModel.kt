@@ -141,11 +141,8 @@ class GameViewModel(
             advanceRoundUseCase(
                 AdvanceRoundUseCase.Params(
                     roundIndex = currentGameState.currentRound,
-                    totalRounds = currentGameState.totalRounds,
-                    score = currentGameState.score,
                     pokemonMatchs = currentState.pokemonMatchs,
                     currentPokemon = currentState.pokemon,
-                    guessTyped = currentState.guessTyped,
                     roundPlayers = currentState.roundPlayers.map { it.toRoundPlayer() }
                 )
             ).onSuccess { result ->
