@@ -50,4 +50,6 @@
     <string name="choose_your_answer">Choose your answer</string>
     <string name="player_format">Player %1$d</string>
     <string name="hidden_guess">********</string>
+    <string name="round_label">Round: %1$s</string>
+    <string name="time_label">Time: %1$ds</string>
 </resources>
