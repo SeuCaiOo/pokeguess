@@ -87,7 +87,7 @@ private fun ScoreResultCard(
             modifier = Modifier.padding(horizontal = 16.dp)
         ) {
             with(gameStatsUi) {
-                if(multiPlayer){
+                if (multiPlayer) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp),

@@ -1,6 +1,5 @@
 package br.com.seucaio.pokeguess.features.score.components
 
-import android.util.Log.i
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,11 +23,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import br.com.seucaio.pokeguess.R
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokemonFrame
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.model.PokemonFrameData
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.GreenPokeQuiz
@@ -43,13 +40,9 @@ fun ScorePokemonList(
     uiState: ScoreUiState,
     modifier: Modifier = Modifier,
 ) {
-//    val pokemonsWithGuesses = uiState.pokemonsWithGuesses
-
-
     val roundPlayers = uiState.roundPlayers
     val scorePlayers = uiState.scorePlayers
     val pokemons = uiState.pokemons
-
 
     LazyRow(
         modifier = modifier.fillMaxWidth(),
@@ -57,7 +50,6 @@ fun ScorePokemonList(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = PaddingValues(8.dp)
     ) {
-
         itemsIndexed(
             items = roundPlayers.toList(),
             key = { _, item -> item.first }
@@ -68,7 +60,6 @@ fun ScorePokemonList(
             val pokemonImageUrl = pokemon?.imageUrl.orEmpty()
             val isCorrect = item.second.values.toList().getOrNull(index) == pokemonName
             val singlePlayer = item.second.size == 1
-
 
             Column(
                 modifier = Modifier
@@ -87,12 +78,10 @@ fun ScorePokemonList(
                 )
 
                 LazyColumn(
-                    modifier = modifier
-                        .fillMaxWidth()
+                    modifier = Modifier
                         .padding(vertical = 8.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-
                     itemsIndexed(
                         items = item.second.toList(),
                         key = { _, item -> item }
@@ -128,7 +117,6 @@ fun ScorePokemonList(
                     }
                 }
             }
-
         }
     }
 }

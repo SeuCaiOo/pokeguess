@@ -29,7 +29,6 @@ import br.com.seucaio.pokeguess.core.designsystem.ui.theme.PokeGuessTheme
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.RedPokeQuiz
 import br.com.seucaio.pokeguess.features.game.model.RoundPlayerUi
 import br.com.seucaio.pokeguess.features.game.preview.GuessCardItemPreviewProvider
-import br.com.seucaio.pokeguess.features.game.preview.GuessSectionPreviewProvider
 import br.com.seucaio.pokeguess.features.game.viewmodel.GameUiAction
 import br.com.seucaio.pokeguess.features.game.viewmodel.GameUiState
 
@@ -119,7 +118,6 @@ private fun GuessPlayerItem(
         )
     }
 }
-
 
 @PreviewLightDark
 @Composable

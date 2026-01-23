@@ -59,7 +59,7 @@ class ScoreScreenPreviewProvider : PreviewParameterProvider<ScoreUiState> {
                 )
             ),
 
-            ),
+        ),
         ScoreUiState(
             playerStats = listOf(
                 GameStatsUi(

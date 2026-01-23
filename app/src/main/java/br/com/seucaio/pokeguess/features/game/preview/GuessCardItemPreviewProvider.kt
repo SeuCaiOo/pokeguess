@@ -2,8 +2,6 @@ package br.com.seucaio.pokeguess.features.game.preview
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import br.com.seucaio.pokeguess.domain.model.GameMatch
-import br.com.seucaio.pokeguess.domain.model.Pokemon
-import br.com.seucaio.pokeguess.features.game.model.GameUi
 import br.com.seucaio.pokeguess.features.game.model.RoundPlayerUi
 import br.com.seucaio.pokeguess.features.game.viewmodel.GameUiState
 
