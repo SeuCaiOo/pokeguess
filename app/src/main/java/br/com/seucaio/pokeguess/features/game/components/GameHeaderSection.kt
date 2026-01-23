@@ -14,9 +14,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import br.com.seucaio.pokeguess.R
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.PokeGuessTheme
 import br.com.seucaio.pokeguess.features.game.preview.GameHeaderSectionPreviewProvider
 import br.com.seucaio.pokeguess.features.game.viewmodel.GameUiState
@@ -25,17 +27,14 @@ import br.com.seucaio.pokeguess.features.game.viewmodel.GameUiState
 fun GameHeaderSection(uiState: GameUiState, modifier: Modifier = Modifier) {
     val gameUi = uiState.gameUi
     Column(modifier = modifier.fillMaxWidth()) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text("Round: ${gameUi.progressText}")
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Text(stringResource(R.string.round_label, gameUi.progressText))
         }
 
         if (gameUi.isTimerEnabled) {
             Spacer(modifier = Modifier.height(8.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = "Time: ${gameUi.remainingTime}s")
+                Text(text = stringResource(R.string.time_label, gameUi.remainingTime))
                 Spacer(modifier = Modifier.width(8.dp))
                 LinearProgressIndicator(
                     progress = { gameUi.remainingTime / 10f },
@@ -54,11 +53,5 @@ fun GameHeaderSection(uiState: GameUiState, modifier: Modifier = Modifier) {
 private fun GameHeaderSectionPreview(
     @PreviewParameter(GameHeaderSectionPreviewProvider::class) uiState: GameUiState
 ) {
-    PokeGuessTheme {
-        Surface {
-            GameHeaderSection(
-                uiState = uiState
-            )
-        }
-    }
+    PokeGuessTheme { Surface { GameHeaderSection(uiState = uiState) } }
 }
