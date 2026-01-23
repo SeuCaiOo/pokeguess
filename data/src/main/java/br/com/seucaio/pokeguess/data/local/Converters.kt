@@ -6,6 +6,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.util.Date
 
+@Suppress("TooManyFunctions")
 class Converters {
     private val json = Json {
         allowStructuredMapKeys = true
@@ -22,6 +23,16 @@ class Converters {
     }
 
     @TypeConverter
+    fun fromIntList(list: List<Int>?): String? {
+        return list?.let { json.encodeToString(it) }
+    }
+
+    @TypeConverter
+    fun fromIntString(value: String?): List<Int>? {
+        return value?.let { json.decodeFromString<List<Int>>(it) }
+    }
+
+    @TypeConverter
     fun fromMap(map: Map<Int, String>?): String? {
         return map?.let { json.encodeToString(it) }
     }
@@ -32,6 +43,16 @@ class Converters {
     }
 
     @TypeConverter
+    fun fromStringStringMap(map: Map<String, String>?): String? {
+        return map?.let { json.encodeToString(it) }
+    }
+
+    @TypeConverter
+    fun fromStringToStringStringMap(value: String?): Map<String, String>? {
+        return value?.let { json.decodeFromString<Map<String, String>>(it) }
+    }
+
+    @TypeConverter
     fun fromPokemonMap(map: Map<PokemonEntity, String>?): String? {
         return map?.let { json.encodeToString(it) }
     }
@@ -39,6 +60,36 @@ class Converters {
     @TypeConverter
     fun fromStringPokemonMap(value: String?): Map<PokemonEntity, String>? {
         return value?.let { json.decodeFromString<Map<PokemonEntity, String>>(it) }
+    }
+
+    @TypeConverter
+    fun fromNestedMap(map: Map<Int, Map<String, String>>?): String? {
+        return map?.let { json.encodeToString(it) }
+    }
+
+    @TypeConverter
+    fun fromNestedMapString(value: String?): Map<Int, Map<String, String>>? {
+        return value?.let { json.decodeFromString<Map<Int, Map<String, String>>>(it) }
+    }
+
+    @TypeConverter
+    fun fromMapIntListString(map: Map<Int, List<String>>?): String? {
+        return map?.let { json.encodeToString(it) }
+    }
+
+    @TypeConverter
+    fun toMapIntListString(value: String?): Map<Int, List<String>>? {
+        return value?.let { json.decodeFromString<Map<Int, List<String>>>(it) }
+    }
+
+    @TypeConverter
+    fun fromStringIntMap(map: Map<String, Int>?): String? {
+        return map?.let { json.encodeToString(it) }
+    }
+
+    @TypeConverter
+    fun toStringIntMap(value: String?): Map<String, Int>? {
+        return value?.let { json.decodeFromString<Map<String, Int>>(it) }
     }
 
     @TypeConverter

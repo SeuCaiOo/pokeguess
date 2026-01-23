@@ -25,9 +25,10 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import br.com.seucaio.pokeguess.R
-import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessContainer
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessErrorContent
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessLoadingContent
+import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessScaffold
+import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessTopAppBar
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.PokeGuessTheme
 import br.com.seucaio.pokeguess.domain.model.GameMatch
 import br.com.seucaio.pokeguess.features.history.preview.HistoryUiStatePreviewProvider
@@ -43,11 +44,14 @@ import java.util.Locale
 @Composable
 fun HistoryScreen(
     onNavigateToScore: (Int, Int, Int, Boolean) -> Unit,
+    onNavigateToBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HistoryViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val latestOnNavigateToScore by rememberUpdatedState(onNavigateToScore)
+    val latestOnNavigateToBack by rememberUpdatedState(onNavigateToBack)
+
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { event ->
             when (event) {
@@ -57,6 +61,8 @@ fun HistoryScreen(
                     event.total,
                     event.withFriends
                 )
+
+                is HistoryUiEvent.NavigateToBack -> latestOnNavigateToBack()
             }
         }
     }
@@ -74,9 +80,14 @@ fun HistoryContent(
     onAction: (HistoryUiAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    PokeGuessContainer(
+    PokeGuessScaffold(
         modifier = modifier,
-        topContent = {},
+        topAppBar = {
+            PokeGuessTopAppBar(
+                title = stringResource(R.string.history),
+                onBackButtonClick = { onAction(HistoryUiAction.BackButtonClicked) }
+            )
+        },
         centerContent = {
             when {
                 uiState.isLoading -> {
@@ -114,7 +125,7 @@ private fun HistoryList(
     ) {
         items(matches) { match ->
             HistoryItem(
-                modifier = Modifier.padding(horizontal = 16.dp),
+                modifier = Modifier,
                 match = match,
                 onMatchClick = onMatchClick
             )
@@ -146,26 +157,21 @@ private fun HistoryItem(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = match.playerName ?: "Player",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
-                )
+                Column {
+                    match.players.forEach {
+                        Text(
+                            text = it,
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
                 Text(
                     text = date,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                 )
             }
-            Text(
-                text = stringResource(
-                    R.string.match_result_format,
-                    match.score ?: 0,
-                    match.totalRounds
-                ),
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(top = 4.dp)
-            )
         }
     }
 }

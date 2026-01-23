@@ -38,7 +38,7 @@ fun PokemonFrame(
             modifier = modifier
                 .clip(RoundedCornerShape(24.dp))
                 .background(pokemonFrameColor)
-                .padding(16.dp),
+                .padding(8.dp),
             horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
         ) {
             Box(

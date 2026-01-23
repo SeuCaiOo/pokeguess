@@ -20,17 +20,6 @@ keystorePropertiesFile?.let {
     }
 }
 
-fun getVersionName(): String {
-    return System.getenv("VERSION_NAME") ?: "1.0.0-SNAPSHOT"
-}
-
-fun getVersionCode(): Int {
-    val versionName = getVersionName()
-    return System.getenv("VERSION_CODE")?.toIntOrNull()
-        ?: versionName.replace(".", "").replace("-SNAPSHOT", "").toIntOrNull()
-        ?: 1
-}
-
 kotlin {
     jvmToolchain(17)
 }

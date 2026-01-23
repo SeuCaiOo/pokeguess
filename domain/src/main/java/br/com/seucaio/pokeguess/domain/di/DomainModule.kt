@@ -1,10 +1,13 @@
 package br.com.seucaio.pokeguess.domain.di
 
 import br.com.seucaio.pokeguess.domain.repository.GameMatchRepository
+import br.com.seucaio.pokeguess.domain.repository.GameSettingsRepository
+import br.com.seucaio.pokeguess.domain.repository.PlayerRepository
 import br.com.seucaio.pokeguess.domain.repository.PokemonRepository
 import br.com.seucaio.pokeguess.domain.usecase.AdvanceRoundUseCase
 import br.com.seucaio.pokeguess.domain.usecase.CalculateGameStatsUseCase
 import br.com.seucaio.pokeguess.domain.usecase.GetAllMatchesUseCase
+import br.com.seucaio.pokeguess.domain.usecase.GetGameSettingsUseCase
 import br.com.seucaio.pokeguess.domain.usecase.GetLastMatchUseCase
 import br.com.seucaio.pokeguess.domain.usecase.GetMatchByIdUseCase
 import br.com.seucaio.pokeguess.domain.usecase.GetNextPokemonUseCase
@@ -12,6 +15,7 @@ import br.com.seucaio.pokeguess.domain.usecase.GetNextRoundUseCase
 import br.com.seucaio.pokeguess.domain.usecase.GetPokemonsUseCase
 import br.com.seucaio.pokeguess.domain.usecase.GetRandomPokemonUseCase
 import br.com.seucaio.pokeguess.domain.usecase.ProcessGuessUseCase
+import br.com.seucaio.pokeguess.domain.usecase.SaveGameSettingsUseCase
 import br.com.seucaio.pokeguess.domain.usecase.SaveUserGuessUseCase
 import br.com.seucaio.pokeguess.domain.usecase.StartGameMatchUseCase
 import br.com.seucaio.pokeguess.domain.usecase.StartTimerUseCase
@@ -33,4 +37,6 @@ val domainModule = module {
     factory { AdvanceRoundUseCase(get<SaveUserGuessUseCase>()) }
     factory { GetAllMatchesUseCase(get()) }
     factory { GetMatchByIdUseCase(get<GameMatchRepository>(), get<PokemonRepository>()) }
+    factory { GetGameSettingsUseCase(get<GameSettingsRepository>(), get<PlayerRepository>()) }
+    factory { SaveGameSettingsUseCase(get<GameSettingsRepository>(), get<PlayerRepository>()) }
 }

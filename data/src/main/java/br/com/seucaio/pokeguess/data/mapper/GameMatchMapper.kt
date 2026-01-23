@@ -8,10 +8,14 @@ object GameMatchMapper {
         if (this == null) throw NoSuchElementException("GameMatch not found")
         return GameMatch(
             id = gameId,
-            playerName = playerName,
+            players = players,
+            pokemonIds = pokemonIds,
+            pokemonsWithOption = pokemonsWithOption,
             totalRounds = totalRounds,
             score = score,
+            scorePlayers = scorePlayers,
             rounds = rounds,
+            roundsMultiplayer = roundsMultiplayer,
             createdAt = createdAt,
             finishedAt = finishedAt
         )
@@ -20,10 +24,14 @@ object GameMatchMapper {
     fun GameMatch.toEntity(): GameMatchEntity {
         return GameMatchEntity(
             gameId = id,
-            playerName = playerName,
+            players = players,
+            pokemonIds = pokemonIds,
+            pokemonsWithOption = pokemonsWithOption,
             totalRounds = totalRounds,
             score = score,
+            scorePlayers = scorePlayers,
             rounds = rounds,
+            roundsMultiplayer = roundsMultiplayer,
             createdAt = createdAt,
             finishedAt = finishedAt
         )

@@ -1,6 +1,5 @@
 package br.com.seucaio.pokeguess.data.repository
 
-import br.com.seucaio.pokeguess.data.local.database.entity.PokemonEntity
 import br.com.seucaio.pokeguess.data.local.source.PokemonLocalDataSource
 import br.com.seucaio.pokeguess.data.mapper.PokemonMapper.toDomainList
 import br.com.seucaio.pokeguess.data.mapper.PokemonMapper.toEntityList
@@ -11,7 +10,6 @@ import br.com.seucaio.pokeguess.data.remote.source.PokemonRemoteDataSource
 import br.com.seucaio.pokeguess.domain.model.Generation
 import br.com.seucaio.pokeguess.domain.model.Pokemon
 import br.com.seucaio.pokeguess.domain.repository.PokemonRepository
-import kotlin.collections.isNotEmpty
 
 internal class PokemonRepositoryImpl(
     private val remoteDataSource: PokemonRemoteDataSource,
@@ -22,16 +20,24 @@ internal class PokemonRepositoryImpl(
     }
 
     private suspend fun getSuccessListPokemon(generation: Generation): List<Pokemon> {
-        val localPokemons: List<PokemonEntity> = localDataSource.getAllPokemons()
-        if (localPokemons.isNotEmpty()) return localPokemons.toDomainList()
-
-        val remotePokemons: List<Pokemon> = getRemotePokemons(generation).toPokemonDomainList()
-        saveCachePokemons(remotePokemons)
-
-        return remotePokemons
+        if (localDataSource.hasPokemons()) return getLocalPokemons(generation)
+        return getPokemonsByGeneration(generation = generation)
     }
 
-    private suspend fun getRemotePokemons(generation: Generation): PokemonListResponse {
+    private suspend fun getLocalPokemons(generation: Generation): List<Pokemon> {
+        return localDataSource
+            .getAllByGeneration(offset = generation.offset, limit = generation.limit)
+            .toDomainList()
+    }
+
+    private suspend fun getPokemonsByGeneration(generation: Generation): List<Pokemon> {
+        saveCachePokemons(getRemotePokemons().toPokemonDomainList())
+        return getLocalPokemons(generation)
+    }
+
+    private suspend fun getRemotePokemons(
+        generation: Generation = Generation.ALL
+    ): PokemonListResponse {
         return remoteDataSource.getPokemons(offset = generation.offset, limit = generation.limit)
     }
 

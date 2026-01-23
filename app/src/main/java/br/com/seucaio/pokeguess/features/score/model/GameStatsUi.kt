@@ -1,5 +1,6 @@
 package br.com.seucaio.pokeguess.features.score.model
 
+import android.os.Parcelable
 import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.Color
 import br.com.seucaio.pokeguess.R
@@ -8,14 +9,16 @@ import br.com.seucaio.pokeguess.core.designsystem.ui.theme.LowAccuracyColor
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.MediumAccuracyColor
 import br.com.seucaio.pokeguess.domain.model.AccuracyLevel
 import br.com.seucaio.pokeguess.domain.model.GameStats
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class GameStatsUi(
     val score: Int,
     val total: Int,
     val accuracy: Int,
     val incorrect: Int,
     private val accuracyLevel: AccuracyLevel
-) {
+) : Parcelable {
     val accuracyColor: Color
         get() {
             return when (accuracyLevel) {

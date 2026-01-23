@@ -22,7 +22,9 @@ class GameMatchRepositoryImpl(private val localDataSource: GameMatchLocalDataSou
             localDataSource.updateRound(
                 gameId = it.gameId,
                 score = it.score,
+                scorePlayers = it.scorePlayers,
                 rounds = it.rounds,
+                roundsMultiplayer = it.roundsMultiplayer,
                 finishedAt = if (isGameOver) System.currentTimeMillis() else null
             )
         }

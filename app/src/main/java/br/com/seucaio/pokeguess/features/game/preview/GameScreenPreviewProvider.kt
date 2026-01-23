@@ -5,7 +5,7 @@ import br.com.seucaio.pokeguess.domain.model.Pokemon
 import br.com.seucaio.pokeguess.features.game.model.GameUi
 import br.com.seucaio.pokeguess.features.game.viewmodel.GameUiState
 
-class GameUiStatePreviewProvider : PreviewParameterProvider<GameUiState> {
+class GameScreenPreviewProvider : PreviewParameterProvider<GameUiState> {
     override val values: Sequence<GameUiState> = sequenceOf(
         GameUiState(
             isLoading = false,
@@ -17,6 +17,8 @@ class GameUiStatePreviewProvider : PreviewParameterProvider<GameUiState> {
             gameUi = GameUi(
                 remainingTime = 7,
                 isTimerEnabled = true,
+                totalRounds = 5,
+                currentRound = 2,
             )
         ),
         GameUiState(
@@ -30,7 +32,9 @@ class GameUiStatePreviewProvider : PreviewParameterProvider<GameUiState> {
                 remainingTime = 7,
                 isTimerEnabled = true,
                 guessSubmitted = true,
-                correctGuess = true
+                correctGuess = true,
+                totalRounds = 5,
+                currentRound = 2,
             )
         ),
         GameUiState(

@@ -19,14 +19,20 @@ interface GameMatchDao {
 
     @Query(
         """ 
-        UPDATE game_matchs SET rounds = :rounds, score = :score, finished_at = :finishedAt 
+        UPDATE game_matchs SET rounds = :rounds, 
+                rounds_multiplayer = :roundsMultiplayer, 
+                score = :score, 
+                score_players = :scorePlayers, 
+                finished_at = :finishedAt    
         WHERE game_id = :gameId
         """
     )
     suspend fun updateRound(
         gameId: Int?,
         score: Int?,
+        scorePlayers: Map<String, Int>,
         rounds: Map<Int, String>,
+        roundsMultiplayer: Map<Int, Map<String, String>>,
         finishedAt: Long?,
     )
 
@@ -36,14 +42,14 @@ interface GameMatchDao {
     @Query("SELECT * FROM game_matchs WHERE game_id = :gameId")
     suspend fun getMatchByGameId(gameId: Int): GameMatchEntity?
 
-    @Query("SELECT * FROM game_matchs WHERE player_name = :playerName")
-    suspend fun getMatchListByPlayerName(playerName: String): List<GameMatchEntity>
-
-    @Query("SELECT * FROM game_matchs WHERE finished_at IS NULL ORDER BY created_at DESC LIMIT 1")
+    @Query("SELECT * FROM game_matchs ORDER BY created_at DESC LIMIT 1")
     fun getCurrentMatchActive(): GameMatchEntity?
 
     @Query("SELECT * FROM game_matchs WHERE finished_at IS NOT NULL ORDER BY finished_at DESC LIMIT 1")
     suspend fun geLastFinishedGameMatch(): GameMatchEntity?
+
+    @Query("DELETE FROM game_matchs WHERE finished_at IS NULL")
+    suspend fun clearNotFinishedMatches()
 
     @Query("DELETE FROM game_matchs")
     suspend fun deleteAll()

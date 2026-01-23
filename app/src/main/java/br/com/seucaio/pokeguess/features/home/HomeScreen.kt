@@ -18,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -27,10 +28,11 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import br.com.seucaio.pokeguess.BuildConfig
 import br.com.seucaio.pokeguess.R
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessButton
-import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessContainer
 import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessOutlinedButton
+import br.com.seucaio.pokeguess.core.designsystem.ui.component.PokeGuessScaffold
 import br.com.seucaio.pokeguess.core.designsystem.ui.theme.PokeGuessTheme
 import br.com.seucaio.pokeguess.features.home.viewmodel.HomeUiAction
 import br.com.seucaio.pokeguess.features.home.viewmodel.HomeUiEvent
@@ -39,21 +41,18 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeScreen(
-    onNavigateToMenuSolo: () -> Unit,
-    onNavigateToMenuFriends: () -> Unit,
+    onNavigateToMenu: () -> Unit,
     onNavigateToHistory: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = koinViewModel()
 ) {
-    val latestOnNavigateToMenuSolo by rememberUpdatedState(onNavigateToMenuSolo)
-    val latestOnNavigateToMenuFriends by rememberUpdatedState(onNavigateToMenuFriends)
+    val latestOnNavigateToMenu by rememberUpdatedState(onNavigateToMenu)
     val latestOnNavigateToHistory by rememberUpdatedState(onNavigateToHistory)
 
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { event ->
             when (event) {
-                is HomeUiEvent.NavigateToSoloMode -> latestOnNavigateToMenuSolo()
-                is HomeUiEvent.NavigateToFriendsMode -> latestOnNavigateToMenuFriends()
+                is HomeUiEvent.NavigateToMenu -> latestOnNavigateToMenu()
                 is HomeUiEvent.NavigateToHistory -> latestOnNavigateToHistory()
             }
         }
@@ -70,12 +69,13 @@ fun HomeContent(
     onAction: (HomeUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    PokeGuessContainer(
+    PokeGuessScaffold(
         modifier = modifier,
+        topAppBar = { },
         centerContent = { HomeBranding() },
         bottomContent = {
             HomeActions(
-                onPlaySolo = { onAction(HomeUiAction.SoloModeSelected) },
+                onPlay = { onAction(HomeUiAction.PlaySelected) },
                 onHistory = { onAction(HomeUiAction.HistorySelected) }
             )
         }
@@ -85,13 +85,13 @@ fun HomeContent(
 @Composable
 private fun HomeBranding(modifier: Modifier = Modifier) {
     Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(
             modifier = Modifier
                 .background(
-                    color = MaterialTheme.colorScheme.secondary,
+                    color = colorResource(id = R.color.ic_launcher_background),
                     shape = CircleShape
                 ),
             contentAlignment = Alignment.Center
@@ -100,7 +100,7 @@ private fun HomeBranding(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .fillMaxWidth(fraction = 0.5f)
                     .aspectRatio(1f),
-                painter = painterResource(id = R.mipmap.ic_launcher_monochrome),
+                painter = painterResource(id = R.mipmap.ic_launcher_foreground),
                 contentDescription = stringResource(R.string.pokemon_logo),
             )
         }
@@ -113,6 +113,11 @@ private fun HomeBranding(modifier: Modifier = Modifier) {
                 }
                 withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.primary)) {
                     append(stringResource(R.string.guess))
+                }
+                if (BuildConfig.DEBUG) {
+                    withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.secondary)) {
+                        append(" DEV")
+                    }
                 }
             },
             fontSize = 32.sp,
@@ -129,7 +134,7 @@ private fun HomeBranding(modifier: Modifier = Modifier) {
 
 @Composable
 private fun HomeActions(
-    onPlaySolo: () -> Unit,
+    onPlay: () -> Unit,
     onHistory: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -140,17 +145,10 @@ private fun HomeActions(
     ) {
         PokeGuessButton(
             modifier = Modifier.fillMaxWidth(),
-            text = stringResource(R.string.play_solo),
-            onClick = onPlaySolo,
+            text = stringResource(R.string.play),
+            onClick = onPlay,
         )
 
-        // TODO implement local multiplayer
-//        Spacer(modifier = Modifier.height(16.dp))
-//        PokeGuessOutlinedButton(
-//            modifier = Modifier.fillMaxWidth(),
-//            text = stringResource(R.string.play_with_friends),
-//            onClick = onPlayWithFriends,
-//        )
         Spacer(modifier = Modifier.height(16.dp))
         PokeGuessOutlinedButton(
             modifier = Modifier.fillMaxWidth(),

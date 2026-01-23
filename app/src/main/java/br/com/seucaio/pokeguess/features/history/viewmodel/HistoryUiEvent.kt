@@ -7,4 +7,5 @@ sealed interface HistoryUiEvent {
         val total: Int,
         val withFriends: Boolean
     ) : HistoryUiEvent
+    object NavigateToBack : HistoryUiEvent
 }
