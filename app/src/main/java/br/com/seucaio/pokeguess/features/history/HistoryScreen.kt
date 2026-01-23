@@ -172,15 +172,6 @@ private fun HistoryItem(
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                 )
             }
-            Text(
-                text = stringResource(
-                    R.string.match_result_format,
-                    match.score ?: 0,
-                    match.totalRounds
-                ),
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(top = 4.dp)
-            )
         }
     }
 }
