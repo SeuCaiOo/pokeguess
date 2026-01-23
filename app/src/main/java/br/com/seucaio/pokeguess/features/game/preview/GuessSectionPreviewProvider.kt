@@ -4,6 +4,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import br.com.seucaio.pokeguess.domain.model.GameMatch
 import br.com.seucaio.pokeguess.domain.model.Pokemon
 import br.com.seucaio.pokeguess.features.game.model.GameUi
+import br.com.seucaio.pokeguess.features.game.model.RoundPlayerUi
 import br.com.seucaio.pokeguess.features.game.viewmodel.GameUiState
 
 class GuessSectionPreviewProvider : PreviewParameterProvider<GameUiState> {
@@ -18,6 +19,33 @@ class GuessSectionPreviewProvider : PreviewParameterProvider<GameUiState> {
                 id = 1,
                 totalRounds = 5,
                 players = listOf("Player 1", "Player 2"),
+                roundsMultiplayer = mapOf(
+                    1 to mapOf(
+                        "Player 1" to "Bulbasaur",
+                        "Player 2" to "Pikachu",
+                    ),
+                    2 to mapOf(
+                        "Player 1" to "Charmander",
+                        "Player 2" to "Bulbasaur",
+                    ),
+                    3 to mapOf(
+                        "Player 1" to "Pikachu",
+                        "Player 2" to "Charmander",
+                    )
+                ),
+            ),
+            roundPlayers = listOf(
+                RoundPlayerUi(
+                    name = "Player 1",
+                    guess = "Pikachu",
+                    filledGuess = true,
+                    correctGuess = true,
+                ),
+                RoundPlayerUi(
+                    name = "Player 2",
+                    guess = "Pikachu",
+                    filledGuess = false,
+                )
             )
         ),
         GameUiState(

@@ -35,7 +35,10 @@ class GameMatchLocalDataSourceImpl(
     }
 
     override suspend fun insert(match: GameMatchEntity) {
-        return withContext(ioDispatcher) { gameMatchDao.insert(match) }
+        return withContext(ioDispatcher) {
+            gameMatchDao.clearNotFinishedMatches()
+            gameMatchDao.insert(match)
+        }
     }
 
     override suspend fun update(match: GameMatchEntity) {

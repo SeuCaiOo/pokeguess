@@ -42,11 +42,14 @@ interface GameMatchDao {
     @Query("SELECT * FROM game_matchs WHERE game_id = :gameId")
     suspend fun getMatchByGameId(gameId: Int): GameMatchEntity?
 
-    @Query("SELECT * FROM game_matchs WHERE finished_at IS NULL ORDER BY created_at DESC LIMIT 1")
+    @Query("SELECT * FROM game_matchs ORDER BY created_at DESC LIMIT 1")
     fun getCurrentMatchActive(): GameMatchEntity?
 
     @Query("SELECT * FROM game_matchs WHERE finished_at IS NOT NULL ORDER BY finished_at DESC LIMIT 1")
     suspend fun geLastFinishedGameMatch(): GameMatchEntity?
+
+    @Query("DELETE FROM game_matchs WHERE finished_at IS NULL")
+    suspend fun clearNotFinishedMatches()
 
     @Query("DELETE FROM game_matchs")
     suspend fun deleteAll()

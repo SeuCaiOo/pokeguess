@@ -9,11 +9,8 @@ class AdvanceRoundUseCase(
 ) {
     data class Params(
         val roundIndex: Int,
-        val totalRounds: Int,
-        val score: Int,
         val pokemonMatchs: List<Pokemon>,
         val currentPokemon: Pokemon?,
-        val guessTyped: String,
         val roundPlayers: List<GameRoundPlayer>,
     )
 
@@ -22,12 +19,11 @@ class AdvanceRoundUseCase(
             val isGameOver = params.pokemonMatchs.lastIndex == params.roundIndex
 
             saveUserGuessUseCase(
-                score = params.score,
-                guess = params.guessTyped,
-                pokemon = params.currentPokemon,
-                isGameOver = isGameOver,
-                player = params.roundPlayers.first().name,
-                roundPlayers = params.roundPlayers
+                SaveUserGuessUseCase.Params(
+                    pokemon = params.currentPokemon,
+                    isGameOver = isGameOver,
+                    roundPlayers = params.roundPlayers
+                )
             )
 
             if (isGameOver) {
